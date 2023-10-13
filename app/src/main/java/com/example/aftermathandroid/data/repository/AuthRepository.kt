@@ -5,7 +5,6 @@ import com.example.aftermathandroid.data.storage.PreferencesManager
 import data.dto.AuthDto
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 interface AuthRepository {
@@ -32,7 +31,7 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun register(name: String, password: String): AuthDto {
-        val model = api.login(name, password)
+        val model = api.register(name, password)
         preferencesManager.token = model.token
         return model
     }

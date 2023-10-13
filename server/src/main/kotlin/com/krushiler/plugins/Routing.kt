@@ -8,7 +8,7 @@ import io.ktor.server.routing.*
 fun Application.configureRouting() {
     routing {
         get("/") {
-            call.respondText { "Server is working" }
+            call.respondText { "Welcome to aftermath" }
         }
         authRouting()
     }

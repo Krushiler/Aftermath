@@ -35,7 +35,7 @@ android {
             dimension = "env"
         }
         create("production") {
-            buildConfigField("String", "BASE_URL", "\"http://192.168.116.128\"")
+            buildConfigField("String", "BASE_URL", "\"http://powerofpoint.online:8080\"")
             dimension = "env"
         }
     }
@@ -47,8 +47,7 @@ android {
         release {
             isMinifyEnabled = true
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }

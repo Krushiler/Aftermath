@@ -15,6 +15,12 @@ application {
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
+ktor {
+    fatJar {
+        archiveFileName.set("server_fat.jar")
+    }
+}
+
 dependencies {
     val exposedVersion = "0.41.1"
     val h2Version = "2.1.214"

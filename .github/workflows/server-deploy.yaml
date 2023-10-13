@@ -1,9 +1,12 @@
 name: Deploy Server
 
 on:
+  pull_request:
+    branches:
+      - master
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:

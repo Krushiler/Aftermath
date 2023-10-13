@@ -28,6 +28,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           known_hosts: 'placeholder'
 
+      - name: Adding Known Hosts
+        run: ssh-keyscan -H 213.183.53.46 >> ~/.ssh/known_hosts
+
       - name: Build and deploy
         run: |
           ./gradlew :server:buildFatJar

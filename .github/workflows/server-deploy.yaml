@@ -22,6 +22,12 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: 'placeholder'
+
       - name: Build and deploy
         run: |
           ./gradlew :server:buildFatJar

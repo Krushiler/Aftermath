@@ -38,4 +38,4 @@ jobs:
         run: |
           ssh krushiler@213.183.53.46 "mkdir -p ~/aftermath/server/build"
           scp ./server/build/libs/server_fat.jar krushiler@213.183.53.46:~/aftermath/server/build
-          ssh krushiler@213.183.53.46 "pkill -f java; nohup java -jar ~/aftermath/server/build/server_fat.jar &"
+          ssh krushiler@213.183.53.46 "pkill java; java -jar ~/aftermath/server/build/server_fat.jar > /dev/null &"

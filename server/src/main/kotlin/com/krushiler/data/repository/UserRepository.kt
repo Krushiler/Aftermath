@@ -26,7 +26,8 @@ class UserRepository(private val userDao: UserDao) {
             UserDbo(
                 login = login,
                 password = password,
-                token = token
+                token = token,
+                name = login
             )
         )
         return AuthDto(token)

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.aftermathandroid.data.repository.AuthRepository
 import com.example.aftermathandroid.presentation.navigation.common.NavigationState
+import com.example.aftermathandroid.presentation.navigation.common.back
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,16 +24,20 @@ class RootNavigationViewModel @Inject constructor(
                 val isAuthScreen =
                     _state.value.route == RootRoute.Login || _state.value.route == RootRoute.Registration
                 if (it == null && !isAuthScreen) {
-                    _state.value = NavigationState(RootRoute.Login)
+                    navigateToLogin()
                 } else {
-                    _state.value = NavigationState(RootRoute.Home)
+                    navigateToHome()
                 }
             }
         }
     }
 
-    fun navigateToHome() {
+    private fun navigateToHome() {
         _state.value = NavigationState(RootRoute.Home)
+    }
+
+    fun navigateToProfile() {
+        _state.value = NavigationState(RootRoute.Profile, prevState = _state.value)
     }
 
     fun navigateToRegister() {
@@ -43,9 +48,5 @@ class RootNavigationViewModel @Inject constructor(
         _state.value = NavigationState(RootRoute.Login)
     }
 
-    fun back() {
-        _state.value.prevState?.let {
-            _state.value = it
-        }
-    }
+    fun back() = _state.back()
 }

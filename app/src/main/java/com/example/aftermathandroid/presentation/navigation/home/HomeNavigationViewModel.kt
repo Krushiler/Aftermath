@@ -1,14 +1,20 @@
 package com.example.aftermathandroid.presentation.navigation.home
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.aftermathandroid.data.repository.AuthRepository
 import com.example.aftermathandroid.presentation.navigation.common.NavigationState
+import com.example.aftermathandroid.presentation.navigation.common.back
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeNavigationViewModel @Inject constructor() : ViewModel() {
+class HomeNavigationViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+) : ViewModel() {
     private val _state = MutableStateFlow<NavigationState<HomeRoute>>(NavigationState(HomeRoute.Feed))
     val state: StateFlow<NavigationState<HomeRoute>> = _state
 
@@ -20,13 +26,9 @@ class HomeNavigationViewModel @Inject constructor() : ViewModel() {
         _state.value = NavigationState(HomeRoute.Messages)
     }
 
-    fun navigateToSettings() {
-        _state.value = NavigationState(HomeRoute.Settings)
+    fun logout() {
+        viewModelScope.launch { authRepository.logout() }
     }
 
-    fun back() {
-        _state.value.prevState?.let {
-            _state.value = it
-        }
-    }
+    fun back() = _state.back()
 }

@@ -1,10 +1,13 @@
 package com.example.aftermathandroid.presentation.screens.auth.register
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -35,30 +38,43 @@ fun RegisterScreen(
     }
 
     Scaffold { padding ->
-        Column(
+        Box(
             modifier = Modifier
+                .padding(padding)
                 .fillMaxSize()
-                .padding(padding),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
         ) {
-            OutlinedTextField(value = state.value.login,
-                onValueChange = { viewModel.loginChanged(it) },
-                label = { Text(text = "Login") })
-            Gap.Lg()
-            OutlinedTextField(value = state.value.password,
-                onValueChange = { viewModel.passwordChanged(it) },
-                label = { Text(text = "Password") })
-            Gap.Lg()
-            Button(onClick = {
-                viewModel.register()
-            }) {
-                Text(text = "Register")
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                OutlinedTextField(value = state.value.login,
+                    onValueChange = { viewModel.loginChanged(it) },
+                    label = { Text(text = "Login") })
+                Gap.Lg()
+                OutlinedTextField(value = state.value.password,
+                    onValueChange = { viewModel.passwordChanged(it) },
+                    label = { Text(text = "Password") })
+                Gap.Lg()
+                Button(
+                    onClick = { viewModel.register() },
+                    enabled = !state.value.isLoading
+                ) {
+                    Text(text = "Register")
+                }
+                Gap.Lg()
+                TextButton(
+                    onClick = { rootNavigation.navigateToLogin() },
+                    enabled = !state.value.isLoading
+                ) {
+                    Text(text = "Already have an account?")
+                }
             }
-            Gap.Lg()
-            TextButton(onClick = { rootNavigation.navigateToLogin() }) {
-                Text(text = "Already have an account?")
-            }
+            if (state.value.isLoading) LinearProgressIndicator(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+            )
         }
     }
 }

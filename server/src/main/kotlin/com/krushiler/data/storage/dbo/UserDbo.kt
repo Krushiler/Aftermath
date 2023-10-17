@@ -8,6 +8,7 @@ data class UserDbo(
     val token: String,
     val password: String,
     val name: String,
+    val avatar: String?,
 )
 
 object Users : Table() {
@@ -15,6 +16,7 @@ object Users : Table() {
     val password = varchar("password", 64)
     val token = varchar("token", 128)
     val name = varchar("name", 128)
+    val avatar = varchar("avatar", 128).nullable()
 
     override val primaryKey = PrimaryKey(login)
 
@@ -22,6 +24,7 @@ object Users : Table() {
         login = row[login],
         token = row[token],
         password = row[password],
-        name = row[name]
+        name = row[name],
+        avatar = row[avatar]
     )
 }

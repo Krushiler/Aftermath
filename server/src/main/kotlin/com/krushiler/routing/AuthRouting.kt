@@ -1,4 +1,4 @@
-package com.krushiler.routing.auth
+package com.krushiler.routing
 
 import com.krushiler.data.repository.UserRepository
 import data.request.LoginRequest

@@ -1,3 +1,3 @@
-package data.dto
+package domain.model
 
 class ServerException(message: String?) : RuntimeException(message)

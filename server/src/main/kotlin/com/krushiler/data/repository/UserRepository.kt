@@ -4,10 +4,25 @@ import com.krushiler.data.storage.dao.UserDao
 import com.krushiler.data.storage.dbo.UserDbo
 import com.krushiler.util.generateUUID
 import data.dto.AuthDto
+import data.dto.UserDto
 
 class UserRepository(private val userDao: UserDao) {
-    suspend fun getUserByToken(token: String): UserDbo? = try {
-        userDao.getUserByToken(token)
+    private suspend fun getUserByToken(token: String): UserDto {
+        val dbo = userDao.getUserByToken(token) ?: throw IllegalArgumentException("User is not found")
+        return UserDto(
+            login = dbo.login, name = dbo.name, avatar = dbo.avatar
+        )
+    }
+
+    suspend fun getUserByLogin(login: String): UserDto {
+        val dbo = userDao.getUserByLogin(login) ?: throw IllegalArgumentException("User is not found")
+        return UserDto(
+            login = dbo.login, name = dbo.name, avatar = dbo.avatar
+        )
+    }
+
+    suspend fun getUserByTokenOrNull(token: String): UserDto? = try {
+        getUserByToken(token)
     } catch (_: Exception) {
         null
     }
@@ -24,10 +39,7 @@ class UserRepository(private val userDao: UserDao) {
         val token = generateUUID()
         userDao.createUser(
             UserDbo(
-                login = login,
-                password = password,
-                token = token,
-                name = login
+                login = login, password = password, token = token, name = login, avatar = null
             )
         )
         return AuthDto(token)

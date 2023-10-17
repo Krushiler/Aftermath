@@ -17,9 +17,10 @@ class UserDao(database: Database) : Dao(database) {
         Users.select { Users.login eq login }.map { Users.resultRowToUser(it) }.singleOrNull()
     }
 
-    suspend fun updateName(login: String, name: String): Boolean = dbQuery {
+    suspend fun updateUser(login: String, name: String, avatar: String?): Boolean = dbQuery {
         Users.update({ Users.login eq login }) {
             it[Users.name] = name
+            it[Users.avatar] = avatar
         } > 0
     }
 
@@ -29,6 +30,7 @@ class UserDao(database: Database) : Dao(database) {
             it[password] = userDbo.password
             it[token] = userDbo.token
             it[name] = userDbo.name
+            it[avatar] = userDbo.avatar
         }.insertedCount > 0
     }
 }

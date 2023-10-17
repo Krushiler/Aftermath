@@ -2,7 +2,7 @@ package com.example.aftermathandroid.presentation.screens.auth.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.aftermathandroid.data.repository.AuthRepository
+import com.example.aftermathandroid.domain.interactor.AuthInteractor
 import com.example.aftermathandroid.presentation.common.model.ErrorModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val authRepository: AuthRepository) : ViewModel() {
+class LoginViewModel @Inject constructor(private val authInteractor: AuthInteractor) : ViewModel() {
     private val _stateFlow = MutableStateFlow(LoginState())
     val stateFlow: StateFlow<LoginState> = _stateFlow
 
@@ -25,7 +25,7 @@ class LoginViewModel @Inject constructor(private val authRepository: AuthReposit
         viewModelScope.launch {
             _stateFlow.update { it.copy(isLoading = true) }
             try {
-                authRepository.login(_stateFlow.value.login, _stateFlow.value.password)
+                authInteractor.login(_stateFlow.value.login, _stateFlow.value.password)
             } catch (e: Exception) {
                 _errorFlow.emit(ErrorModel.fromException(e))
             }

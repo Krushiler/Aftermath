@@ -2,7 +2,7 @@ package com.example.aftermathandroid.presentation.navigation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.aftermathandroid.data.repository.AuthRepository
+import com.example.aftermathandroid.domain.interactor.AuthInteractor
 import com.example.aftermathandroid.presentation.navigation.common.NavigationState
 import com.example.aftermathandroid.presentation.navigation.common.back
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeNavigationViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authInteractor: AuthInteractor
 ) : ViewModel() {
     private val _state = MutableStateFlow<NavigationState<HomeRoute>>(NavigationState(HomeRoute.Feed))
     val state: StateFlow<NavigationState<HomeRoute>> = _state
@@ -27,7 +27,7 @@ class HomeNavigationViewModel @Inject constructor(
     }
 
     fun logout() {
-        viewModelScope.launch { authRepository.logout() }
+        viewModelScope.launch { authInteractor.logout() }
     }
 
     fun back() = _state.back()

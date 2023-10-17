@@ -2,7 +2,7 @@ package com.example.aftermathandroid.presentation.screens.auth.register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.aftermathandroid.data.repository.AuthRepository
+import com.example.aftermathandroid.domain.interactor.AuthInteractor
 import com.example.aftermathandroid.presentation.common.model.ErrorModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authInteractor: AuthInteractor
 ) : ViewModel() {
     private val _stateFlow = MutableStateFlow(RegisterState())
     val stateFlow: StateFlow<RegisterState> = _stateFlow
@@ -27,7 +27,7 @@ class RegisterViewModel @Inject constructor(
         viewModelScope.launch {
             _stateFlow.update { it.copy(isLoading = true) }
             try {
-                authRepository.register(_stateFlow.value.login, _stateFlow.value.password)
+                authInteractor.register(_stateFlow.value.login, _stateFlow.value.password)
             } catch (e: Exception) {
                 _errorFlow.emit(ErrorModel.fromException(e))
             }

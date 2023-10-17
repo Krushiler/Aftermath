@@ -17,7 +17,7 @@ fun main() {
 fun Application.module() {
     configureDi()
     configureSerialization()
-    configureSockets()
     configureSecurity()
+    configureSockets()
     configureRouting()
 }

@@ -12,7 +12,7 @@ fun Application.configureSecurity() {
     val userRepository: UserRepository by inject()
 
     install(Authentication) {
-        bearer("auth") {
+        bearer {
             realm = "Auth"
             authenticate { credential ->
                 userRepository.getUserByTokenOrNull(credential.token)?.let { user ->

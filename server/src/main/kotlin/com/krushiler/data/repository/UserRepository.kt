@@ -27,6 +27,10 @@ class UserRepository(private val userDao: UserDao) {
         null
     }
 
+    suspend fun updateUser(login: String, name: String, avatar: String?) {
+        userDao.updateUser(login, name, avatar)
+    }
+
     suspend fun login(login: String, password: String): AuthDto {
         val user = userDao.getUserByLogin(login) ?: throw IllegalArgumentException("Username or password is invalid")
         if (user.password == password) return AuthDto(user.token)

@@ -21,7 +21,7 @@ fun Routing.authRouting() = route("/auth") {
             val auth = userRepository.login(login.name, login.password)
             call.respond(auth)
         } catch (e: Exception) {
-            call.respondText(e.localizedMessage, status = HttpStatusCode.Unauthorized)
+            call.respondText(e.localizedMessage, status = HttpStatusCode.BadRequest)
         }
     }
     post("/register") {
@@ -30,7 +30,7 @@ fun Routing.authRouting() = route("/auth") {
             val auth = userRepository.register(login.name, login.password)
             call.respond(auth)
         } catch (e: Exception) {
-            call.respondText(e.localizedMessage, status = HttpStatusCode.Unauthorized)
+            call.respondText(e.localizedMessage, status = HttpStatusCode.BadRequest)
         }
     }
 }

@@ -75,7 +75,7 @@ dependencies {
     implementation(project(":api", "default"))
 
     val coroutinesVersion = "1.7.3"
-    val roomVersion = "2.5.2"
+    val roomVersion = "2.6.0"
     val ktorVersion = "2.3.5"
 
     implementation("androidx.core:core-ktx:1.12.0")
@@ -106,6 +106,7 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
     implementation("io.ktor:ktor-client-auth:$ktorVersion")
+    implementation("io.ktor:ktor-client-logging:$ktorVersion")
 
     // Room
     implementation("androidx.room:room-runtime:$roomVersion")

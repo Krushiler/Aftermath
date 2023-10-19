@@ -17,6 +17,7 @@ class AuthInteractor @Inject constructor(
         coroutineScope.launch {
             authRepository.watchAuthState().collect {
                 if (it == null) userRepository.clear()
+                else userRepository.fetchUser()
             }
         }
     }

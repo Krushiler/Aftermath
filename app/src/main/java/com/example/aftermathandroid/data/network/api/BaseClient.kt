@@ -10,6 +10,10 @@ import io.ktor.client.plugins.HttpResponseValidator
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.logging.ANDROID
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
@@ -22,6 +26,10 @@ class BaseClient(
     private val authHeaderInterceptor: AuthHeaderInterceptor,
 ) {
     fun create() = HttpClient(CIO) {
+        install(Logging) {
+            logger = Logger.ANDROID
+            level = LogLevel.ALL
+        }
         install(ContentNegotiation) {
             json(Json {
                 prettyPrint = true

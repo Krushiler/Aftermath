@@ -1,11 +1,11 @@
 package com.krushiler.routing
 
 import com.krushiler.data.repository.UserRepository
+import com.krushiler.plugins.authenticateBearer
 import com.krushiler.util.userLogin
 import data.request.ChangeUserRequest
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
-import io.ktor.server.auth.authenticate
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
@@ -17,7 +17,7 @@ import org.koin.ktor.ext.inject
 
 fun Routing.userRouting() = route("/user") {
     val userRepository: UserRepository by inject()
-    authenticate {
+    authenticateBearer {
         patch {
             try {
                 val login = call.userLogin

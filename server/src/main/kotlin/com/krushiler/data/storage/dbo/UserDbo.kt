@@ -15,7 +15,7 @@ object Users : Table() {
     val login = varchar("login", 64)
     val password = varchar("password", 64)
     val token = varchar("token", 128)
-    val name = varchar("name", 128)
+    val name = varchar("username", 128)
     val avatar = varchar("avatar", 128).nullable()
 
     override val primaryKey = PrimaryKey(login)

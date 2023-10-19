@@ -11,12 +11,10 @@ import javax.inject.Singleton
 class AuthHeaderInterceptor @Inject constructor(
     private val preferencesManager: PreferencesManager
 ) {
-    fun install(auth: Auth): Unit = auth.run {
-        bearer {
-            loadTokens {
-                preferencesManager.token?.let { token ->
-                    BearerTokens(token, token)
-                }
+    fun install(auth: Auth) = auth.bearer {
+        loadTokens {
+            preferencesManager.token?.let { token ->
+                BearerTokens(token, token)
             }
         }
     }

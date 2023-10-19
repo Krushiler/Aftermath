@@ -42,8 +42,8 @@ class BaseClient(
             authHeaderInterceptor.install(this)
         }
         HttpResponseValidator {
-            validateResponse(authResponseInterceptor)
             validateResponse { response ->
+                authResponseInterceptor.invoke(response)
                 if (!response.status.isSuccess()) {
                     throw ServerException(response.bodyAsText())
                 }

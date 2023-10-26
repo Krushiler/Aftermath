@@ -28,7 +28,10 @@ class ProfileViewModel @Inject constructor(
             authInteractor.watchUser().collect { user ->
                 _stateFlow.update {
                     it.copy(
-                        name = user?.name ?: "", avatar = user?.avatar
+                        name = user?.name ?: "",
+                        avatar = user?.avatar,
+                        initialName = user?.name ?: "",
+                        initialAvatar = user?.avatar
                     )
                 }
             }
@@ -42,7 +45,9 @@ class ProfileViewModel @Inject constructor(
     fun saveChanges() {
         viewModelScope.launch {
             try {
+                _stateFlow.update { it.copy(loading = true) }
                 authInteractor.updateUser(_stateFlow.value.name, _stateFlow.value.avatar)
+                _stateFlow.update { it.copy(loading = false, initialName = it.name, initialAvatar = it.avatar) }
             } catch (e: Exception) {
                 _errorFlow.emit(ErrorModel.fromException(e))
             }

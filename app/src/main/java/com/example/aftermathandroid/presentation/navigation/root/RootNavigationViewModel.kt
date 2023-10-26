@@ -21,11 +21,10 @@ class RootNavigationViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             authInteractor.watchAuthState().collect {
-                val isAuthScreen =
-                    _state.value.route == RootRoute.Login || _state.value.route == RootRoute.Registration
+                val isAuthScreen = _state.value.route is RootRoute.Login || _state.value.route is RootRoute.Registration
                 if (it == null && !isAuthScreen) {
                     navigateToLogin()
-                } else {
+                } else if (it != null && isAuthScreen) {
                     navigateToHome()
                 }
             }

@@ -11,7 +11,7 @@ class AuthResponseInterceptor @Inject constructor(
     private val preferencesManager: PreferencesManager
 ) : ResponseValidator {
     override suspend fun invoke(response: HttpResponse) {
-        if (response.status.value == 401 || response.status.value == 403) {
+        if (response.status.value == 401) {
             preferencesManager.token = null
         }
     }

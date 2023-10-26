@@ -17,5 +17,10 @@ class AuthHeaderInterceptor @Inject constructor(
                 BearerTokens(token, token)
             }
         }
+        refreshTokens {
+            preferencesManager.token?.let { token ->
+                BearerTokens(token, token)
+            }
+        }
     }
 }

@@ -2,17 +2,19 @@ package com.krushiler.domain.interactor
 
 import com.krushiler.data.repository.DictionaryRepository
 import com.krushiler.data.repository.UserRepository
+import com.krushiler.domain.model.PagingData
 import data.dto.DictionaryDto
 import data.dto.DictionaryInfoDto
 import data.dto.TermInputDto
+import data.response.PagedResponse
 
 class DictionaryInteractor(
     private val userRepository: UserRepository,
     private val dictionaryRepository: DictionaryRepository
 ) {
-    suspend fun getUserDictionaries(userId: String): List<DictionaryInfoDto> {
+    suspend fun getUserDictionaries(userId: String, pagingData: PagingData): PagedResponse<DictionaryInfoDto> {
         val user = userRepository.getUserByLogin(userId)
-        return dictionaryRepository.getUserDictionaries(user)
+        return dictionaryRepository.getUserDictionaries(user, pagingData)
     }
 
     suspend fun getDictionary(id: String): DictionaryDto? {
@@ -41,7 +43,7 @@ class DictionaryInteractor(
         return dictionaryRepository.deleteDictionary(id, userDto)
     }
 
-    suspend fun getDictionaries(): List<DictionaryInfoDto> {
-        return dictionaryRepository.getDictionaries()
+    suspend fun getDictionaries(pagingData: PagingData): PagedResponse<DictionaryInfoDto> {
+        return dictionaryRepository.getDictionaries(pagingData)
     }
 }

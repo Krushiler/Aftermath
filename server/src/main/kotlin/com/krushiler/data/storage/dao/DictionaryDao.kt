@@ -1,11 +1,13 @@
 package com.krushiler.data.storage.dao
 
 import com.krushiler.data.dao.Dao
+import com.krushiler.data.storage.database.DatabaseList
 import com.krushiler.data.storage.dbo.ChangeTermDboAction
 import com.krushiler.data.storage.dbo.Dictionaries
 import com.krushiler.data.storage.dbo.DictionaryDbo
 import com.krushiler.data.storage.dbo.TermDbo
 import com.krushiler.data.storage.dbo.Terms
+import com.krushiler.domain.model.PagingData
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
@@ -15,12 +17,24 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
 
 class DictionaryDao(database: Database) : Dao(database) {
-    suspend fun getUserDictionaries(userId: String): List<DictionaryDbo> = dbQuery {
-        Dictionaries.select { Dictionaries.authorId eq userId }.map { Dictionaries.resultRowToDictionary(it) }
+    suspend fun getUserDictionaries(userId: String, pagingData: PagingData): DatabaseList<DictionaryDbo> = dbQuery {
+        val request = Dictionaries.select { Dictionaries.authorId eq userId }
+        DatabaseList(
+            items = request.limit(pagingData.limit, pagingData.offset.toLong())
+                .map { Dictionaries.resultRowToDictionary(it) },
+            total = request.count().toInt(),
+        )
     }
 
-    suspend fun getDictionaries(): List<DictionaryDbo> = dbQuery {
-        Dictionaries.selectAll().map { Dictionaries.resultRowToDictionary(it) }
+    suspend fun getDictionaries(pagingData: PagingData): DatabaseList<DictionaryDbo> = dbQuery {
+        val request = Dictionaries.selectAll()
+        DatabaseList(
+            items = request.limit(
+                pagingData.limit,
+                pagingData.offset.toLong()
+            ).map { Dictionaries.resultRowToDictionary(it) },
+            total = request.count().toInt(),
+        )
     }
 
     suspend fun getDictionary(id: String): DictionaryDbo? = dbQuery {
@@ -50,8 +64,7 @@ class DictionaryDao(database: Database) : Dao(database) {
     }
 
     suspend fun deleteDictionary(id: String): Boolean = dbQuery {
-        Dictionaries.deleteWhere { Dictionaries.id eq id } > 0 &&
-                Terms.deleteWhere { Terms.dictionaryId eq id } > 0
+        Dictionaries.deleteWhere { Dictionaries.id eq id } > 0 && Terms.deleteWhere { Terms.dictionaryId eq id } > 0
     }
 
     suspend fun deleteTerm(id: String): Boolean = dbQuery {
@@ -59,10 +72,7 @@ class DictionaryDao(database: Database) : Dao(database) {
     }
 
     suspend fun updateDictionary(
-        id: String,
-        name: String,
-        description: String,
-        updates: List<ChangeTermDboAction>
+        id: String, name: String, description: String, updates: List<ChangeTermDboAction>
     ): Boolean = dbQuery {
         Terms.deleteWhere {
             Terms.dictionaryId eq id

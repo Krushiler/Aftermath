@@ -9,5 +9,6 @@ data class PagedResponse<T>(
     val page: Int,
     val pageSize: Int,
 ) {
+    val offset: Int get() = (page - 1) * pageSize
     val hasNext: Boolean get() = page * pageSize < total
 }

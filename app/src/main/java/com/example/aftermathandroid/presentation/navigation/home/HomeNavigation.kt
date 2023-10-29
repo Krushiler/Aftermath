@@ -18,6 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.aftermathandroid.presentation.common.provider.rootViewModel
+import com.example.aftermathandroid.presentation.screens.dictionary.flow.DictionariesFlowScreen
 
 @Composable
 fun HomeNavigation() {
@@ -38,7 +39,7 @@ fun HomeNavigation() {
         startDestination = state.value.route.path,
         enterTransition = { fadeIn() },
         exitTransition = { fadeOut() }) {
-        composable(HomeRoute.Feed.path) {
+        composable(HomeRoute.Game.path) {
             Scaffold {
                 Column(
                     modifier = Modifier
@@ -51,18 +52,8 @@ fun HomeNavigation() {
                 }
             }
         }
-        composable(HomeRoute.Messages.path) {
-            Scaffold {
-                Column(
-                    modifier = Modifier
-                        .padding(it)
-                        .fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(text = "Messages")
-                }
-            }
+        composable(HomeRoute.Dictionaries.path) {
+            DictionariesFlowScreen()
         }
     }
 }

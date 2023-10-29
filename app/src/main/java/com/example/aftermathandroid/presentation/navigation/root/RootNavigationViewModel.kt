@@ -47,5 +47,11 @@ class RootNavigationViewModel @Inject constructor(
         _state.value = NavigationState(RootRoute.Login)
     }
 
+    fun logout() {
+        viewModelScope.launch {
+            authInteractor.logout()
+        }
+    }
+
     fun back() = _state.back()
 }

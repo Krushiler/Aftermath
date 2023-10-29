@@ -6,7 +6,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,10 +22,6 @@ fun RootNavigation() {
     val state = viewModel.state.collectAsState()
 
     val navController = rememberNavController()
-
-    LaunchedEffect(state) {
-        navController.navigate(state.value.route.path)
-    }
 
     BackHandler(state.value.canPop) {
         viewModel.back()

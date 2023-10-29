@@ -15,15 +15,15 @@ import javax.inject.Inject
 class HomeNavigationViewModel @Inject constructor(
     private val authInteractor: AuthInteractor
 ) : ViewModel() {
-    private val _state = MutableStateFlow<NavigationState<HomeRoute>>(NavigationState(HomeRoute.Feed))
+    private val _state = MutableStateFlow<NavigationState<HomeRoute>>(NavigationState(HomeRoute.Game))
     val state: StateFlow<NavigationState<HomeRoute>> = _state
 
     fun navigateToFeed() {
-        _state.value = NavigationState(HomeRoute.Feed)
+        _state.value = NavigationState(HomeRoute.Game, prevState = state.value)
     }
 
-    fun navigateToMessages() {
-        _state.value = NavigationState(HomeRoute.Messages)
+    fun navigateToDictionaries() {
+        _state.value = NavigationState(HomeRoute.Dictionaries, prevState = state.value)
     }
 
     fun logout() {

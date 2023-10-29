@@ -35,7 +35,7 @@ android {
             dimension = "env"
         }
         create("production") {
-            buildConfigField("String", "BASE_URL", "\"http://powerofpoint.online:8080\"")
+            buildConfigField("String", "BASE_URL", "\"https://backend.powerofpoint.online\"")
             dimension = "env"
         }
     }
@@ -107,6 +107,7 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
     implementation("io.ktor:ktor-client-auth:$ktorVersion")
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
     // Room
     implementation("androidx.room:room-runtime:$roomVersion")

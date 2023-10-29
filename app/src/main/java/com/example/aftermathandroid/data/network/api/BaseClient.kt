@@ -5,7 +5,7 @@ import com.example.aftermathandroid.data.network.interceptor.AuthHeaderIntercept
 import com.example.aftermathandroid.data.network.interceptor.AuthResponseInterceptor
 import domain.model.ServerException
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
+import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.HttpResponseValidator
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -20,12 +20,18 @@ import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import okhttp3.logging.HttpLoggingInterceptor
 
 class BaseClient(
     private val authResponseInterceptor: AuthResponseInterceptor,
     private val authHeaderInterceptor: AuthHeaderInterceptor,
 ) {
-    fun create() = HttpClient(CIO) {
+    fun create() = HttpClient(OkHttp) {
+        engine {
+            addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
+        }
         install(Logging) {
             logger = Logger.ANDROID
             level = LogLevel.ALL

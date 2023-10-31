@@ -8,9 +8,3 @@ data class TermDto(
     val name: String,
     val description: String,
 )
-
-@Serializable
-data class TermInputDto(
-    val name: String,
-    val description: String,
-)

@@ -1,10 +1,10 @@
 package data.request
 
-import data.dto.TermInputDto
+import data.dto.TermDto
 
 data class UpdateDictionaryRequest(
     val dictionaryId: String,
     val name: String,
     val description: String,
-    val terms: List<TermInputDto>,
+    val terms: List<TermDto>,
 )

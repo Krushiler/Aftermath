@@ -20,20 +20,20 @@ class DictionaryDao(database: Database) : Dao(database) {
     suspend fun getUserDictionaries(userId: String, pagingData: PagingData): DatabaseList<DictionaryDbo> = dbQuery {
         val request = Dictionaries.select { Dictionaries.authorId eq userId }
         DatabaseList(
-            items = request.limit(pagingData.limit, pagingData.offset.toLong())
+            items = request.copy().limit(pagingData.limit, pagingData.offset.toLong())
                 .map { Dictionaries.resultRowToDictionary(it) },
-            total = request.count().toInt(),
+            total = request.copy().count().toInt(),
         )
     }
 
     suspend fun getDictionaries(pagingData: PagingData): DatabaseList<DictionaryDbo> = dbQuery {
         val request = Dictionaries.selectAll()
         DatabaseList(
-            items = request.limit(
+            items = request.copy().limit(
                 pagingData.limit,
                 pagingData.offset.toLong()
             ).map { Dictionaries.resultRowToDictionary(it) },
-            total = request.count().toInt(),
+            total = request.copy().count().toInt(),
         )
     }
 

@@ -29,7 +29,12 @@ class MyDictionariesViewModel @Inject constructor(
     val errorFlow: SharedFlow<ErrorModel> = _errorFlow
 
     fun createDictionary() {
-        viewModelScope.launch {}
+        _stateFlow.update { it.copy(showCreateDictionary = true) }
+    }
+
+    fun completedCreateDictionary(created: Boolean) {
+        _stateFlow.update { it.copy(showCreateDictionary = false) }
+        if (created) loadMore(refresh = true)
     }
 
     init {
@@ -38,21 +43,28 @@ class MyDictionariesViewModel @Inject constructor(
 
     fun loadMore(refresh: Boolean = false) = viewModelScope.launch {
         try {
+            if (refresh) _stateFlow.update {
+                it.copy(
+                    dictionaries = emptyList(),
+                    hasNext = true,
+                    offset = 0,
+                    isRefreshing = true,
+                )
+            }
             _stateFlow.update { it.copy(isLoading = true) }
             val pagedDictionaries = dictionaryInteractor.getMyDictionaries(
-                limit = PAGE_SIZE,
-                offset = _stateFlow.value.offset
+                limit = PAGE_SIZE, offset = _stateFlow.value.offset
             )
             _stateFlow.update {
                 it.copy(
                     hasNext = pagedDictionaries.hasNext,
-                    offset = pagedDictionaries.offset,
-                    dictionaries = pagedDictionaries.items
+                    offset = pagedDictionaries.offset + PAGE_SIZE,
+                    dictionaries = _stateFlow.value.dictionaries + pagedDictionaries.items
                 )
             }
         } catch (e: Exception) {
             _errorFlow.emit(ErrorModel.fromException(e))
         }
-        _stateFlow.update { it.copy(isLoading = false) }
+        _stateFlow.update { it.copy(isLoading = false, isRefreshing = false) }
     }
 }

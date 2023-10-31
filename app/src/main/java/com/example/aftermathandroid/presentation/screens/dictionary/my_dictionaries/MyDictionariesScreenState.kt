@@ -7,4 +7,6 @@ data class MyDictionariesScreenState(
     val dictionaries: List<DictionaryInfoDto> = emptyList(),
     val offset: Int = 0,
     val hasNext: Boolean = true,
+    val showCreateDictionary: Boolean = false,
+    val isRefreshing: Boolean = false,
 )

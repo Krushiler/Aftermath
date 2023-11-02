@@ -6,13 +6,17 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.aftermathandroid.presentation.common.provider.rootViewModel
 import com.example.aftermathandroid.presentation.screens.auth.login.LoginScreen
 import com.example.aftermathandroid.presentation.screens.auth.register.RegisterScreen
+import com.example.aftermathandroid.presentation.screens.dictionary.edit.EditDictionaryScreen
+import com.example.aftermathandroid.presentation.screens.dictionary.edit.EditDictionaryViewModel
 import com.example.aftermathandroid.presentation.screens.home.flow.HomeFlowScreen
 import com.example.aftermathandroid.presentation.screens.home.profile.ProfileScreen
 
@@ -28,25 +32,34 @@ fun RootNavigation() {
     }
 
     NavHost(navController = navController,
-        startDestination = state.value.route.path,
+        startDestination = state.value.route.path(),
         enterTransition = { fadeIn() },
         exitTransition = { fadeOut() }) {
-        composable(RootRoute.Profile.path,
+        composable(RootDestination.Profile.path,
             enterTransition = { slideInHorizontally() },
             exitTransition = { slideOutHorizontally() }) {
-            ProfileScreen()
+            ProfileScreen(viewModel = hiltViewModel())
         }
-        composable(RootRoute.Home.path) {
+        composable(RootDestination.Home.path) {
             HomeFlowScreen()
         }
-        composable(RootRoute.Login.path) {
-            LoginScreen()
+        composable(RootDestination.Login.path) {
+            LoginScreen(viewModel = hiltViewModel())
         }
-        composable(
-            RootRoute.Registration.path,
+        composable(RootDestination.Registration.path,
             enterTransition = { slideInHorizontally() },
             exitTransition = { slideOutHorizontally() }) {
-            RegisterScreen()
+            RegisterScreen(viewModel = hiltViewModel())
+        }
+        composable(
+            RootDestination.EditDictionary.path,
+        ) {
+            val editDictionaryViewModel = hiltViewModel<EditDictionaryViewModel>()
+            LaunchedEffect(Unit) {
+                val route = state.value.route as? RootRoute.EditDictionary
+                editDictionaryViewModel.init(route?.dictionaryId ?: "")
+            }
+            EditDictionaryScreen(viewModel = editDictionaryViewModel)
         }
     }
 }

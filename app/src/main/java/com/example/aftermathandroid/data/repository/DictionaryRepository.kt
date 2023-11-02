@@ -3,7 +3,7 @@ package com.example.aftermathandroid.data.repository
 import com.example.aftermathandroid.data.network.api.BaseApi
 import data.dto.DictionaryDto
 import data.dto.DictionaryInfoDto
-import data.dto.TermInputDto
+import data.dto.TermDto
 import data.request.CreateDictionaryRequest
 import data.request.UpdateDictionaryRequest
 import data.response.PagedResponse
@@ -28,8 +28,10 @@ class DictionaryRepository @Inject constructor(
         id: String,
         name: String,
         description: String,
-        terms: List<TermInputDto>
+        terms: List<TermDto>
     ): DictionaryDto = api.updateDictionary(
         UpdateDictionaryRequest(id, name, description, terms)
     )
+
+    suspend fun getDictionary(id: String): DictionaryDto = api.getDictionary(id)
 }

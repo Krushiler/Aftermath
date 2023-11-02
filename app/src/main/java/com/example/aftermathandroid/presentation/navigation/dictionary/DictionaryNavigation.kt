@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -24,7 +25,6 @@ import com.example.aftermathandroid.presentation.screens.dictionary.my_dictionar
 fun DictionaryNavigation() {
     val viewModel: DictionaryNavigationViewModel = rootViewModel()
     val state = viewModel.state.collectAsState()
-
     val navController = rememberNavController()
 
     BackHandler(state.value.canPop) {
@@ -39,7 +39,7 @@ fun DictionaryNavigation() {
             DictionariesMenuScreen()
         }
         composable(DictionaryRoute.My.path) {
-            MyDictionariesScreen()
+            MyDictionariesScreen(viewModel = hiltViewModel())
         }
         composable(DictionaryRoute.Search.path) {
             Scaffold { padding ->

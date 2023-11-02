@@ -30,6 +30,7 @@ import com.example.aftermathandroid.presentation.common.component.dictionary.Dic
 import com.example.aftermathandroid.presentation.common.provider.rootSnackbar
 import com.example.aftermathandroid.presentation.common.provider.rootViewModel
 import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryNavigationViewModel
+import com.example.aftermathandroid.presentation.navigation.root.RootNavigationViewModel
 import com.example.aftermathandroid.presentation.screens.dictionary.create.CreateDictionaryDialog
 import com.example.aftermathandroid.presentation.theme.Dimens
 import kotlinx.coroutines.flow.collectLatest
@@ -39,6 +40,7 @@ import kotlinx.coroutines.flow.collectLatest
 fun MyDictionariesScreen(
     viewModel: MyDictionariesViewModel = hiltViewModel(),
     dictionaryNavigation: DictionaryNavigationViewModel = rootViewModel(),
+    rootNavigation: RootNavigationViewModel = rootViewModel()
 ) {
     val snackbarHost = rootSnackbar()
     val state = viewModel.stateFlow.collectAsState()
@@ -88,7 +90,7 @@ fun MyDictionariesScreen(
                 contentPadding = PaddingValues(Dimens.md),
             ) {
                 items(state.value.dictionaries) { item ->
-                    DictionaryItem(dictionary = item, onPressed = {})
+                    DictionaryItem(dictionary = item, onPressed = { rootNavigation.navigateToEditDictionary(item.id) })
                 }
                 if (state.value.isLoading) {
                     item {

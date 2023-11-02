@@ -56,4 +56,6 @@ class BaseApi(private val client: HttpClient) {
     suspend fun updateDictionary(request: UpdateDictionaryRequest): DictionaryDto = client.post("/dictionary/edit") {
         setBody(request)
     }.body()
+
+    suspend fun getDictionary(id: String): DictionaryDto = client.get("/dictionary/$id").body()
 }

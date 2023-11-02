@@ -47,6 +47,10 @@ class RootNavigationViewModel @Inject constructor(
         _state.value = NavigationState(RootRoute.Login)
     }
 
+    fun navigateToEditDictionary(dictionaryId: String) {
+        _state.value = NavigationState(RootRoute.EditDictionary(dictionaryId), prevState = _state.value)
+    }
+
     fun logout() {
         viewModelScope.launch {
             authInteractor.logout()

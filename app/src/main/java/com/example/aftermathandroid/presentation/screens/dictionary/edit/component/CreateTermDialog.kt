@@ -1,4 +1,4 @@
-package com.example.aftermathandroid.presentation.screens.dictionary.create
+package com.example.aftermathandroid.presentation.screens.dictionary.edit.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,36 +16,20 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.aftermathandroid.presentation.common.component.Gap
-import com.example.aftermathandroid.presentation.common.provider.rootSnackbar
 import com.example.aftermathandroid.presentation.theme.Dimens
-import data.dto.DictionaryDto
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateDictionaryDialog(
-    onDismiss: () -> Unit,
-    onCreatedDictionary: (DictionaryDto) -> Unit,
-    viewModel: CreateDictionaryViewModel = hiltViewModel(),
+fun CreateTermDialog(
+    onCreate: (name: String, description: String) -> Unit,
+    onDismiss: () -> Unit
 ) {
-    val state = viewModel.stateFlow.collectAsState()
-    val snackbarHost = rootSnackbar()
-
-    LaunchedEffect(key1 = Unit) {
-        viewModel.errorFlow.collect {
-            snackbarHost.showSnackbar(it.message)
-        }
-    }
-
-    LaunchedEffect(key1 = Unit) {
-        viewModel.completedFlow.collect {
-            onCreatedDictionary(it.dictionary)
-        }
-    }
+    val name = remember { mutableStateOf("") }
+    val description = remember { mutableStateOf("") }
 
     AlertDialog(onDismissRequest = { onDismiss() }) {
         Box(
@@ -57,14 +41,14 @@ fun CreateDictionaryDialog(
             Column(
                 modifier = Modifier.padding(Dimens.md)
             ) {
-                Text(text = "Create dictionary")
+                Text(text = "Create term")
                 Gap.Md()
-                OutlinedTextField(value = state.value.name, onValueChange = { viewModel.nameChanged(it) }, label = {
+                OutlinedTextField(value = name.value, onValueChange = { name.value = it }, label = {
                     Text(text = "Name")
                 })
                 Gap.Md()
                 OutlinedTextField(
-                    value = state.value.description, onValueChange = { viewModel.descriptionChanged(it) },
+                    value = description.value, onValueChange = { description.value = it },
                     maxLines = 3,
                     label = {
                         Text(text = "Description")
@@ -76,7 +60,9 @@ fun CreateDictionaryDialog(
                         Text(text = "Cancel")
                     }
                     Gap.Sm()
-                    ElevatedButton(modifier = Modifier.weight(1f), onClick = { viewModel.createDictionary() }) {
+                    ElevatedButton(
+                        modifier = Modifier.weight(1f),
+                        onClick = { onCreate(name.value, description.value) }) {
                         Text(text = "Create")
                     }
                 }

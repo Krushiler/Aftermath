@@ -1,8 +1,19 @@
 package com.example.aftermathandroid.presentation.navigation.root
 
-sealed class RootRoute(val path: String) {
-    object Login : RootRoute("login")
-    object Registration : RootRoute("registration")
-    object Home : RootRoute("home")
-    object Profile : RootRoute("profile")
+enum class RootDestination(val path: String) {
+    Login("login"),
+    Registration("registration"),
+    Home("home"),
+    Profile("profile"),
+    EditDictionary("edit-dictionary")
+}
+
+sealed class RootRoute(private val destination: RootDestination) {
+    open fun path() = destination.path
+
+    object Login : RootRoute(RootDestination.Login)
+    object Registration : RootRoute(RootDestination.Registration)
+    object Home : RootRoute(RootDestination.Home)
+    object Profile : RootRoute(RootDestination.Profile)
+    data class EditDictionary(val dictionaryId: String) : RootRoute(RootDestination.EditDictionary)
 }

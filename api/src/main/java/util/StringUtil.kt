@@ -1,4 +1,4 @@
-package com.krushiler.util
+package util
 
 import java.util.UUID
 

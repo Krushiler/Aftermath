@@ -5,7 +5,7 @@ import com.krushiler.data.repository.UserRepository
 import com.krushiler.domain.model.PagingData
 import data.dto.DictionaryDto
 import data.dto.DictionaryInfoDto
-import data.dto.TermInputDto
+import data.dto.TermDto
 import data.response.PagedResponse
 
 class DictionaryInteractor(
@@ -31,7 +31,7 @@ class DictionaryInteractor(
         user: String,
         name: String,
         description: String,
-        terms: List<TermInputDto>
+        terms: List<TermDto>
     ): DictionaryDto? {
         val userDto = userRepository.getUserByLogin(user)
         dictionaryRepository.updateDictionary(id, userDto, name, description, terms)

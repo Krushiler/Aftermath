@@ -4,13 +4,12 @@ import com.krushiler.data.storage.dao.DictionaryDao
 import com.krushiler.data.storage.dao.UserDao
 import com.krushiler.data.storage.dbo.ChangeTermDboAction
 import com.krushiler.domain.model.PagingData
-import com.krushiler.util.generateUUID
 import data.dto.DictionaryDto
 import data.dto.DictionaryInfoDto
 import data.dto.TermDto
-import data.dto.TermInputDto
 import data.dto.UserDto
 import data.response.PagedResponse
+import util.generateUUID
 
 class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val userDao: UserDao) {
     suspend fun getUserDictionaries(user: UserDto, pagingData: PagingData): PagedResponse<DictionaryInfoDto> {
@@ -61,7 +60,7 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
     }
 
     suspend fun updateDictionary(
-        id: String, user: UserDto, name: String, description: String, terms: List<TermInputDto>
+        id: String, user: UserDto, name: String, description: String, terms: List<TermDto>
     ) {
         val dictionary = dictionaryDao.getDictionary(id)
         if (dictionary?.authorId != user.name) throw IllegalArgumentException("Dictionary is not yours")

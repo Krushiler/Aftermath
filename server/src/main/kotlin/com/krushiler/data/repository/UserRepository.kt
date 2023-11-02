@@ -5,6 +5,7 @@ import com.krushiler.data.storage.dbo.UserDbo
 import com.krushiler.util.generateUUID
 import data.dto.AuthDto
 import data.dto.UserDto
+import util.generateUUID
 
 class UserRepository(private val userDao: UserDao) {
     private suspend fun getUserByToken(token: String): UserDto {

@@ -2,7 +2,6 @@ package com.krushiler.data.repository
 
 import com.krushiler.data.storage.dao.UserDao
 import com.krushiler.data.storage.dbo.UserDbo
-import com.krushiler.util.generateUUID
 import data.dto.AuthDto
 import data.dto.UserDto
 import util.generateUUID

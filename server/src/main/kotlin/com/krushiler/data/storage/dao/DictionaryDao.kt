@@ -30,8 +30,7 @@ class DictionaryDao(database: Database) : Dao(database) {
         val request = Dictionaries.selectAll()
         DatabaseList(
             items = request.copy().limit(
-                pagingData.limit,
-                pagingData.offset.toLong()
+                pagingData.limit, pagingData.offset.toLong()
             ).map { Dictionaries.resultRowToDictionary(it) },
             total = request.copy().count().toInt(),
         )
@@ -82,6 +81,7 @@ class DictionaryDao(database: Database) : Dao(database) {
                 it[Terms.id] = action.id
                 it[Terms.name] = action.name
                 it[Terms.description] = action.description
+                it[Terms.dictionaryId] = id
             }
         }
         Dictionaries.update({ Dictionaries.id eq id }) {

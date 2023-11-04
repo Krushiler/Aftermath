@@ -14,6 +14,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.aftermathandroid.R
 import com.example.aftermathandroid.presentation.common.component.button.ProfileButton
 import com.example.aftermathandroid.presentation.common.provider.rootViewModel
 import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryNavigationViewModel
@@ -29,7 +31,7 @@ fun DictionariesMenuScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Dictionaries") },
+                title = { Text(text = stringResource(id = R.string.dictionaries)) },
                 actions = {
                     ProfileButton(
                         profilePressed = { rootNavigation.navigateToProfile() },
@@ -52,14 +54,14 @@ fun DictionariesMenuScreen(
             ) {
                 item {
                     DictionaryMenuItem(
-                        name = "My Dictionaries",
+                        name = stringResource(id = R.string.search),
                         icon = Icons.Outlined.Home,
                         onPressed = { dictionaryNavigation.navigateToMyDictionaries() }
                     )
                 }
                 item {
                     DictionaryMenuItem(
-                        name = "Search",
+                        name = stringResource(id = R.string.search),
                         icon = Icons.Outlined.Search,
                         onPressed = { dictionaryNavigation.navigateToSearch() }
                     )

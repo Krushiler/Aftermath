@@ -14,6 +14,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.aftermathandroid.R
 import com.example.aftermathandroid.presentation.common.provider.rootViewModel
 import com.example.aftermathandroid.presentation.navigation.home.HomeNavigation
 import com.example.aftermathandroid.presentation.navigation.home.HomeNavigationViewModel
@@ -39,7 +41,7 @@ fun HomeFlowScreen(
                     icon = {
                         Icon(imageVector = Icons.Outlined.Menu, contentDescription = null)
                     },
-                    label = { Text(text = "Dictionaries") },
+                    label = { Text(text = stringResource(id = R.string.dictionaries)) },
                 )
             }
         },

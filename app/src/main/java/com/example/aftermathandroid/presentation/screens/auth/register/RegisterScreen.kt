@@ -20,8 +20,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.aftermathandroid.R
 import com.example.aftermathandroid.presentation.common.component.Gap
 import com.example.aftermathandroid.presentation.common.component.animation.animateBoolAsFloatState
 import com.example.aftermathandroid.presentation.common.provider.rootSnackbar
@@ -57,26 +59,26 @@ fun RegisterScreen(
                 OutlinedTextField(value = state.value.login,
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                     onValueChange = { viewModel.loginChanged(it) },
-                    label = { Text(text = "Login") })
+                    label = { Text(text = stringResource(id = R.string.login)) })
                 Gap.Lg()
                 OutlinedTextField(value = state.value.password,
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
                     keyboardActions = KeyboardActions { viewModel.register() },
                     onValueChange = { viewModel.passwordChanged(it) },
-                    label = { Text(text = "Password") })
+                    label = { Text(text = stringResource(id = R.string.password)) })
                 Gap.Lg()
                 Button(
                     onClick = { viewModel.register() },
                     enabled = !state.value.isLoading
                 ) {
-                    Text(text = "Register")
+                    Text(text = stringResource(id = R.string.register))
                 }
                 Gap.Lg()
                 TextButton(
                     onClick = { rootNavigation.navigateToLogin() },
                     enabled = !state.value.isLoading
                 ) {
-                    Text(text = "Already have an account?")
+                    Text(text = stringResource(id = R.string.loginSuggestion))
                 }
             }
             if (state.value.isLoading) LinearProgressIndicator(

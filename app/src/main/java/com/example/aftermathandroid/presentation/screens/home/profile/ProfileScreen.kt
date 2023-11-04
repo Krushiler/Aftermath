@@ -25,8 +25,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.aftermathandroid.R
 import com.example.aftermathandroid.presentation.common.component.Gap
 import com.example.aftermathandroid.presentation.common.component.animation.animateBoolAsFloatState
 import com.example.aftermathandroid.presentation.common.component.button.BackButton
@@ -38,7 +40,8 @@ import com.example.aftermathandroid.presentation.theme.Dimens
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
-    viewModel: ProfileViewModel = hiltViewModel(), rootNavigationViewModel: RootNavigationViewModel = rootViewModel()
+    viewModel: ProfileViewModel = hiltViewModel(),
+    rootNavigationViewModel: RootNavigationViewModel = rootViewModel()
 ) {
     val state = viewModel.stateFlow.collectAsState()
     val columnScrollState = rememberScrollState()
@@ -53,17 +56,23 @@ fun ProfileScreen(
     }
 
     Scaffold(topBar = {
-        TopAppBar(title = { Text(text = "Profile") },
+        TopAppBar(title = { Text(text = stringResource(id = R.string.profile)) },
             navigationIcon = { BackButton(onClick = { rootNavigationViewModel.back() }) },
             actions = {
                 IconButton(
                     onClick = { viewModel.saveChanges() },
                     modifier = Modifier.scale(confirmButtonAnimation.value)
                 ) {
-                    Icon(imageVector = Icons.Outlined.Check, contentDescription = "Save changes")
+                    Icon(
+                        imageVector = Icons.Outlined.Check,
+                        contentDescription = stringResource(id = R.string.save)
+                    )
                 }
                 IconButton(onClick = { viewModel.logout() }) {
-                    Icon(imageVector = Icons.Outlined.ExitToApp, contentDescription = "Sign Out")
+                    Icon(
+                        imageVector = Icons.Outlined.ExitToApp,
+                        contentDescription = stringResource(id = R.string.signOut)
+                    )
                 }
             })
     }) { padding ->

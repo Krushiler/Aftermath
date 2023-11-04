@@ -28,7 +28,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.aftermathandroid.R
 import com.example.aftermathandroid.presentation.common.component.Gap
 import com.example.aftermathandroid.presentation.common.component.animation.animateBoolAsFloatState
 import com.example.aftermathandroid.presentation.common.component.button.BackButton
@@ -43,7 +45,8 @@ import com.example.aftermathandroid.presentation.theme.Dimens
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditDictionaryScreen(
-    viewModel: EditDictionaryViewModel = hiltViewModel(), rootNavigation: RootNavigationViewModel = rootViewModel()
+    viewModel: EditDictionaryViewModel = hiltViewModel(),
+    rootNavigation: RootNavigationViewModel = rootViewModel()
 ) {
     val snackbarHost = rootSnackbar()
     val state = viewModel.stateFlow.collectAsState()
@@ -73,14 +76,22 @@ fun EditDictionaryScreen(
                 },
                 actions = {
                     IconButton(onClick = { viewModel.save() }) {
-                        Icon(imageVector = Icons.Outlined.Done, contentDescription = "Save")
+                        Icon(
+                            imageVector = Icons.Outlined.Done, contentDescription = stringResource(
+                                id = R.string.save
+                            )
+                        )
                     }
                 },
             )
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { viewModel.addTermPressed() }) {
-                Icon(imageVector = Icons.Outlined.Add, contentDescription = "Add")
+                Icon(
+                    imageVector = Icons.Outlined.Add, contentDescription = stringResource(
+                        id = R.string.addTerm
+                    )
+                )
             }
         }
     ) { padding ->

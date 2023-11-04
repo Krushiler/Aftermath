@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.example.aftermathandroid.presentation.common.provider.LocalRootSnackbarState
 import com.example.aftermathandroid.presentation.common.provider.LocalRootStoreOwner
+import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryNavigationViewModel
 import com.example.aftermathandroid.presentation.navigation.home.HomeNavigationViewModel
 import com.example.aftermathandroid.presentation.navigation.root.RootNavigation
 import com.example.aftermathandroid.presentation.navigation.root.RootNavigationViewModel
@@ -28,13 +29,12 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val rootNavigationViewModel: RootNavigationViewModel by viewModels()
     private val homeNavigationViewModel: HomeNavigationViewModel by viewModels()
+    private val dictionaryNavigationViewModel: DictionaryNavigationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
-
-        this.viewModelStore
 
         setContent {
             AftermathAndroidTheme {

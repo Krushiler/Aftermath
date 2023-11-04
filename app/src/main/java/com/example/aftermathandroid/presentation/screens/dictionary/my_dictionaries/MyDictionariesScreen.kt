@@ -56,7 +56,9 @@ fun MyDictionariesScreen(
         snapshotFlow {
             dictionaryListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
         }.collectLatest { index ->
-            if (!state.value.isLoading && state.value.hasNext && index != null && index >= state.value.dictionaries.size - 2) {
+            if (!state.value.isLoading && state.value.dictionaries.hasNext
+                && index != null && index >= state.value.dictionaries.size - 2
+            ) {
                 viewModel.loadMore()
             }
         }
@@ -89,7 +91,7 @@ fun MyDictionariesScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(Dimens.md),
             ) {
-                items(state.value.dictionaries) { item ->
+                items(state.value.dictionaries.items) { item ->
                     DictionaryItem(dictionary = item, onPressed = { rootNavigation.navigateToEditDictionary(item.id) })
                 }
                 if (state.value.isLoading) {

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.aftermathandroid.domain.interactor.DictionaryInteractor
 import com.example.aftermathandroid.presentation.common.model.ErrorModel
+import com.example.aftermathandroid.presentation.common.model.PagedList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,11 +20,11 @@ class MyDictionariesViewModel @Inject constructor(
 ) : ViewModel() {
 
     companion object {
-        private const val PAGE_SIZE = 10
+        private const val PAGE_SIZE = 20
     }
 
-    private val _stateFlow = MutableStateFlow(MyDictionariesScreenState())
-    val stateFlow: StateFlow<MyDictionariesScreenState> = _stateFlow
+    private val _stateFlow = MutableStateFlow(MyDictionariesState())
+    val stateFlow: StateFlow<MyDictionariesState> = _stateFlow
 
     private val _errorFlow = MutableSharedFlow<ErrorModel>()
     val errorFlow: SharedFlow<ErrorModel> = _errorFlow
@@ -45,21 +46,21 @@ class MyDictionariesViewModel @Inject constructor(
         try {
             if (refresh) _stateFlow.update {
                 it.copy(
-                    dictionaries = emptyList(),
-                    hasNext = true,
-                    offset = 0,
+                    dictionaries = PagedList(),
                     isRefreshing = true,
                 )
             }
             _stateFlow.update { it.copy(isLoading = true) }
             val pagedDictionaries = dictionaryInteractor.getMyDictionaries(
-                limit = PAGE_SIZE, offset = _stateFlow.value.offset
+                limit = PAGE_SIZE, offset = _stateFlow.value.dictionaries.offset
             )
             _stateFlow.update {
                 it.copy(
-                    hasNext = pagedDictionaries.hasNext,
-                    offset = pagedDictionaries.offset + PAGE_SIZE,
-                    dictionaries = _stateFlow.value.dictionaries + pagedDictionaries.items
+                    dictionaries = it.dictionaries.copy(
+                        hasNext = pagedDictionaries.hasNext,
+                        offset = pagedDictionaries.offset + PAGE_SIZE,
+                        items = _stateFlow.value.dictionaries.items + pagedDictionaries.items
+                    )
                 )
             }
         } catch (e: Exception) {

@@ -19,6 +19,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.aftermathandroid.R
 import com.example.aftermathandroid.presentation.common.component.Gap
 import com.example.aftermathandroid.presentation.theme.Dimens
 
@@ -41,7 +43,7 @@ fun CreateTermDialog(
             Column(
                 modifier = Modifier.padding(Dimens.md)
             ) {
-                Text(text = "Create term")
+                Text(text = stringResource(id = R.string.createTerm))
                 Gap.Md()
                 OutlinedTextField(value = name.value, onValueChange = { name.value = it }, label = {
                     Text(text = "Name")
@@ -51,19 +53,22 @@ fun CreateTermDialog(
                     value = description.value, onValueChange = { description.value = it },
                     maxLines = 3,
                     label = {
-                        Text(text = "Description")
+                        Text(text = stringResource(id = R.string.description))
                     },
                 )
                 Gap.Md()
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
                     OutlinedButton(modifier = Modifier.weight(1f), onClick = { onDismiss() }) {
-                        Text(text = "Cancel")
+                        Text(text = stringResource(id = R.string.cancel))
                     }
                     Gap.Sm()
                     ElevatedButton(
                         modifier = Modifier.weight(1f),
                         onClick = { onCreate(name.value, description.value) }) {
-                        Text(text = "Create")
+                        Text(text = stringResource(id = R.string.create))
                     }
                 }
             }

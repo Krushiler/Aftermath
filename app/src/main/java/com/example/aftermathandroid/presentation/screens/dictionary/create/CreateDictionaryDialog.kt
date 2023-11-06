@@ -19,7 +19,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.aftermathandroid.R
 import com.example.aftermathandroid.presentation.common.component.Gap
 import com.example.aftermathandroid.presentation.common.provider.rootSnackbar
 import com.example.aftermathandroid.presentation.theme.Dimens
@@ -57,27 +59,36 @@ fun CreateDictionaryDialog(
             Column(
                 modifier = Modifier.padding(Dimens.md)
             ) {
-                Text(text = "Create dictionary")
-                Gap.Md()
-                OutlinedTextField(value = state.value.name, onValueChange = { viewModel.nameChanged(it) }, label = {
-                    Text(text = "Name")
-                })
+                Text(text = stringResource(id = R.string.createDictionary))
                 Gap.Md()
                 OutlinedTextField(
-                    value = state.value.description, onValueChange = { viewModel.descriptionChanged(it) },
+                    value = state.value.name,
+                    onValueChange = { viewModel.nameChanged(it) },
+                    label = {
+                        Text(text = stringResource(id = R.string.name))
+                    })
+                Gap.Md()
+                OutlinedTextField(
+                    value = state.value.description,
+                    onValueChange = { viewModel.descriptionChanged(it) },
                     maxLines = 3,
                     label = {
-                        Text(text = "Description")
+                        Text(text = stringResource(id = R.string.description))
                     },
                 )
                 Gap.Md()
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
                     OutlinedButton(modifier = Modifier.weight(1f), onClick = { onDismiss() }) {
-                        Text(text = "Cancel")
+                        Text(text = stringResource(id = R.string.cancel))
                     }
                     Gap.Sm()
-                    ElevatedButton(modifier = Modifier.weight(1f), onClick = { viewModel.createDictionary() }) {
-                        Text(text = "Create")
+                    ElevatedButton(
+                        modifier = Modifier.weight(1f),
+                        onClick = { viewModel.createDictionary() }) {
+                        Text(text = stringResource(id = R.string.create))
                     }
                 }
             }

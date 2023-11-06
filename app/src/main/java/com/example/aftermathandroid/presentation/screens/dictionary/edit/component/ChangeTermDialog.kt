@@ -24,6 +24,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.aftermathandroid.R
 import com.example.aftermathandroid.presentation.common.component.Gap
 import com.example.aftermathandroid.presentation.theme.Dimens
 import data.dto.TermDto
@@ -54,33 +56,48 @@ fun ChangeTermDialog(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Edit term")
+                    Text(text = stringResource(R.string.editTerm))
                     IconButton(onClick = { onDelete(term) }) {
-                        Icon(imageVector = Icons.Outlined.Delete, contentDescription = "Delete")
+                        Icon(
+                            imageVector = Icons.Outlined.Delete,
+                            contentDescription = stringResource(
+                                id = R.string.delete
+                            )
+                        )
                     }
                 }
                 Gap.Md()
                 OutlinedTextField(value = name.value, onValueChange = { name.value = it }, label = {
-                    Text(text = "Name")
+                    Text(text = stringResource(id = R.string.name))
                 })
                 Gap.Md()
                 OutlinedTextField(
                     value = description.value, onValueChange = { description.value = it },
                     maxLines = 3,
                     label = {
-                        Text(text = "Description")
+                        Text(text = stringResource(id = R.string.description))
                     },
                 )
                 Gap.Md()
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
                     OutlinedButton(modifier = Modifier.weight(1f), onClick = { onDismiss() }) {
-                        Text(text = "Cancel")
+                        Text(text = stringResource(id = R.string.cancel))
                     }
                     Gap.Sm()
                     ElevatedButton(
                         modifier = Modifier.weight(1f),
-                        onClick = { onChange(term.copy(name = name.value, description = description.value)) }) {
-                        Text(text = "Confirm")
+                        onClick = {
+                            onChange(
+                                term.copy(
+                                    name = name.value,
+                                    description = description.value
+                                )
+                            )
+                        }) {
+                        Text(text = stringResource(id = R.string.confirm))
                     }
                 }
             }

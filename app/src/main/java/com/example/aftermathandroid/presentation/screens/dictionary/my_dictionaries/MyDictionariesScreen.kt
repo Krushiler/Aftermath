@@ -24,7 +24,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.aftermathandroid.R
 import com.example.aftermathandroid.presentation.common.component.button.BackButton
 import com.example.aftermathandroid.presentation.common.component.dictionary.DictionaryItem
 import com.example.aftermathandroid.presentation.common.provider.rootSnackbar
@@ -67,7 +69,7 @@ fun MyDictionariesScreen(
     Scaffold(topBar = {
         TopAppBar(
             title = {
-                Text(text = "My dictionaries")
+                Text(text = stringResource(id = R.string.myDictionaries))
             },
             navigationIcon = {
                 BackButton(onClick = { dictionaryNavigation.back() })
@@ -77,7 +79,10 @@ fun MyDictionariesScreen(
         FloatingActionButton(onClick = {
             viewModel.createDictionary()
         }) {
-            Icon(imageVector = Icons.Outlined.Add, contentDescription = "Create dictionary")
+            Icon(
+                imageVector = Icons.Outlined.Add,
+                contentDescription = stringResource(id = R.string.createDictionary)
+            )
         }
     }) { padding ->
         Box(
@@ -92,7 +97,9 @@ fun MyDictionariesScreen(
                 contentPadding = PaddingValues(Dimens.md),
             ) {
                 items(state.value.dictionaries.items) { item ->
-                    DictionaryItem(dictionary = item, onPressed = { rootNavigation.navigateToEditDictionary(item.id) })
+                    DictionaryItem(
+                        dictionary = item,
+                        onPressed = { rootNavigation.navigateToEditDictionary(item.id) })
                 }
                 if (state.value.isLoading) {
                     item {

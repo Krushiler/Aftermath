@@ -1,3 +1,35 @@
 <resources>
-    <string name="app_name">AftermathAndroid</string>
+    <string name="app_name">Aftermath</string>
+
+    <string name="search">Search</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="create">Create</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
+    <string name="done">Done</string>
+    <string name="add">Add</string>
+    <string name="confirm">Confirm</string>
+    <string name="name">Name</string>
+    <string name="profile">Profile</string>
+
+    <string name="login">Login</string>
+    <string name="loginSuggestion">Already have an account?</string>
+    <string name="register">Register</string>
+    <string name="registerSuggestion">Do not have an account?</string>
+    <string name="password">Password</string>
+    <string name="description">Description</string>
+    <string name="signOut">Sign out</string>
+
+    <string name="dictionary">Dictionary</string>
+    <string name="createDictionary">Create dictionary"></string>
+    <string name="editDictionary">Edit dictionary</string>
+    <string name="editTerm">Edit term</string>
+    <string name="createTerm">Create term</string>
+    <string name="deleteTerm">Delete term</string>
+    <string name="addTerm">Add term</string>
+    <string name="dictionaries">Dictionaries</string>
+    <string name="myDictionaries">My dictionaries</string>
 </resources>

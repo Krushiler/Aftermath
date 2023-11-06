@@ -7,11 +7,14 @@ import com.krushiler.data.storage.dbo.Dictionaries
 import com.krushiler.data.storage.dbo.DictionaryDbo
 import com.krushiler.data.storage.dbo.TermDbo
 import com.krushiler.data.storage.dbo.Terms
+import com.krushiler.domain.model.DictionarySearchData
 import com.krushiler.domain.model.PagingData
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
@@ -26,8 +29,28 @@ class DictionaryDao(database: Database) : Dao(database) {
         )
     }
 
-    suspend fun getDictionaries(pagingData: PagingData): DatabaseList<DictionaryDbo> = dbQuery {
+    suspend fun getDictionaries(
+        pagingData: PagingData,
+        searchData: DictionarySearchData,
+    ): DatabaseList<DictionaryDbo> = dbQuery {
         val request = Dictionaries.selectAll()
+        if (searchData.authors.isNotEmpty()) {
+            request.andWhere {
+                Dictionaries.authorId inList searchData.authors
+            }
+        }
+        if (searchData.excludeAuthors.isNotEmpty()) {
+            request.andWhere {
+                Dictionaries.authorId notInList searchData.excludeAuthors
+            }
+        }
+        if (searchData.query.isNotBlank()) {
+            request.andWhere {
+                (Dictionaries.name like "%${searchData.query}%").or {
+                    Dictionaries.description like "%${searchData.query}%"
+                }
+            }
+        }
         DatabaseList(
             items = request.copy().limit(
                 pagingData.limit, pagingData.offset.toLong()

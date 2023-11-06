@@ -3,6 +3,7 @@ package com.krushiler.data.repository
 import com.krushiler.data.storage.dao.DictionaryDao
 import com.krushiler.data.storage.dao.UserDao
 import com.krushiler.data.storage.dbo.ChangeTermDboAction
+import com.krushiler.domain.model.DictionarySearchData
 import com.krushiler.domain.model.PagingData
 import data.dto.DictionaryDto
 import data.dto.DictionaryInfoDto
@@ -22,8 +23,11 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
         )
     }
 
-    suspend fun getDictionaries(pagingData: PagingData): PagedResponse<DictionaryInfoDto> {
-        val dictionaries = dictionaryDao.getDictionaries(pagingData)
+    suspend fun getDictionaries(
+        pagingData: PagingData,
+        searchData: DictionarySearchData
+    ): PagedResponse<DictionaryInfoDto> {
+        val dictionaries = dictionaryDao.getDictionaries(pagingData, searchData)
         return PagedResponse(
             items = dictionaries.items.map {
                 val userDbo = userDao.getUserByLogin(it.authorId)

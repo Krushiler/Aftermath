@@ -2,6 +2,7 @@ package com.krushiler.routing
 
 import com.krushiler.domain.interactor.DictionaryInteractor
 import com.krushiler.plugins.authenticateBearer
+import com.krushiler.util.dictionarySearchData
 import com.krushiler.util.pagingData
 import com.krushiler.util.userLogin
 import data.request.CreateDictionaryRequest
@@ -22,7 +23,7 @@ fun Routing.dictionaryRouting() = route("/dictionary") {
     authenticateBearer {
         get("/all") {
             try {
-                call.respond(dictionaryInteractor.getDictionaries(call.pagingData))
+                call.respond(dictionaryInteractor.getDictionaries(call.pagingData, call.dictionarySearchData))
             } catch (e: Exception) {
                 call.respondText(e.localizedMessage, status = HttpStatusCode.BadRequest)
             }

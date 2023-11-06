@@ -2,6 +2,7 @@ package com.krushiler.domain.interactor
 
 import com.krushiler.data.repository.DictionaryRepository
 import com.krushiler.data.repository.UserRepository
+import com.krushiler.domain.model.DictionarySearchData
 import com.krushiler.domain.model.PagingData
 import data.dto.DictionaryDto
 import data.dto.DictionaryInfoDto
@@ -43,7 +44,10 @@ class DictionaryInteractor(
         return dictionaryRepository.deleteDictionary(id, userDto)
     }
 
-    suspend fun getDictionaries(pagingData: PagingData): PagedResponse<DictionaryInfoDto> {
-        return dictionaryRepository.getDictionaries(pagingData)
+    suspend fun getDictionaries(
+        pagingData: PagingData,
+        searchData: DictionarySearchData
+    ): PagedResponse<DictionaryInfoDto> {
+        return dictionaryRepository.getDictionaries(pagingData, searchData)
     }
 }

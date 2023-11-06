@@ -1,5 +1,6 @@
 package com.krushiler.util
 
+import com.krushiler.domain.model.DictionarySearchData
 import com.krushiler.domain.model.PagingData
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.auth.UserIdPrincipal
@@ -10,3 +11,10 @@ val ApplicationCall.userLogin
 
 val ApplicationCall.pagingData
     get() = PagingData(request.queryParameters["limit"]?.toInt() ?: 10, request.queryParameters["offset"]?.toInt() ?: 0)
+
+val ApplicationCall.dictionarySearchData
+    get() = DictionarySearchData(
+        request.queryParameters["authors"]?.split(",") ?: listOf(),
+        request.queryParameters["excludeAuthors"]?.split(",") ?: listOf(),
+        request.queryParameters["query"] ?: ""
+    )

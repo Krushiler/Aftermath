@@ -52,14 +52,16 @@ class MyDictionariesViewModel @Inject constructor(
             }
             _stateFlow.update { it.copy(isLoading = true) }
             val pagedDictionaries = dictionaryInteractor.getMyDictionaries(
-                limit = PAGE_SIZE, offset = _stateFlow.value.dictionaries.offset
+                limit = PAGE_SIZE,
+                offset = _stateFlow.value.dictionaries.offset
             )
             _stateFlow.update {
                 it.copy(
                     dictionaries = it.dictionaries.copy(
                         hasNext = pagedDictionaries.hasNext,
                         offset = pagedDictionaries.offset + PAGE_SIZE,
-                        items = _stateFlow.value.dictionaries.items + pagedDictionaries.items
+                        items = _stateFlow.value.dictionaries.items + pagedDictionaries.items,
+                        total = pagedDictionaries.total
                     )
                 )
             }

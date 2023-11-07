@@ -1,7 +1,7 @@
 package domain.model
 
 data class DictionarySearchData(
-    val authors: List<String>,
-    val excludeAuthors: List<String>,
-    val query: String,
+    val authors: List<String> = emptyList(),
+    val excludeAuthors: List<String> = emptyList(),
+    val query: String = "",
 )

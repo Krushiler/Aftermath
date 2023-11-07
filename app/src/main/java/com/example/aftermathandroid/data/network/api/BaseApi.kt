@@ -10,6 +10,7 @@ import data.request.LoginRequest
 import data.request.RegisterRequest
 import data.request.UpdateDictionaryRequest
 import data.response.PagedResponse
+import domain.model.DictionarySearchData
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -44,9 +45,13 @@ class BaseApi(private val client: HttpClient) {
     suspend fun getGeneralDictionaries(
         limit: Int = 10,
         offset: Int = 0,
+        searchData: DictionarySearchData? = null
     ): PagedResponse<DictionaryInfoDto> = client.get("/dictionary/all") {
         parameter("limit", limit)
         parameter("offset", offset)
+        parameter("query", searchData?.query)
+        if (!searchData?.authors.isNullOrEmpty()) parameter("authors", searchData?.authors)
+        if (!searchData?.excludeAuthors.isNullOrEmpty()) parameter("excludeAuthors", searchData?.excludeAuthors)
     }.body()
 
     suspend fun createDictionary(request: CreateDictionaryRequest): DictionaryDto = client.post("/dictionary/create") {

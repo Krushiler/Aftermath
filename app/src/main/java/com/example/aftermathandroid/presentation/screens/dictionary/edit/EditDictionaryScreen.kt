@@ -71,28 +71,31 @@ fun EditDictionaryScreen(
                         onValueChange = { viewModel.nameChanged(it) },
                         cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
                         textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onBackground),
-                        maxLines = 1
+                        maxLines = 1,
+                        readOnly = !state.value.canEdit
                     )
                 },
                 actions = {
-                    IconButton(onClick = { viewModel.save() }) {
-                        Icon(
-                            imageVector = Icons.Outlined.Done, contentDescription = stringResource(
-                                id = R.string.save
+                    if (state.value.canEdit)
+                        IconButton(onClick = { viewModel.save() }) {
+                            Icon(
+                                imageVector = Icons.Outlined.Done, contentDescription = stringResource(
+                                    id = R.string.save
+                                )
                             )
-                        )
-                    }
+                        }
                 },
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { viewModel.addTermPressed() }) {
-                Icon(
-                    imageVector = Icons.Outlined.Add, contentDescription = stringResource(
-                        id = R.string.addTerm
+            if (state.value.canEdit)
+                FloatingActionButton(onClick = { viewModel.addTermPressed() }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Add, contentDescription = stringResource(
+                            id = R.string.addTerm
+                        )
                     )
-                )
-            }
+                }
         }
     ) { padding ->
         Box(
@@ -108,12 +111,15 @@ fun EditDictionaryScreen(
                     OutlinedTextField(
                         value = state.value.description,
                         onValueChange = { viewModel.dictionaryDescriptionChanged(it) },
-                        maxLines = 3
+                        maxLines = 3,
+                        readOnly = !state.value.canEdit,
                     )
                 }
                 item { Gap.Sm() }
                 items(state.value.terms) { term ->
-                    TermEditingItem(term = term, onPressed = { viewModel.editTermPressed(term) })
+                    TermEditingItem(
+                        term = term,
+                        onPressed = { if (state.value.canEdit) viewModel.editTermPressed(term) })
                 }
             }
             if (state.value.editTermDialogState != null) {

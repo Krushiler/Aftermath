@@ -9,6 +9,7 @@ data class EditDictionaryState(
     val terms: List<TermDto> = emptyList(),
     val editTermDialogState: EditTermDialogState? = null,
     val showAddTermDialog: Boolean = false,
+    val canEdit: Boolean = false,
 )
 
 data class EditTermDialogState(

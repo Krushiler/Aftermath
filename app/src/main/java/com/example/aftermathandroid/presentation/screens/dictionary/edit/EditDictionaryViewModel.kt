@@ -37,7 +37,8 @@ class EditDictionaryViewModel @Inject constructor(
                     it.copy(
                         name = dictionary.name,
                         description = dictionary.description,
-                        terms = dictionary.terms
+                        terms = dictionary.terms,
+                        canEdit = dictionary.canEdit
                     )
                 }
             } catch (e: Exception) {

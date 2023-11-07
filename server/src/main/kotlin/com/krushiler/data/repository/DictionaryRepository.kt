@@ -16,7 +16,7 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
     suspend fun getUserDictionaries(user: UserDto, pagingData: PagingData): PagedResponse<DictionaryInfoDto> {
         val dictionaries = dictionaryDao.getUserDictionaries(user.name, pagingData)
         return PagedResponse(
-            items = dictionaries.items.map { DictionaryInfoDto(it.id, user, it.name, it.description) },
+            items = dictionaries.items.map { DictionaryInfoDto(it.id, it.name, it.description, null, true) },
             total = dictionaries.total,
             page = pagingData.page,
             pageSize = pagingData.limit
@@ -25,7 +25,8 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
 
     suspend fun getDictionaries(
         pagingData: PagingData,
-        searchData: DictionarySearchData
+        searchData: DictionarySearchData,
+        userId: String?,
     ): PagedResponse<DictionaryInfoDto> {
         val dictionaries = dictionaryDao.getDictionaries(pagingData, searchData)
         return PagedResponse(
@@ -36,7 +37,7 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
                         dbo.login, dbo.name, dbo.avatar
                     )
                 }
-                DictionaryInfoDto(it.id, user, it.name, it.description)
+                DictionaryInfoDto(it.id, it.name, it.description, user, user?.login equalId userId)
             },
             total = dictionaries.total,
             page = pagingData.page,
@@ -44,21 +45,31 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
         )
     }
 
-    suspend fun getDictionary(id: String): DictionaryDto? {
+    suspend fun getDictionary(id: String, userId: String?): DictionaryDto? {
         val dictionary = dictionaryDao.getDictionary(id)
         val terms = dictionaryDao.getTerms(id)
         return dictionary?.let {
-            DictionaryDto(id,
+            val userDbo = userDao.getUserByLogin(it.authorId)
+            val user = userDbo?.let { dbo ->
+                UserDto(
+                    dbo.login, dbo.name, dbo.avatar
+                )
+            }
+            DictionaryDto(
+                id,
                 it.name,
                 it.description,
-                terms.map { term -> TermDto(term.id, term.name, term.description) })
+                user,
+                user?.login equalId userId,
+                terms.map { term -> TermDto(term.id, term.name, term.description) },
+            )
         }
     }
 
     suspend fun createDictionary(user: UserDto, name: String, description: String): DictionaryDto {
         val id = generateUUID()
         if (dictionaryDao.createDictionary(id, user.name, name, description)) {
-            return DictionaryDto(id, name, description, emptyList())
+            return DictionaryDto(id, name, description, user, true, emptyList())
         }
         throw IllegalStateException("Failed to create dictionary")
     }
@@ -79,5 +90,10 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
         val dictionary = dictionaryDao.getDictionary(id)
         if (dictionary?.authorId != user.login) throw IllegalArgumentException("Dictionary is not yours")
         return dictionaryDao.deleteDictionary(id)
+    }
+
+    private infix fun String?.equalId(userId: String?): Boolean {
+        if (this == null || userId == null) return false
+        return this == userId
     }
 }

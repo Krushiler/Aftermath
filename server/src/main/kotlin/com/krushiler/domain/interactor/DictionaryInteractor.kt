@@ -18,8 +18,8 @@ class DictionaryInteractor(
         return dictionaryRepository.getUserDictionaries(user, pagingData)
     }
 
-    suspend fun getDictionary(id: String): DictionaryDto? {
-        return dictionaryRepository.getDictionary(id)
+    suspend fun getDictionary(id: String, userId: String?): DictionaryDto? {
+        return dictionaryRepository.getDictionary(id, userId)
     }
 
     suspend fun createDictionary(user: String, name: String, description: String): DictionaryDto {
@@ -32,11 +32,12 @@ class DictionaryInteractor(
         user: String,
         name: String,
         description: String,
-        terms: List<TermDto>
+        terms: List<TermDto>,
+        userId: String,
     ): DictionaryDto? {
         val userDto = userRepository.getUserByLogin(user)
         dictionaryRepository.updateDictionary(id, userDto, name, description, terms)
-        return dictionaryRepository.getDictionary(id)
+        return dictionaryRepository.getDictionary(id, userId)
     }
 
     suspend fun deleteDictionary(id: String, user: String): Boolean {
@@ -46,8 +47,9 @@ class DictionaryInteractor(
 
     suspend fun getDictionaries(
         pagingData: PagingData,
-        searchData: DictionarySearchData
+        searchData: DictionarySearchData,
+        userId: String?,
     ): PagedResponse<DictionaryInfoDto> {
-        return dictionaryRepository.getDictionaries(pagingData, searchData)
+        return dictionaryRepository.getDictionaries(pagingData, searchData, userId)
     }
 }

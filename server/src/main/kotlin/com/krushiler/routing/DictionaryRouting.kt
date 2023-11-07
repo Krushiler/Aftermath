@@ -23,7 +23,13 @@ fun Routing.dictionaryRouting() = route("/dictionary") {
     authenticateBearer {
         get("/all") {
             try {
-                call.respond(dictionaryInteractor.getDictionaries(call.pagingData, call.dictionarySearchData))
+                call.respond(
+                    dictionaryInteractor.getDictionaries(
+                        call.pagingData,
+                        call.dictionarySearchData,
+                        call.userLogin
+                    )
+                )
             } catch (e: Exception) {
                 call.respondText(e.localizedMessage, status = HttpStatusCode.BadRequest)
             }
@@ -37,7 +43,7 @@ fun Routing.dictionaryRouting() = route("/dictionary") {
         }
         get("/{id}") {
             try {
-                val dictionary = dictionaryInteractor.getDictionary(call.parameters["id"]!!)
+                val dictionary = dictionaryInteractor.getDictionary(call.parameters["id"]!!, call.userLogin)
                 dictionary?.let {
                     call.respond(it)
                 } ?: call.respondText("Dictionary not found", status = HttpStatusCode.NotFound)
@@ -57,7 +63,12 @@ fun Routing.dictionaryRouting() = route("/dictionary") {
             try {
                 val request = call.receive<UpdateDictionaryRequest>()
                 val dictionary = dictionaryInteractor.updateDictionary(
-                    request.dictionaryId, call.userLogin, request.name, request.description, request.terms
+                    request.dictionaryId,
+                    call.userLogin,
+                    request.name,
+                    request.description,
+                    request.terms,
+                    call.userLogin
                 )
                 dictionary?.let {
                     call.respond(it)

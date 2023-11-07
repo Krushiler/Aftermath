@@ -1,4 +1,4 @@
-package com.krushiler.domain.model
+package domain.model
 
 data class DictionarySearchData(
     val authors: List<String>,

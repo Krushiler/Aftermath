@@ -3,7 +3,7 @@ package com.krushiler.data.repository
 import com.krushiler.data.storage.dao.DictionaryDao
 import com.krushiler.data.storage.dao.UserDao
 import com.krushiler.data.storage.dbo.ChangeTermDboAction
-import com.krushiler.domain.model.DictionarySearchData
+import domain.model.DictionarySearchData
 import com.krushiler.domain.model.PagingData
 import data.dto.DictionaryDto
 import data.dto.DictionaryInfoDto

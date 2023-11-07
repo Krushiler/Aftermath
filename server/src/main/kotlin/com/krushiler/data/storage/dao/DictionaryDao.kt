@@ -7,7 +7,7 @@ import com.krushiler.data.storage.dbo.Dictionaries
 import com.krushiler.data.storage.dbo.DictionaryDbo
 import com.krushiler.data.storage.dbo.TermDbo
 import com.krushiler.data.storage.dbo.Terms
-import com.krushiler.domain.model.DictionarySearchData
+import domain.model.DictionarySearchData
 import com.krushiler.domain.model.PagingData
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq

@@ -1,6 +1,6 @@
 package com.krushiler.util
 
-import com.krushiler.domain.model.DictionarySearchData
+import domain.model.DictionarySearchData
 import com.krushiler.domain.model.PagingData
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.auth.UserIdPrincipal

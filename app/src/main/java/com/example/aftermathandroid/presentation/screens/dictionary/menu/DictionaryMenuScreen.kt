@@ -54,7 +54,7 @@ fun DictionariesMenuScreen(
             ) {
                 item {
                     DictionaryMenuItem(
-                        name = stringResource(id = R.string.search),
+                        name = stringResource(id = R.string.myDictionaries),
                         icon = Icons.Outlined.Home,
                         onPressed = { dictionaryNavigation.navigateToMyDictionaries() }
                     )

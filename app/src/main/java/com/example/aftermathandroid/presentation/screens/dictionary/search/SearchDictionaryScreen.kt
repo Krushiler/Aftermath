@@ -31,6 +31,7 @@ import com.example.aftermathandroid.presentation.common.component.field.AppBarTe
 import com.example.aftermathandroid.presentation.common.provider.rootSnackbar
 import com.example.aftermathandroid.presentation.common.provider.rootViewModel
 import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryNavigationViewModel
+import com.example.aftermathandroid.presentation.navigation.root.RootNavigationViewModel
 import com.example.aftermathandroid.presentation.theme.Dimens
 import kotlinx.coroutines.flow.collectLatest
 
@@ -39,6 +40,7 @@ import kotlinx.coroutines.flow.collectLatest
 fun SearchDictionaryScreen(
     viewModel: SearchDictionaryViewModel = hiltViewModel(),
     dictionaryNavigation: DictionaryNavigationViewModel = rootViewModel(),
+    rootNavigation: RootNavigationViewModel = rootViewModel(),
 ) {
     val state = viewModel.stateFlow.collectAsState()
     val snackbarHost = rootSnackbar()
@@ -88,7 +90,7 @@ fun SearchDictionaryScreen(
                 items(state.value.dictionaries.items) { item ->
                     DictionaryItem(
                         dictionary = item,
-                        onPressed = {},
+                        onPressed = { rootNavigation.navigateToEditDictionary(item.id) },
                     )
                 }
                 if (state.value.loading) {

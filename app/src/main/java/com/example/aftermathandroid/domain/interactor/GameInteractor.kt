@@ -28,4 +28,6 @@ class GameInteractor @Inject constructor(
     val localGameState: StateFlow<LocalGameState> get() = localGameRepository.localGameState
 
     val timeSecondsFlow: StateFlow<Int> get() = localGameRepository.timeSecondsFlow
+
+    val userScoreState: StateFlow<Int> get() = localGameRepository.userScoreState
 }

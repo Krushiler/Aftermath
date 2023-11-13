@@ -7,7 +7,7 @@ sealed class TakeTermResult {
     object TermsEnded : TakeTermResult()
 }
 
-class GameTermsSource(val terms: List<TermDto>) {
+class GameTermsSource(val terms: List<TermDto>, private val termsCount: Int) {
     private var index = 0
 
     fun currentTerm(): TermDto {
@@ -15,7 +15,7 @@ class GameTermsSource(val terms: List<TermDto>) {
     }
 
     fun takeTerm(additionalTermsCount: Int): TakeTermResult {
-        if (index + additionalTermsCount > terms.size - 1) {
+        if (index + additionalTermsCount > terms.size - 1 || index == termsCount - 1) {
             return TakeTermResult.TermsEnded
         }
         val term = terms[index]

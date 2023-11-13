@@ -32,4 +32,10 @@
     <string name="addTerm">Add term</string>
     <string name="dictionaries">Dictionaries</string>
     <string name="myDictionaries">My dictionaries</string>
+
+    <string name="question">Question</string>
+    <string name="answer">Answer</string>
+    <string name="correctAnswer">Correct answer</string>
+    <string name="time">Time</string>
+    <string name="score">Score</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.aftermathandroid.data.storage
+package com.example.aftermathandroid.data.storage.preferences
 
 import android.content.SharedPreferences
 import androidx.core.content.edit

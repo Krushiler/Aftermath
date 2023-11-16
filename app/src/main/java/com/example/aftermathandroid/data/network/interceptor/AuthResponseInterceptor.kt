@@ -1,6 +1,6 @@
 package com.example.aftermathandroid.data.network.interceptor
 
-import com.example.aftermathandroid.data.storage.PreferencesManager
+import com.example.aftermathandroid.data.storage.preferences.PreferencesManager
 import io.ktor.client.plugins.ResponseValidator
 import io.ktor.client.statement.HttpResponse
 import javax.inject.Inject

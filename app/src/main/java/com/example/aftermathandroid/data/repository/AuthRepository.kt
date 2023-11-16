@@ -1,7 +1,7 @@
 package com.example.aftermathandroid.data.repository
 
 import com.example.aftermathandroid.data.network.api.BaseApi
-import com.example.aftermathandroid.data.storage.PreferencesManager
+import com.example.aftermathandroid.data.storage.preferences.PreferencesManager
 import data.dto.AuthDto
 import data.request.LoginRequest
 import data.request.RegisterRequest

@@ -5,7 +5,9 @@ enum class RootDestination(val path: String) {
     Registration("registration"),
     Home("home"),
     Profile("profile"),
-    EditDictionary("edit-dictionary")
+    EditDictionary("edit-dictionary"),
+    SelectDictionary("select-dictionary"),
+    Game("game"),
 }
 
 sealed class RootRoute(private val destination: RootDestination) {
@@ -16,4 +18,6 @@ sealed class RootRoute(private val destination: RootDestination) {
     object Home : RootRoute(RootDestination.Home)
     object Profile : RootRoute(RootDestination.Profile)
     data class EditDictionary(val dictionaryId: String) : RootRoute(RootDestination.EditDictionary)
+    object SelectDictionary : RootRoute(RootDestination.SelectDictionary)
+    object Game : RootRoute(RootDestination.Game)
 }

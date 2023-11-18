@@ -15,7 +15,8 @@ import javax.inject.Inject
 class RootNavigationViewModel @Inject constructor(
     private val authInteractor: AuthInteractor
 ) : ViewModel() {
-    private val _state = MutableStateFlow<NavigationState<RootRoute>>(NavigationState(RootRoute.Home))
+    val initState: NavigationState<RootRoute> = NavigationState(RootRoute.Home)
+    private val _state = MutableStateFlow(initState)
     val state: StateFlow<NavigationState<RootRoute>> = _state
 
     init {
@@ -49,6 +50,14 @@ class RootNavigationViewModel @Inject constructor(
 
     fun navigateToEditDictionary(dictionaryId: String) {
         _state.value = NavigationState(RootRoute.EditDictionary(dictionaryId), prevState = _state.value)
+    }
+
+    fun navigateToSelectDictionary() {
+        _state.value = NavigationState(RootRoute.SelectDictionary, prevState = _state.value)
+    }
+
+    fun navigateToGame() {
+        _state.value = NavigationState(RootRoute.Game, prevState = _state.value)
     }
 
     fun logout() {

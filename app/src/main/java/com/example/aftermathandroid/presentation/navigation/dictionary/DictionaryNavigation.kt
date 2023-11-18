@@ -15,8 +15,11 @@ import com.example.aftermathandroid.presentation.screens.dictionary.my_dictionar
 import com.example.aftermathandroid.presentation.screens.dictionary.search.SearchDictionaryScreen
 
 @Composable
-fun DictionaryNavigation() {
-    val viewModel: DictionaryNavigationViewModel = rootViewModel()
+fun DictionaryNavigation(dictionaryScreenSource: DictionaryScreenSource = DictionaryScreenSource.Main) {
+    val viewModel: DictionaryNavigationViewModel = when (dictionaryScreenSource) {
+        DictionaryScreenSource.Main -> rootViewModel()
+        DictionaryScreenSource.Select -> hiltViewModel()
+    }
     val state = viewModel.state.collectAsState()
     val navController = rememberNavController()
 
@@ -29,13 +32,21 @@ fun DictionaryNavigation() {
         enterTransition = { fadeIn() },
         exitTransition = { fadeOut() }) {
         composable(DictionaryRoute.Menu.path) {
-            DictionariesMenuScreen()
+            DictionariesMenuScreen(
+                dictionaryScreenSource = dictionaryScreenSource, dictionaryNavigation = viewModel
+            )
         }
         composable(DictionaryRoute.My.path) {
-            MyDictionariesScreen(viewModel = hiltViewModel())
+            MyDictionariesScreen(
+                dictionaryScreenSource = dictionaryScreenSource,
+                viewModel = hiltViewModel(),
+                dictionaryNavigation = viewModel
+            )
         }
         composable(DictionaryRoute.Search.path) {
-            SearchDictionaryScreen()
+            SearchDictionaryScreen(
+                dictionaryScreenSource = dictionaryScreenSource, dictionaryNavigation = viewModel
+            )
         }
     }
 }

@@ -32,6 +32,7 @@ import com.example.aftermathandroid.presentation.common.component.dictionary.Dic
 import com.example.aftermathandroid.presentation.common.provider.rootSnackbar
 import com.example.aftermathandroid.presentation.common.provider.rootViewModel
 import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryNavigationViewModel
+import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryScreenSource
 import com.example.aftermathandroid.presentation.navigation.root.RootNavigationViewModel
 import com.example.aftermathandroid.presentation.screens.dictionary.create.CreateDictionaryDialog
 import com.example.aftermathandroid.presentation.theme.Dimens
@@ -40,6 +41,7 @@ import kotlinx.coroutines.flow.collectLatest
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyDictionariesScreen(
+    dictionaryScreenSource: DictionaryScreenSource,
     viewModel: MyDictionariesViewModel = hiltViewModel(),
     dictionaryNavigation: DictionaryNavigationViewModel = rootViewModel(),
     rootNavigation: RootNavigationViewModel = rootViewModel()
@@ -66,25 +68,30 @@ fun MyDictionariesScreen(
         }
     }
 
-    Scaffold(topBar = {
-        TopAppBar(
-            title = {
-                Text(text = stringResource(id = R.string.myDictionaries))
-            },
-            navigationIcon = {
-                BackButton(onClick = { dictionaryNavigation.back() })
-            },
-        )
-    }, floatingActionButton = {
-        FloatingActionButton(onClick = {
-            viewModel.createDictionary()
-        }) {
-            Icon(
-                imageVector = Icons.Outlined.Add,
-                contentDescription = stringResource(id = R.string.createDictionary)
-            )
-        }
-    }) { padding ->
+    Scaffold(
+        topBar = {
+            if (dictionaryScreenSource == DictionaryScreenSource.Main)
+                TopAppBar(
+                    title = {
+                        Text(text = stringResource(id = R.string.myDictionaries))
+                    },
+                    navigationIcon = {
+                        BackButton(onClick = { dictionaryNavigation.back() })
+                    },
+                )
+        },
+        floatingActionButton = {
+            if (dictionaryScreenSource == DictionaryScreenSource.Main)
+                FloatingActionButton(onClick = {
+                    viewModel.createDictionary()
+                }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Add,
+                        contentDescription = stringResource(id = R.string.createDictionary)
+                    )
+                }
+        },
+    ) { padding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -99,7 +106,19 @@ fun MyDictionariesScreen(
                 items(state.value.dictionaries.items) { item ->
                     DictionaryItem(
                         dictionary = item,
-                        onPressed = { rootNavigation.navigateToEditDictionary(item.id) })
+                        onPressed = {
+                            when (dictionaryScreenSource) {
+                                DictionaryScreenSource.Main -> {
+                                    rootNavigation.navigateToEditDictionary(item.id)
+                                }
+
+                                DictionaryScreenSource.Select -> {
+                                    viewModel.selectDictionary(item)
+                                    rootNavigation.back()
+                                }
+                            }
+                        }
+                    )
                 }
                 if (state.value.isLoading) {
                     item {

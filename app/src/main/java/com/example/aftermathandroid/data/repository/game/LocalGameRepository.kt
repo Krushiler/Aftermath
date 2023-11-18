@@ -55,6 +55,8 @@ class LocalGameRepository @Inject constructor(
                     delay(1000)
                 }
             }
+
+            nextTerm()
         }
     }
 

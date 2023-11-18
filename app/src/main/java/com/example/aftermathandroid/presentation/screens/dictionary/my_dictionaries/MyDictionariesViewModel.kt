@@ -3,9 +3,11 @@ package com.example.aftermathandroid.presentation.screens.dictionary.my_dictiona
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.aftermathandroid.domain.interactor.DictionaryInteractor
+import com.example.aftermathandroid.presentation.common.emitter.DictionarySelectResultEmitter
 import com.example.aftermathandroid.presentation.common.model.ErrorModel
 import com.example.aftermathandroid.presentation.common.model.PagedList
 import dagger.hilt.android.lifecycle.HiltViewModel
+import data.dto.DictionaryInfoDto
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -16,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyDictionariesViewModel @Inject constructor(
-    private val dictionaryInteractor: DictionaryInteractor
+    private val dictionaryInteractor: DictionaryInteractor,
+    private val dictionarySelectResultEmitter: DictionarySelectResultEmitter,
 ) : ViewModel() {
 
     companion object {
@@ -42,6 +45,10 @@ class MyDictionariesViewModel @Inject constructor(
         loadMore()
     }
 
+    fun selectDictionary(dictionary: DictionaryInfoDto) {
+        dictionarySelectResultEmitter.emit(dictionary)
+    }
+
     fun loadMore(refresh: Boolean = false) = viewModelScope.launch {
         try {
             if (refresh) _stateFlow.update {
@@ -52,8 +59,7 @@ class MyDictionariesViewModel @Inject constructor(
             }
             _stateFlow.update { it.copy(isLoading = true) }
             val pagedDictionaries = dictionaryInteractor.getMyDictionaries(
-                limit = PAGE_SIZE,
-                offset = _stateFlow.value.dictionaries.offset
+                limit = PAGE_SIZE, offset = _stateFlow.value.dictionaries.offset
             )
             _stateFlow.update {
                 it.copy(

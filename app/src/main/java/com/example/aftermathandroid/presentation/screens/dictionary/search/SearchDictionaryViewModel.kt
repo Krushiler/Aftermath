@@ -3,9 +3,11 @@ package com.example.aftermathandroid.presentation.screens.dictionary.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.aftermathandroid.domain.interactor.DictionaryInteractor
+import com.example.aftermathandroid.presentation.common.emitter.DictionarySelectResultEmitter
 import com.example.aftermathandroid.presentation.common.model.ErrorModel
 import com.example.aftermathandroid.presentation.common.model.PagedList
 import dagger.hilt.android.lifecycle.HiltViewModel
+import data.dto.DictionaryInfoDto
 import domain.model.DictionarySearchData
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
@@ -24,6 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchDictionaryViewModel @Inject constructor(
     private val dictionaryInteractor: DictionaryInteractor,
+    private val dictionarySelectResultEmitter: DictionarySelectResultEmitter,
 ) : ViewModel() {
 
     companion object {
@@ -43,6 +46,10 @@ class SearchDictionaryViewModel @Inject constructor(
         viewModelScope.launch {
             _queryFlow.debounce(500).onEach { searchDictionary() }.collect()
         }
+    }
+
+    fun selectDictionary(dictionary: DictionaryInfoDto) {
+        dictionarySelectResultEmitter.emit(dictionary)
     }
 
     fun queryChanged(query: String) {

@@ -14,6 +14,8 @@
     <string name="confirm">Confirm</string>
     <string name="name">Name</string>
     <string name="profile">Profile</string>
+    <string name="back">Back</string>
+    <string name="close">Close</string>
 
     <string name="login">Login</string>
     <string name="loginSuggestion">Already have an account?</string>
@@ -32,10 +34,22 @@
     <string name="addTerm">Add term</string>
     <string name="dictionaries">Dictionaries</string>
     <string name="myDictionaries">My dictionaries</string>
+    <string name="selectDictionary">Select dictionary</string>
 
     <string name="question">Question</string>
     <string name="answer">Answer</string>
     <string name="correctAnswer">Correct answer</string>
     <string name="time">Time</string>
     <string name="score">Score</string>
+    <string name="startGame">Start game</string>
+    <string name="questionsCount">Questions count</string>
+
+    <plurals name="questionCount">
+        <item quantity="one">question</item>
+        <item quantity="two">questions</item>
+        <item quantity="few">questions</item>
+        <item quantity="many">questions</item>
+        <item quantity="zero">questions</item>
+        <item quantity="other">questions</item>
+    </plurals>
 </resources>

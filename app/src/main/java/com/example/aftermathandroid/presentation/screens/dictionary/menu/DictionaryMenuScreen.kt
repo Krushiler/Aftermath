@@ -19,26 +19,29 @@ import com.example.aftermathandroid.R
 import com.example.aftermathandroid.presentation.common.component.button.ProfileButton
 import com.example.aftermathandroid.presentation.common.provider.rootViewModel
 import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryNavigationViewModel
+import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryScreenSource
 import com.example.aftermathandroid.presentation.navigation.root.RootNavigationViewModel
 import com.example.aftermathandroid.presentation.theme.Dimens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DictionariesMenuScreen(
+    dictionaryScreenSource: DictionaryScreenSource,
     dictionaryNavigation: DictionaryNavigationViewModel = rootViewModel(),
     rootNavigation: RootNavigationViewModel = rootViewModel()
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(text = stringResource(id = R.string.dictionaries)) },
-                actions = {
-                    ProfileButton(
-                        profilePressed = { rootNavigation.navigateToProfile() },
-                        logoutPressed = { rootNavigation.logout() }
-                    )
-                }
-            )
+            if (dictionaryScreenSource == DictionaryScreenSource.Main)
+                TopAppBar(
+                    title = { Text(text = stringResource(id = R.string.dictionaries)) },
+                    actions = {
+                        ProfileButton(
+                            profilePressed = { rootNavigation.navigateToProfile() },
+                            logoutPressed = { rootNavigation.logout() }
+                        )
+                    }
+                )
         }
     ) { padding ->
         Box(

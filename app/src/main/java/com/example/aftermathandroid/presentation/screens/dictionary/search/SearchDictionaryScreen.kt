@@ -12,7 +12,9 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,6 +33,7 @@ import com.example.aftermathandroid.presentation.common.component.field.AppBarTe
 import com.example.aftermathandroid.presentation.common.provider.rootSnackbar
 import com.example.aftermathandroid.presentation.common.provider.rootViewModel
 import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryNavigationViewModel
+import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryScreenSource
 import com.example.aftermathandroid.presentation.navigation.root.RootNavigationViewModel
 import com.example.aftermathandroid.presentation.theme.Dimens
 import kotlinx.coroutines.flow.collectLatest
@@ -38,6 +41,7 @@ import kotlinx.coroutines.flow.collectLatest
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchDictionaryScreen(
+    dictionaryScreenSource: DictionaryScreenSource,
     viewModel: SearchDictionaryViewModel = hiltViewModel(),
     dictionaryNavigation: DictionaryNavigationViewModel = rootViewModel(),
     rootNavigation: RootNavigationViewModel = rootViewModel(),
@@ -65,20 +69,21 @@ fun SearchDictionaryScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    AppBarTextField(
-                        value = state.value.query,
-                        onValueChange = { viewModel.queryChanged(it) },
-                        hint = stringResource(id = R.string.search),
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                        keyboardActions = KeyboardActions { focusManager.clearFocus() }
-                    )
-                },
-                navigationIcon = {
-                    BackButton(onClick = { dictionaryNavigation.back() })
-                },
-            )
+            if (dictionaryScreenSource == DictionaryScreenSource.Main)
+                TopAppBar(
+                    title = {
+                        AppBarTextField(
+                            value = state.value.query,
+                            onValueChange = { viewModel.queryChanged(it) },
+                            hint = stringResource(id = R.string.search),
+                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                            keyboardActions = KeyboardActions { focusManager.clearFocus() }
+                        )
+                    },
+                    navigationIcon = {
+                        BackButton(onClick = { dictionaryNavigation.back() })
+                    },
+                )
         },
     ) { padding ->
         Box(modifier = Modifier.padding(padding)) {
@@ -87,10 +92,30 @@ fun SearchDictionaryScreen(
                 verticalArrangement = Arrangement.spacedBy(Dimens.sm),
                 state = dictionaryListState
             ) {
+                if (dictionaryScreenSource == DictionaryScreenSource.Select) item {
+                    OutlinedTextField(
+                        value = state.value.query,
+                        onValueChange = { viewModel.queryChanged(it) },
+                        placeholder = { Text(text = stringResource(id = R.string.search)) },
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                        keyboardActions = KeyboardActions { focusManager.clearFocus() }
+                    )
+                }
                 items(state.value.dictionaries.items) { item ->
                     DictionaryItem(
                         dictionary = item,
-                        onPressed = { rootNavigation.navigateToEditDictionary(item.id) },
+                        onPressed = {
+                            when (dictionaryScreenSource) {
+                                DictionaryScreenSource.Main -> {
+                                    rootNavigation.navigateToEditDictionary(item.id)
+                                }
+
+                                DictionaryScreenSource.Select -> {
+                                    viewModel.selectDictionary(item)
+                                    rootNavigation.back()
+                                }
+                            }
+                        },
                     )
                 }
                 if (state.value.loading) {

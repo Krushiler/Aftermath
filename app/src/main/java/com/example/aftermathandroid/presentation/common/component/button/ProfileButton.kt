@@ -13,6 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.aftermathandroid.R
 
 @Composable
 fun ProfileButton(
@@ -23,7 +25,7 @@ fun ProfileButton(
 
     Box(modifier = Modifier.wrapContentSize()) {
         IconButton(onClick = { dropdownExpanded.value = !dropdownExpanded.value }) {
-            Icon(Icons.Outlined.Person, contentDescription = "Profile")
+            Icon(Icons.Outlined.Person, contentDescription = stringResource(id = R.string.profile))
         }
         DropdownMenu(expanded = dropdownExpanded.value, onDismissRequest = { dropdownExpanded.value = false }) {
             DropdownMenuItem(text = { Text(text = "Profile") }, onClick = {

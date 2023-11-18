@@ -9,4 +9,7 @@ data class NavigationState<R>(
     val canPop: Boolean get() = prevState != null
 }
 
-fun <T> MutableStateFlow<NavigationState<T>>.back() = value.prevState?.let { value = it }
+fun <T> MutableStateFlow<NavigationState<T>>.back(): Boolean = value.prevState?.let {
+    value = it
+    return true
+} ?: false

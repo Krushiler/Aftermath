@@ -30,8 +30,10 @@ import com.example.aftermathandroid.R
 import com.example.aftermathandroid.presentation.common.component.button.BackButton
 import com.example.aftermathandroid.presentation.common.component.dictionary.DictionaryItem
 import com.example.aftermathandroid.presentation.common.component.field.AppBarTextField
+import com.example.aftermathandroid.presentation.common.provider.LocalDictionaryNavigationOwner
+import com.example.aftermathandroid.presentation.common.provider.LocalRootNavigationOwner
+import com.example.aftermathandroid.presentation.common.provider.storeViewModel
 import com.example.aftermathandroid.presentation.common.provider.rootSnackbar
-import com.example.aftermathandroid.presentation.common.provider.rootViewModel
 import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryNavigationViewModel
 import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryScreenSource
 import com.example.aftermathandroid.presentation.navigation.root.RootNavigationViewModel
@@ -43,8 +45,8 @@ import kotlinx.coroutines.flow.collectLatest
 fun SearchDictionaryScreen(
     dictionaryScreenSource: DictionaryScreenSource,
     viewModel: SearchDictionaryViewModel = hiltViewModel(),
-    dictionaryNavigation: DictionaryNavigationViewModel = rootViewModel(),
-    rootNavigation: RootNavigationViewModel = rootViewModel(),
+    dictionaryNavigation: DictionaryNavigationViewModel = storeViewModel(LocalDictionaryNavigationOwner),
+    rootNavigation: RootNavigationViewModel = storeViewModel(LocalRootNavigationOwner),
 ) {
     val state = viewModel.stateFlow.collectAsState()
     val snackbarHost = rootSnackbar()

@@ -17,7 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.aftermathandroid.R
 import com.example.aftermathandroid.presentation.common.component.button.ProfileButton
-import com.example.aftermathandroid.presentation.common.provider.rootViewModel
+import com.example.aftermathandroid.presentation.common.provider.LocalDictionaryNavigationOwner
+import com.example.aftermathandroid.presentation.common.provider.LocalRootNavigationOwner
+import com.example.aftermathandroid.presentation.common.provider.storeViewModel
 import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryNavigationViewModel
 import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryScreenSource
 import com.example.aftermathandroid.presentation.navigation.root.RootNavigationViewModel
@@ -27,8 +29,8 @@ import com.example.aftermathandroid.presentation.theme.Dimens
 @Composable
 fun DictionariesMenuScreen(
     dictionaryScreenSource: DictionaryScreenSource,
-    dictionaryNavigation: DictionaryNavigationViewModel = rootViewModel(),
-    rootNavigation: RootNavigationViewModel = rootViewModel()
+    dictionaryNavigation: DictionaryNavigationViewModel = storeViewModel(LocalDictionaryNavigationOwner),
+    rootNavigation: RootNavigationViewModel = storeViewModel(LocalRootNavigationOwner)
 ) {
     Scaffold(
         topBar = {

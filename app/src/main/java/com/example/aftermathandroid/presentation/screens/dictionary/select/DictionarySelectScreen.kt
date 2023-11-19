@@ -15,46 +15,63 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.aftermathandroid.R
 import com.example.aftermathandroid.presentation.common.component.Gap
 import com.example.aftermathandroid.presentation.common.component.button.BackButton
-import com.example.aftermathandroid.presentation.common.provider.rootViewModel
+import com.example.aftermathandroid.presentation.common.provider.LocalDictionaryNavigationOwner
+import com.example.aftermathandroid.presentation.common.provider.LocalRootNavigationOwner
+import com.example.aftermathandroid.presentation.common.provider.storeViewModel
 import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryNavigation
 import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryNavigationViewModel
 import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryScreenSource
 import com.example.aftermathandroid.presentation.navigation.root.RootNavigationViewModel
 import com.example.aftermathandroid.presentation.theme.Dimens
+import com.example.aftermathandroid.util.rememberViewModelStoreOwner
 
 @Composable
 fun DictionarySelectScreen(
-    rootNavigationViewModel: RootNavigationViewModel = rootViewModel(),
-    dictionaryNavigationViewModel: DictionaryNavigationViewModel = rootViewModel(),
+    rootNavigationViewModel: RootNavigationViewModel = storeViewModel(LocalRootNavigationOwner)
 ) {
-    Scaffold { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-        ) {
-            Row(
+    val store = rememberViewModelStoreOwner()
+    CompositionLocalProvider(
+        LocalDictionaryNavigationOwner provides store,
+    ) {
+        val dictionaryNavigationViewModel: DictionaryNavigationViewModel =
+            storeViewModel(LocalDictionaryNavigationOwner)
+
+        Scaffold { padding ->
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(Dimens.md),
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically
+                    .fillMaxSize()
+                    .padding(padding)
             ) {
-                BackButton(onClick = { dictionaryNavigationViewModel.back() || rootNavigationViewModel.back() })
-                Gap.Md()
-                Text(text = stringResource(R.string.selectDictionary), style = MaterialTheme.typography.headlineMedium)
-                Spacer(modifier = Modifier.fillMaxWidth())
-                IconButton(onClick = { rootNavigationViewModel.back() }) {
-                    Icon(imageVector = Icons.Outlined.Close, contentDescription = stringResource(id = R.string.close))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(Dimens.md),
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    BackButton(onClick = { dictionaryNavigationViewModel.back() })
+                    Gap.Md()
+                    Text(
+                        text = stringResource(R.string.selectDictionary),
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+                    Spacer(modifier = Modifier.fillMaxWidth())
+                    IconButton(onClick = { rootNavigationViewModel.back() }) {
+                        Icon(
+                            imageVector = Icons.Outlined.Close,
+                            contentDescription = stringResource(id = R.string.close)
+                        )
+                    }
                 }
+                DictionaryNavigation(dictionaryScreenSource = DictionaryScreenSource.Select)
             }
-            DictionaryNavigation(dictionaryScreenSource = DictionaryScreenSource.Select)
         }
     }
 }

@@ -32,8 +32,9 @@ import com.example.aftermathandroid.R
 import com.example.aftermathandroid.presentation.common.component.Gap
 import com.example.aftermathandroid.presentation.common.component.animation.animateBoolAsFloatState
 import com.example.aftermathandroid.presentation.common.component.button.BackButton
+import com.example.aftermathandroid.presentation.common.provider.LocalRootNavigationOwner
+import com.example.aftermathandroid.presentation.common.provider.storeViewModel
 import com.example.aftermathandroid.presentation.common.provider.rootSnackbar
-import com.example.aftermathandroid.presentation.common.provider.rootViewModel
 import com.example.aftermathandroid.presentation.navigation.root.RootNavigationViewModel
 import com.example.aftermathandroid.presentation.theme.Dimens
 
@@ -41,7 +42,7 @@ import com.example.aftermathandroid.presentation.theme.Dimens
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
-    rootNavigationViewModel: RootNavigationViewModel = rootViewModel()
+    rootNavigationViewModel: RootNavigationViewModel = storeViewModel(LocalRootNavigationOwner)
 ) {
     val state = viewModel.stateFlow.collectAsState()
     val columnScrollState = rememberScrollState()

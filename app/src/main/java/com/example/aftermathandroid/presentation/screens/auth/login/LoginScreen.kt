@@ -24,13 +24,15 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.aftermathandroid.presentation.common.component.Gap
 import com.example.aftermathandroid.presentation.common.component.animation.animateBoolAsFloatState
+import com.example.aftermathandroid.presentation.common.provider.LocalRootNavigationOwner
+import com.example.aftermathandroid.presentation.common.provider.storeViewModel
 import com.example.aftermathandroid.presentation.common.provider.rootSnackbar
-import com.example.aftermathandroid.presentation.common.provider.rootViewModel
 import com.example.aftermathandroid.presentation.navigation.root.RootNavigationViewModel
 
 @Composable
 fun LoginScreen(
-    rootNavigation: RootNavigationViewModel = rootViewModel(), viewModel: LoginViewModel = hiltViewModel()
+    rootNavigation: RootNavigationViewModel = storeViewModel(LocalRootNavigationOwner),
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
     val snackbarHost = rootSnackbar()
     val state = viewModel.stateFlow.collectAsState()

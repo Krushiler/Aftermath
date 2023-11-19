@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -18,19 +17,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.example.aftermathandroid.presentation.common.provider.LocalRootSnackbarState
 import com.example.aftermathandroid.presentation.common.provider.LocalRootStoreOwner
-import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryNavigationViewModel
-import com.example.aftermathandroid.presentation.navigation.home.HomeNavigationViewModel
 import com.example.aftermathandroid.presentation.navigation.root.RootNavigation
-import com.example.aftermathandroid.presentation.navigation.root.RootNavigationViewModel
 import com.example.aftermathandroid.presentation.theme.AftermathAndroidTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val rootNavigationViewModel: RootNavigationViewModel by viewModels()
-    private val homeNavigationViewModel: HomeNavigationViewModel by viewModels()
-    private val dictionaryNavigationViewModel: DictionaryNavigationViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

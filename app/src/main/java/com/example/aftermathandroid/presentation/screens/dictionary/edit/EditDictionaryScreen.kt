@@ -35,8 +35,9 @@ import com.example.aftermathandroid.presentation.common.component.Gap
 import com.example.aftermathandroid.presentation.common.component.animation.animateBoolAsFloatState
 import com.example.aftermathandroid.presentation.common.component.button.BackButton
 import com.example.aftermathandroid.presentation.common.component.dictionary.TermEditingItem
+import com.example.aftermathandroid.presentation.common.provider.LocalRootNavigationOwner
+import com.example.aftermathandroid.presentation.common.provider.storeViewModel
 import com.example.aftermathandroid.presentation.common.provider.rootSnackbar
-import com.example.aftermathandroid.presentation.common.provider.rootViewModel
 import com.example.aftermathandroid.presentation.navigation.root.RootNavigationViewModel
 import com.example.aftermathandroid.presentation.screens.dictionary.edit.component.ChangeTermDialog
 import com.example.aftermathandroid.presentation.screens.dictionary.edit.component.CreateTermDialog
@@ -46,7 +47,7 @@ import com.example.aftermathandroid.presentation.theme.Dimens
 @Composable
 fun EditDictionaryScreen(
     viewModel: EditDictionaryViewModel = hiltViewModel(),
-    rootNavigation: RootNavigationViewModel = rootViewModel()
+    rootNavigation: RootNavigationViewModel = storeViewModel(LocalRootNavigationOwner)
 ) {
     val snackbarHost = rootSnackbar()
     val state = viewModel.stateFlow.collectAsState()

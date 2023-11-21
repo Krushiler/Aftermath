@@ -14,6 +14,7 @@ import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
+import io.ktor.server.routing.patch
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 import org.koin.ktor.ext.inject
@@ -59,11 +60,12 @@ fun Routing.dictionaryRouting() = route("/dictionary") {
                 call.respondText(e.localizedMessage, status = HttpStatusCode.BadRequest)
             }
         }
-        post("/edit") {
+        patch("/{id}") {
             try {
                 val request = call.receive<UpdateDictionaryRequest>()
+                val dictionaryId = call.parameters["id"]!!
                 val dictionary = dictionaryInteractor.updateDictionary(
-                    request.dictionaryId,
+                    dictionaryId,
                     call.userLogin,
                     request.name,
                     request.description,

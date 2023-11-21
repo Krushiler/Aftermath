@@ -18,7 +18,11 @@ class DictionaryRepository @Inject constructor(
     suspend fun getMyDictionaries(limit: Int, offset: Int): PagedResponse<DictionaryInfoDto> =
         api.getMyDictionaries(limit, offset)
 
-    suspend fun getDictionaries(limit: Int, offset: Int, searchData: DictionarySearchData? = null): PagedResponse<DictionaryInfoDto> =
+    suspend fun getDictionaries(
+        limit: Int,
+        offset: Int,
+        searchData: DictionarySearchData? = null
+    ): PagedResponse<DictionaryInfoDto> =
         api.getGeneralDictionaries(limit, offset, searchData)
 
     suspend fun createDictionary(name: String, description: String): DictionaryDto = api.createDictionary(
@@ -31,7 +35,8 @@ class DictionaryRepository @Inject constructor(
         description: String,
         terms: List<TermDto>
     ): DictionaryDto = api.updateDictionary(
-        UpdateDictionaryRequest(id, name, description, terms)
+        id,
+        UpdateDictionaryRequest(name, description, terms)
     )
 
     suspend fun getDictionary(id: String): DictionaryDto = api.getDictionary(id)

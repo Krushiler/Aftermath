@@ -51,22 +51,23 @@ class MyDictionariesViewModel @Inject constructor(
 
     fun loadMore(refresh: Boolean = false) = viewModelScope.launch {
         try {
-            if (refresh) _stateFlow.update {
-                it.copy(
+            _stateFlow.update { it.copy(isLoading = true) }
+
+            val prevState =
+                if (refresh) _stateFlow.value.copy(
                     dictionaries = PagedList(),
                     isRefreshing = true,
-                )
-            }
-            _stateFlow.update { it.copy(isLoading = true) }
+                ) else _stateFlow.value
+
             val pagedDictionaries = dictionaryInteractor.getMyDictionaries(
-                limit = PAGE_SIZE, offset = _stateFlow.value.dictionaries.offset
+                limit = PAGE_SIZE, offset = prevState.dictionaries.offset
             )
             _stateFlow.update {
-                it.copy(
+                prevState.copy(
                     dictionaries = it.dictionaries.copy(
                         hasNext = pagedDictionaries.hasNext,
                         offset = pagedDictionaries.offset + PAGE_SIZE,
-                        items = _stateFlow.value.dictionaries.items + pagedDictionaries.items,
+                        items = prevState.dictionaries.items + pagedDictionaries.items,
                         total = pagedDictionaries.total
                     )
                 )
@@ -76,4 +77,25 @@ class MyDictionariesViewModel @Inject constructor(
         }
         _stateFlow.update { it.copy(isLoading = false, isRefreshing = false) }
     }
+
+    fun deleteDictionary(dictionary: DictionaryInfoDto) {
+        _stateFlow.update { it.copy(showDeleteDictionaryState = ShowDeleteDictionaryState(dictionary)) }
+    }
+
+    fun closeDeleteDictionary(isDeleted: Boolean) {
+        if (isDeleted) {
+            val dictionaryInfo = _stateFlow.value.showDeleteDictionaryState?.dictionaryInfo
+            dictionaryInfo?.let { dictionary ->
+                _stateFlow.update {
+                    it.copy(
+                        dictionaries = it.dictionaries.copy(
+                            items = it.dictionaries.items.filter { item -> item.id != dictionary.id }
+                        )
+                    )
+                }
+            }
+        }
+        _stateFlow.update { it.copy(showDeleteDictionaryState = null) }
+    }
+
 }

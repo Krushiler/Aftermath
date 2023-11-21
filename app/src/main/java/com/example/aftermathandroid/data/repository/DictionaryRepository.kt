@@ -40,4 +40,6 @@ class DictionaryRepository @Inject constructor(
     )
 
     suspend fun getDictionary(id: String): DictionaryDto = api.getDictionary(id)
+
+    suspend fun deleteDictionary(id: String) = api.deleteDictionary(id)
 }

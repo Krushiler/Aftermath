@@ -1,6 +1,7 @@
 package com.example.aftermathandroid.presentation.common.component.button
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -15,9 +16,15 @@ fun AnswerButton(
     onClick: () -> Unit
 ) {
     ElevatedButton(
+        modifier = Modifier.fillMaxWidth(),
         onClick = { onClick() },
-        modifier = Modifier.background(
-            if (isCorrect == true) Color.Red else if (isCorrect == false) Color.Green else MaterialTheme.colorScheme.primary
+        colors = ButtonDefaults.elevatedButtonColors(
+            containerColor = when (isCorrect) {
+                true -> Color.Green
+                false -> Color.Red
+                else -> MaterialTheme.colorScheme.primary
+            },
+            contentColor = if (isCorrect != null) Color.Black else MaterialTheme.colorScheme.onPrimary
         )
     ) {
         Text(text = text)

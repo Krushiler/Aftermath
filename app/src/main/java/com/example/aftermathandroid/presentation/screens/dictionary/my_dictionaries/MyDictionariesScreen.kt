@@ -1,5 +1,6 @@
 package com.example.aftermathandroid.presentation.screens.dictionary.my_dictionaries
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,8 +17,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -31,16 +34,17 @@ import com.example.aftermathandroid.presentation.common.component.button.BackBut
 import com.example.aftermathandroid.presentation.common.component.dictionary.DictionaryItem
 import com.example.aftermathandroid.presentation.common.provider.LocalDictionaryNavigationOwner
 import com.example.aftermathandroid.presentation.common.provider.LocalRootNavigationOwner
-import com.example.aftermathandroid.presentation.common.provider.storeViewModel
 import com.example.aftermathandroid.presentation.common.provider.rootSnackbar
+import com.example.aftermathandroid.presentation.common.provider.storeViewModel
 import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryNavigationViewModel
 import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryScreenSource
 import com.example.aftermathandroid.presentation.navigation.root.RootNavigationViewModel
 import com.example.aftermathandroid.presentation.screens.dictionary.create.CreateDictionaryDialog
+import com.example.aftermathandroid.presentation.screens.dictionary.delete.DeleteDictionaryDialog
 import com.example.aftermathandroid.presentation.theme.Dimens
 import kotlinx.coroutines.flow.collectLatest
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun MyDictionariesScreen(
     dictionaryScreenSource: DictionaryScreenSource,
@@ -105,20 +109,33 @@ fun MyDictionariesScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(Dimens.md),
             ) {
-                items(state.value.dictionaries.items) { item ->
-                    DictionaryItem(
-                        dictionary = item,
-                        onPressed = {
-                            when (dictionaryScreenSource) {
-                                DictionaryScreenSource.Main -> {
-                                    rootNavigation.navigateToEditDictionary(item.id)
-                                }
+                items(state.value.dictionaries.items, key = { it.id }) { item ->
+                    val dismissState = rememberDismissState(
+                        confirmValueChange = {
+                            viewModel.deleteDictionary(item)
+                            false
+                        }
+                    )
+                    SwipeToDismiss(
+                        modifier = Modifier.animateItemPlacement(),
+                        state = dismissState,
+                        background = {},
+                        dismissContent = {
+                            DictionaryItem(
+                                dictionary = item,
+                                onPressed = {
+                                    when (dictionaryScreenSource) {
+                                        DictionaryScreenSource.Main -> {
+                                            rootNavigation.navigateToEditDictionary(item.id)
+                                        }
 
-                                DictionaryScreenSource.Select -> {
-                                    viewModel.selectDictionary(item)
-                                    rootNavigation.back()
+                                        DictionaryScreenSource.Select -> {
+                                            viewModel.selectDictionary(item)
+                                            rootNavigation.back()
+                                        }
+                                    }
                                 }
-                            }
+                            )
                         }
                     )
                 }
@@ -139,6 +156,12 @@ fun MyDictionariesScreen(
                 CreateDictionaryDialog(
                     onDismiss = { viewModel.completedCreateDictionary(false) },
                     onCreatedDictionary = { viewModel.completedCreateDictionary(true) },
+                )
+            }
+            state.value.showDeleteDictionaryState?.let { deleteState ->
+                DeleteDictionaryDialog(
+                    deleteState.dictionaryInfo,
+                    onClose = { viewModel.closeDeleteDictionary(it) }
                 )
             }
         }

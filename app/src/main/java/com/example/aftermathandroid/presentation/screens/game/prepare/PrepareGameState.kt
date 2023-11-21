@@ -3,7 +3,7 @@ package com.example.aftermathandroid.presentation.screens.game.prepare
 import data.dto.DictionaryInfoDto
 
 data class PrepareGameState(
-    val questionCountValue: String = "0",
+    val questionCountValue: String = "10",
     val dictionary: DictionaryInfoDto? = null,
     val loading: Boolean = false,
 ) {

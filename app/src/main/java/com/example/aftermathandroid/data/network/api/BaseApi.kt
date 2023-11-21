@@ -13,6 +13,7 @@ import data.response.PagedResponse
 import domain.model.DictionarySearchData
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.patch
@@ -64,4 +65,6 @@ class BaseApi(private val client: HttpClient) {
         }.body()
 
     suspend fun getDictionary(id: String): DictionaryDto = client.get("/dictionary/$id").body()
+
+    suspend fun deleteDictionary(id: String): Boolean = client.delete("/dictionary/$id").body()
 }

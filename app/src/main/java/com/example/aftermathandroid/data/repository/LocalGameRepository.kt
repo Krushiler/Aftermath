@@ -1,4 +1,4 @@
-package com.example.aftermathandroid.data.repository.game
+package com.example.aftermathandroid.data.repository
 
 import com.example.aftermathandroid.domain.model.GameInitParams
 import com.example.aftermathandroid.domain.model.LocalGameState
@@ -104,7 +104,7 @@ class LocalGameRepository @Inject constructor(
     }
 
     private fun finishGame() {
-        _localGameState.value = LocalGameState.GameOver(_timeSecondsFlow.value, _timeSecondsFlow.value)
+        _localGameState.value = LocalGameState.GameOver(_timeSecondsFlow.value, _userScoreState.value)
         timerJob?.cancel()
         timerJob = null
     }

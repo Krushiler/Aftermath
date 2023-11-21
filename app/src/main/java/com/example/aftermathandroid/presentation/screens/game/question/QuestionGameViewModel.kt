@@ -39,9 +39,8 @@ class QuestionGameViewModel @Inject constructor(
                                     AnswerUiModel(
                                         questionItem = questionItem,
                                         answerUiState = if (gameState.correctAnswer?.termId == questionItem.termId)
-                                            AnswerUiState.Correct else if (gameState.answeredQuestion?.termId ==
-                                            questionItem.termId
-                                        ) AnswerUiState.Incorrect else AnswerUiState.NotAnswered
+                                            AnswerUiState.Correct else if (gameState.answeredQuestion?.termId == questionItem.termId)
+                                            AnswerUiState.Incorrect else AnswerUiState.NotAnswered
                                     )
                                 },
                             )

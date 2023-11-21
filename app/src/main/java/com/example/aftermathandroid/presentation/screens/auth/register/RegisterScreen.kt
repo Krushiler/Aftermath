@@ -76,7 +76,7 @@ fun RegisterScreen(
                 }
                 Gap.Lg()
                 TextButton(
-                    onClick = { rootNavigation.navigateToLogin() },
+                    onClick = { rootNavigation.back() },
                     enabled = !state.value.isLoading
                 ) {
                     Text(text = stringResource(id = R.string.loginSuggestion))

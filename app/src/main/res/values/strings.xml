@@ -26,8 +26,10 @@
     <string name="signOut">Sign out</string>
 
     <string name="dictionary">Dictionary</string>
-    <string name="createDictionary">Create dictionary"></string>
+    <string name="createDictionary">Create dictionary"</string>
     <string name="editDictionary">Edit dictionary</string>
+    <string name="deleteDictionary">Delete dictionary</string>
+    <string name="deleteDictionaryWarningStart">Are you sure you want to delete</string>
     <string name="editTerm">Edit term</string>
     <string name="createTerm">Create term</string>
     <string name="deleteTerm">Delete term</string>

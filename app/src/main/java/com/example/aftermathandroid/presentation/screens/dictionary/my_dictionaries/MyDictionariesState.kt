@@ -8,4 +8,9 @@ data class MyDictionariesState(
     val dictionaries: PagedList<DictionaryInfoDto> = PagedList(),
     val showCreateDictionary: Boolean = false,
     val isRefreshing: Boolean = false,
+    val showDeleteDictionaryState: ShowDeleteDictionaryState? = null,
+)
+
+class ShowDeleteDictionaryState(
+    val dictionaryInfo: DictionaryInfoDto,
 )

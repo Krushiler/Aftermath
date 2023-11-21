@@ -24,4 +24,6 @@ class DictionaryInteractor @Inject constructor(
         dictionaryRepository.updateDictionary(id, name, description, terms)
 
     suspend fun getDictionary(id: String): DictionaryDto = dictionaryRepository.getDictionary(id)
+
+    suspend fun deleteDictionary(id: String) = dictionaryRepository.deleteDictionary(id)
 }

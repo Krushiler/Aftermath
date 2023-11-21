@@ -1,7 +1,7 @@
 package com.example.aftermathandroid.domain.interactor
 
 import com.example.aftermathandroid.data.repository.DictionaryRepository
-import com.example.aftermathandroid.data.repository.game.LocalGameRepository
+import com.example.aftermathandroid.data.repository.LocalGameRepository
 import com.example.aftermathandroid.domain.model.GameInitParams
 import com.example.aftermathandroid.domain.model.LocalGameState
 import data.dto.QuestionItemDto

@@ -3,6 +3,7 @@ package com.example.aftermathandroid.presentation.screens.game.result
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -34,18 +35,29 @@ fun ResultGameScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "${stringResource(id = R.string.time)}:", style = MaterialTheme.typography.headlineMedium)
+                Row {
+                    Text(
+                        text = "${stringResource(id = R.string.time)}:",
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+                    Gap.Md()
+                    Text(
+                        text = state.value.time.toString(),
+                        style = MaterialTheme.typography.headlineLarge,
+                    )
+                }
                 Gap.Md()
-                Text(
-                    text = state.value.time.toString(),
-                    style = MaterialTheme.typography.headlineLarge,
-                )
-                Text(text = "${stringResource(id = R.string.score)}:", style = MaterialTheme.typography.headlineMedium)
-                Gap.Md()
-                Text(
-                    text = state.value.score.toString(),
-                    style = MaterialTheme.typography.headlineLarge,
-                )
+                Row {
+                    Text(
+                        text = "${stringResource(id = R.string.score)}:",
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+                    Gap.Md()
+                    Text(
+                        text = state.value.score.toString(),
+                        style = MaterialTheme.typography.headlineLarge,
+                    )
+                }
             }
         }
     }

@@ -10,28 +10,19 @@ sealed class TakeTermResult {
 class GameTermsSource(val terms: List<TermDto>, private val termsCount: Int) {
     private var index = 0
 
-    fun currentTerm(): TermDto {
-        return terms[index]
-    }
-
     fun takeTerm(additionalTermsCount: Int): TakeTermResult {
-        if (index + additionalTermsCount > terms.size - 1 || index == termsCount - 1) {
+        if (index + additionalTermsCount > terms.size || index >= termsCount) {
             return TakeTermResult.TermsEnded
         }
         val term = terms[index]
 
         val answers = mutableListOf(term)
 
-        val shuffledTerms = terms.shuffled()
-
-        var answersIndex = 0
+        val shuffledTerms = terms.shuffled().toMutableList()
+        shuffledTerms.remove(term)
 
         for (i in 1 until additionalTermsCount) {
-            var termToAdd = shuffledTerms[answersIndex]
-            while (termToAdd.id == term.id) {
-                termToAdd = shuffledTerms[answersIndex]
-                answersIndex++
-            }
+            val termToAdd = shuffledTerms[i]
             answers.add(termToAdd)
         }
 

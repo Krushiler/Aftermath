@@ -13,6 +13,7 @@ import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Routing
+import io.ktor.server.routing.delete
 import io.ktor.server.routing.get
 import io.ktor.server.routing.patch
 import io.ktor.server.routing.post
@@ -56,6 +57,14 @@ fun Routing.dictionaryRouting() = route("/dictionary") {
             try {
                 val request = call.receive<CreateDictionaryRequest>()
                 call.respond(dictionaryInteractor.createDictionary(call.userLogin, request.name, request.description))
+            } catch (e: Exception) {
+                call.respondText(e.localizedMessage, status = HttpStatusCode.BadRequest)
+            }
+        }
+        delete("/{id}") {
+            try {
+                val dictionaryId = call.parameters["id"]!!
+                call.respond(dictionaryInteractor.deleteDictionary(dictionaryId, call.userLogin))
             } catch (e: Exception) {
                 call.respondText(e.localizedMessage, status = HttpStatusCode.BadRequest)
             }

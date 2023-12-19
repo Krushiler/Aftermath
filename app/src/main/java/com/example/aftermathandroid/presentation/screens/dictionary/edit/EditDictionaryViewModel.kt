@@ -1,5 +1,6 @@
 package com.example.aftermathandroid.presentation.screens.dictionary.edit
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.aftermathandroid.domain.interactor.DictionaryInteractor
@@ -17,22 +18,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EditDictionaryViewModel @Inject constructor(
-    private val dictionaryInteractor: DictionaryInteractor
+    private val dictionaryInteractor: DictionaryInteractor,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private val _stateFlow = MutableStateFlow(EditDictionaryState())
+    private val _stateFlow =
+        MutableStateFlow(EditDictionaryState(dictionaryId = savedStateHandle.get<String>("dictionaryId") ?: ""))
     val stateFlow: StateFlow<EditDictionaryState> = _stateFlow
 
     private val _errorFlow = MutableSharedFlow<ErrorModel>()
     val errorFlow: SharedFlow<ErrorModel> = _errorFlow
 
-    private var dictionaryId = ""
-
-    fun init(dictionaryId: String) {
-        this.dictionaryId = dictionaryId
+    init {
         viewModelScope.launch {
             try {
                 _stateFlow.update { it.copy(loading = true) }
-                val dictionary = dictionaryInteractor.getDictionary(dictionaryId)
+                val dictionary = dictionaryInteractor.getDictionary(_stateFlow.value.dictionaryId)
                 _stateFlow.update {
                     it.copy(
                         name = dictionary.name,
@@ -53,7 +53,10 @@ class EditDictionaryViewModel @Inject constructor(
             try {
                 _stateFlow.update { it.copy(loading = true) }
                 dictionaryInteractor.updateDictionary(
-                    dictionaryId, stateFlow.value.name, stateFlow.value.description, stateFlow.value.terms
+                    _stateFlow.value.dictionaryId,
+                    stateFlow.value.name,
+                    stateFlow.value.description,
+                    stateFlow.value.terms
                 )
             } catch (e: Exception) {
                 _errorFlow.emit(ErrorModel.fromException(e))

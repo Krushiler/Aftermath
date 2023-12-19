@@ -1,6 +1,7 @@
 package com.example.aftermathandroid.data.repository
 
 import com.example.aftermathandroid.data.network.api.BaseApi
+import data.dto.DictionaryCollectionDto
 import data.dto.DictionaryDto
 import data.dto.DictionaryInfoDto
 import data.dto.TermDto
@@ -21,9 +22,10 @@ class DictionaryRepository @Inject constructor(
     suspend fun getDictionaries(
         limit: Int,
         offset: Int,
-        searchData: DictionarySearchData? = null
+        searchData: DictionarySearchData? = null,
+        collectionId: String? = null,
     ): PagedResponse<DictionaryInfoDto> =
-        api.getGeneralDictionaries(limit, offset, searchData)
+        api.getGeneralDictionaries(limit, offset, searchData, collectionId)
 
     suspend fun createDictionary(name: String, description: String): DictionaryDto = api.createDictionary(
         CreateDictionaryRequest(name, description)
@@ -42,4 +44,6 @@ class DictionaryRepository @Inject constructor(
     suspend fun getDictionary(id: String): DictionaryDto = api.getDictionary(id)
 
     suspend fun deleteDictionary(id: String) = api.deleteDictionary(id)
+
+    suspend fun getCollectionInfo(collectionId: String): DictionaryCollectionDto = api.getCollectionInfo(collectionId)
 }

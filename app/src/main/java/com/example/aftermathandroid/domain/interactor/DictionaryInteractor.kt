@@ -14,8 +14,13 @@ class DictionaryInteractor @Inject constructor(
     suspend fun getMyDictionaries(limit: Int = 10, offset: Int = 0) =
         dictionaryRepository.getMyDictionaries(limit, offset)
 
-    suspend fun getDictionaries(limit: Int = 10, offset: Int = 0, searchData: DictionarySearchData? = null) =
-        dictionaryRepository.getDictionaries(limit, offset, searchData)
+    suspend fun getDictionaries(
+        limit: Int = 10,
+        offset: Int = 0,
+        searchData: DictionarySearchData? = null,
+        collectionId: String? = null,
+    ) =
+        dictionaryRepository.getDictionaries(limit, offset, searchData, collectionId)
 
     suspend fun createDictionary(name: String, description: String) =
         dictionaryRepository.createDictionary(name, description)
@@ -26,4 +31,6 @@ class DictionaryInteractor @Inject constructor(
     suspend fun getDictionary(id: String): DictionaryDto = dictionaryRepository.getDictionary(id)
 
     suspend fun deleteDictionary(id: String) = dictionaryRepository.deleteDictionary(id)
+
+    suspend fun getCollectionInfo(collectionId: String) = dictionaryRepository.getCollectionInfo(collectionId)
 }

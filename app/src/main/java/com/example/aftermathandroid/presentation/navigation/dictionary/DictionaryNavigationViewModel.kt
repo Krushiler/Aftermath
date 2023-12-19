@@ -14,4 +14,8 @@ class DictionaryNavigationViewModel @Inject constructor() : NavigationViewModel<
     fun navigateToSearch() {
         emit(NavigationState(DictionaryRoute.Search))
     }
+
+    fun navigateToCollection(collectionId: String) {
+        emit(NavigationState(DictionaryRoute.Collection(collectionId)))
+    }
 }

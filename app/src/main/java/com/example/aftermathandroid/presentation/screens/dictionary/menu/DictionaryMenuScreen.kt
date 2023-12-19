@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -57,6 +58,12 @@ fun DictionariesMenuScreen(
                     .padding(Dimens.md),
                 verticalArrangement = Arrangement.spacedBy(Dimens.md),
             ) {
+                item {
+                    DictionaryMenuItem(
+                        name = stringResource(id = R.string.defaultDictionaries), icon =
+                        Icons.Outlined.ThumbUp,
+                        onPressed = { dictionaryNavigation.navigateToCollection("default") })
+                }
                 item {
                     DictionaryMenuItem(
                         name = stringResource(id = R.string.myDictionaries),

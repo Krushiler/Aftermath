@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -19,7 +18,6 @@ import com.example.aftermathandroid.presentation.navigation.common.NavigationCom
 import com.example.aftermathandroid.presentation.screens.auth.login.LoginScreen
 import com.example.aftermathandroid.presentation.screens.auth.register.RegisterScreen
 import com.example.aftermathandroid.presentation.screens.dictionary.edit.EditDictionaryScreen
-import com.example.aftermathandroid.presentation.screens.dictionary.edit.EditDictionaryViewModel
 import com.example.aftermathandroid.presentation.screens.dictionary.select.DictionarySelectScreen
 import com.example.aftermathandroid.presentation.screens.game.flow.GameFlowScreen
 import com.example.aftermathandroid.presentation.screens.home.flow.HomeFlowScreen
@@ -84,10 +82,6 @@ fun RootNavigation(
                     "${RootDestination.EditDictionary.path}/{dictionaryId}",
                     arguments = listOf(navArgument("dictionaryId") { type = NavType.StringType })
                 ) {
-                    val editDictionaryViewModel = hiltViewModel<EditDictionaryViewModel>()
-                    editDictionaryViewModel.init(
-                        dictionaryId = it.arguments?.getString("dictionaryId") ?: ""
-                    )
                     EditDictionaryScreen()
                 }
                 composable(

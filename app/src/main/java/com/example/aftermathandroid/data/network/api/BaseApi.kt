@@ -1,6 +1,7 @@
 package com.example.aftermathandroid.data.network.api
 
 import data.dto.AuthDto
+import data.dto.DictionaryCollectionDto
 import data.dto.DictionaryDto
 import data.dto.DictionaryInfoDto
 import data.dto.UserDto
@@ -46,11 +47,13 @@ class BaseApi(private val client: HttpClient) {
     suspend fun getGeneralDictionaries(
         limit: Int = 10,
         offset: Int = 0,
-        searchData: DictionarySearchData? = null
+        searchData: DictionarySearchData? = null,
+        collectionId: String? = null,
     ): PagedResponse<DictionaryInfoDto> = client.get("/dictionary/all") {
         parameter("limit", limit)
         parameter("offset", offset)
         parameter("query", searchData?.query)
+        parameter("collectionId", collectionId)
         if (!searchData?.authors.isNullOrEmpty()) parameter("authors", searchData?.authors)
         if (!searchData?.excludeAuthors.isNullOrEmpty()) parameter("excludeAuthors", searchData?.excludeAuthors)
     }.body()
@@ -67,4 +70,6 @@ class BaseApi(private val client: HttpClient) {
     suspend fun getDictionary(id: String): DictionaryDto = client.get("/dictionary/$id").body()
 
     suspend fun deleteDictionary(id: String): Boolean = client.delete("/dictionary/$id").body()
+
+    suspend fun getCollectionInfo(id: String): DictionaryCollectionDto = client.get("/dictionary/collection/$id").body()
 }

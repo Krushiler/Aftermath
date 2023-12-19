@@ -1,0 +1,122 @@
+{
+  "name": "Mathematics",
+  "description": "A dictionary with mathematical terms",
+  "terms": [
+    {
+      "name": "Derivative",
+      "description": "The rate at which a function's output value changes concerning its input variable"
+    },
+    {
+      "name": "Integral",
+      "description": "The accumulation of quantities, often interpreted as the area under a curve"
+    },
+    {
+      "name": "Prime Number",
+      "description": "A natural number greater than 1 that is not a product of two smaller natural numbers"
+    },
+    {
+      "name": "Matrix",
+      "description": "A rectangular array of numbers, symbols, or expressions arranged in rows and columns"
+    },
+    {
+      "name": "Quadratic Equation",
+      "description": "A second-order polynomial equation in a single variable with the form ax^2 + bx + c = 0"
+    },
+    {
+      "name": "Exponential Function",
+      "description": "A mathematical function of the form f(x) = a^x, where 'a' is a constant greater than 0 and not equal to 1"
+    },
+    {
+      "name": "Complex Number",
+      "description": "A number of the form a + bi, where 'a' and 'b' are real numbers, and 'i' is the imaginary unit"
+    },
+    {
+      "name": "Vector",
+      "description": "An object that has both magnitude and direction, often represented as an arrow in Euclidean space"
+    },
+    {
+      "name": "Probability Distribution",
+      "description": "A mathematical function that describes the likelihood of obtaining the possible values that a random variable can take"
+    },
+    {
+      "name": "Geometric Progression",
+      "description": "A sequence of numbers where each term after the first is found by multiplying the previous one by a fixed, non-zero number"
+    },
+    {
+      "name": "Set Theory",
+      "description": "A branch of mathematical logic that studies sets, which are collections of objects"
+    },
+    {
+      "name": "Trigonometry",
+      "description": "A branch of mathematics that studies the relationships between the sides and angles of triangles"
+    },
+    {
+      "name": "Calculus",
+      "description": "A branch of mathematics that studies continuous change, involving derivatives and integrals"
+    },
+    {
+      "name": "Number Theory",
+      "description": "A branch of pure mathematics that deals with properties and relationships of numbers, especially integers"
+    },
+    {
+      "name": "Statistics",
+      "description": "A branch of mathematics that deals with the collection, analysis, interpretation, presentation, and organization of data"
+    },
+    {
+      "name": "Linear Algebra",
+      "description": "A branch of mathematics concerning linear equations, linear functions, and their representations through matrices and vector spaces"
+    },
+    {
+      "name": "Logic",
+      "description": "A branch of mathematics dealing with the study of reasoning and argumentation"
+    },
+    {
+      "name": "Geometry",
+      "description": "A branch of mathematics involving the study of shapes, sizes, properties, and dimensions of objects and spaces"
+    },
+    {
+      "name": "Number System",
+      "description": "A writing system for expressing numbers, including natural numbers, integers, rational numbers, and real numbers"
+    },
+    {
+      "name": "Graph Theory",
+      "description": "A branch of discrete mathematics that studies the relationships between edges and vertices in a graph"
+    },
+    {
+      "name": "Discrete Mathematics",
+      "description": "A branch of mathematics dealing with objects that can assume only distinct, separated values"
+    },
+    {
+      "name": "Differential Equation",
+      "description": "An equation involving derivatives, describing the rate at which a quantity changes concerning another variable"
+    },
+    {
+      "name": "Permutation",
+      "description": "An arrangement of objects in a specific order"
+    },
+    {
+      "name": "Probability Theory",
+      "description": "A branch of mathematics dealing with the analysis of random phenomena and probability distributions"
+    },
+    {
+      "name": "Hyperbolic Function",
+      "description": "Mathematical functions analog to trigonometric functions but based on hyperbolas"
+    },
+    {
+      "name": "Algebraic Equation",
+      "description": "An equation involving algebraic expressions, often polynomial equations"
+    },
+    {
+      "name": "Combinatorics",
+      "description": "A branch of mathematics concerning the counting, combination, and arrangement of objects"
+    },
+    {
+      "name": "Euler's Formula",
+      "description": "A mathematical formula expressing a deep relationship between complex exponentials and trigonometric functions"
+    },
+    {
+      "name": "Golden Ratio",
+      "description": "An irrational number often denoted by the Greek letter phi (Φ), with interesting mathematical properties"
+    }
+  ]
+}

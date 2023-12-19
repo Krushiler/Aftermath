@@ -18,9 +18,11 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.lowerCase
 import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.trim
 import org.jetbrains.exposed.sql.update
 import util.generateUUID
 
@@ -52,8 +54,8 @@ class DictionaryDao(database: Database) : Dao(database) {
         }
         if (searchData.query.isNotBlank()) {
             request.andWhere {
-                (Dictionaries.name like "%${searchData.query}%").or {
-                    Dictionaries.description like "%${searchData.query}%"
+                (Dictionaries.name.lowerCase().trim() like "%${searchData.query.lowercase().trim()}%").or {
+                    Dictionaries.description.lowerCase().trim() like "%${searchData.query.lowercase().trim()}%"
                 }
             }
         }
@@ -78,18 +80,27 @@ class DictionaryDao(database: Database) : Dao(database) {
         Dictionaries.select { Dictionaries.id eq id }.map { Dictionaries.resultRowToDictionary(it) }.singleOrNull()
     }
 
+    suspend fun getDictionariesNotPaged(collectionId: String): List<DictionaryDbo> = dbQuery {
+        Dictionaries.select {
+            Dictionaries.id inList DictionaryCollectionDictionaries
+                .select { DictionaryCollectionDictionaries.collectionId eq collectionId }
+                .map { it[DictionaryCollectionDictionaries.dictionaryId] }
+        }.map { Dictionaries.resultRowToDictionary(it) }
+    }
+
     suspend fun getTerms(dictionaryId: String): List<TermDbo> = dbQuery {
         Terms.select { Terms.dictionaryId eq dictionaryId }.map { Terms.resultRowToTerm(it) }
     }
 
-    suspend fun createDictionary(id: String, authorId: String?, name: String, description: String): Boolean = dbQuery {
-        Dictionaries.insert {
-            it[Dictionaries.name] = name
-            it[Dictionaries.description] = description
-            it[Dictionaries.authorId] = authorId
-            it[Dictionaries.id] = id
-        }.insertedCount > 0
-    }
+    suspend fun createDictionary(id: String, authorId: String?, name: String, description: String): Boolean =
+        dbQuery {
+            Dictionaries.insert {
+                it[Dictionaries.name] = name
+                it[Dictionaries.description] = description
+                it[Dictionaries.authorId] = authorId
+                it[Dictionaries.id] = id
+            }.insertedCount > 0
+        }
 
     suspend fun createTerm(id: String, dictionaryId: String, term: String, description: String): Boolean = dbQuery {
         Terms.insert {
@@ -186,10 +197,11 @@ class DictionaryDao(database: Database) : Dao(database) {
     suspend fun getDictionaryCollectionDictionaries(
         collectionId: String,
     ): List<DictionaryDbo> = dbQuery {
-        DictionaryCollectionDictionaries.select { DictionaryCollectionDictionaries.collectionId eq collectionId }.map {
-            Dictionaries.select {
-                Dictionaries.id eq it[DictionaryCollectionDictionaries.dictionaryId]
-            }.map { Dictionaries.resultRowToDictionary(it) }.firstOrNull()
-        }.mapNotNull { it }
+        DictionaryCollectionDictionaries.select { DictionaryCollectionDictionaries.collectionId eq collectionId }
+            .map {
+                Dictionaries.select {
+                    Dictionaries.id eq it[DictionaryCollectionDictionaries.dictionaryId]
+                }.map { Dictionaries.resultRowToDictionary(it) }.firstOrNull()
+            }.mapNotNull { it }
     }
 }

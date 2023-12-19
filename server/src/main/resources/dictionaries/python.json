@@ -1,0 +1,122 @@
+{
+  "name": "Python",
+  "description": "A dictionary with Python terms",
+  "terms": [
+    {
+      "name": "GIL (Global Interpreter Lock)",
+      "description": "A mutex that protects access to Python objects, preventing multiple threads from executing Python bytecodes at once"
+    },
+    {
+      "name": "List Comprehension",
+      "description": "A concise way to create lists in Python using a single line of code"
+    },
+    {
+      "name": "Decorator",
+      "description": "A design pattern in Python that allows the modification of functions or methods"
+    },
+    {
+      "name": "Tuple",
+      "description": "An ordered, immutable collection of elements, often used for heterogeneous data"
+    },
+    {
+      "name": "Virtual Environment",
+      "description": "Isolated Python environment to manage dependencies and project-specific packages"
+    },
+    {
+      "name": "Lambda Function",
+      "description": "Anonymous function defined using the lambda keyword"
+    },
+    {
+      "name": "PEP (Python Enhancement Proposal)",
+      "description": "Design document providing information to the Python community, or describing a new feature for Python or its processes"
+    },
+    {
+      "name": "Generator",
+      "description": "A special type of iterable, allowing lazy evaluation of values"
+    },
+    {
+      "name": "Duck Typing",
+      "description": "A programming concept that focuses on the methods and properties an object has rather than its actual type"
+    },
+    {
+      "name": "Namespace",
+      "description": "A container holding a set of identifiers, preventing naming conflicts"
+    },
+    {
+      "name": "List Slicing",
+      "description": "A concise way to extract elements from a list using a specified range"
+    },
+    {
+      "name": "Recursion",
+      "description": "A programming technique where a function calls itself directly or indirectly to solve a problem"
+    },
+    {
+      "name": "PEP 8",
+      "description": "Style guide for Python code, providing conventions for writing readable and maintainable code"
+    },
+    {
+      "name": "Exception Handling",
+      "description": "The process of catching and responding to exceptions during program execution"
+    },
+    {
+      "name": "Dictionary",
+      "description": "An unordered, mutable collection of key-value pairs"
+    },
+    {
+      "name": "Docstring",
+      "description": "String literal used to document a Python module, function, class, or method"
+    },
+    {
+      "name": "Virtualenv",
+      "description": "A tool used to create isolated Python environments"
+    },
+    {
+      "name": "JSON (JavaScript Object Notation)",
+      "description": "A lightweight data interchange format often used for data exchange between a server and web application"
+    },
+    {
+      "name": "Module",
+      "description": "A file containing Python code that can be imported and used in other Python programs"
+    },
+    {
+      "name": "Iterator",
+      "description": "An object representing a stream of data, used to iterate over elements in a sequence"
+    },
+    {
+      "name": "List",
+      "description": "An ordered, mutable collection of elements"
+    },
+    {
+      "name": "Map (Dictionary)",
+      "description": "A collection of key-value pairs, providing a mapping between keys and values"
+    },
+    {
+      "name": "PEP 484 (Type Hints)",
+      "description": "A PEP that introduced the concept of type hints in Python for optional static typing"
+    },
+    {
+      "name": "List Concatenation",
+      "description": "Combining multiple lists into a single list"
+    },
+    {
+      "name": "PEP 333 (WSGI - Web Server Gateway Interface)",
+      "description": "A standard interface between web servers and Python web applications or frameworks"
+    },
+    {
+      "name": "List Sorting",
+      "description": "Arranging elements in a list in a specific order"
+    },
+    {
+      "name": "PEP 572 (Assignment Expressions)",
+      "description": "A PEP introducing the walrus operator := for assignment expressions in Python"
+    },
+    {
+      "name": "Set",
+      "description": "An unordered collection of unique elements"
+    },
+    {
+      "name": "List Iteration",
+      "description": "Iterating over elements in a list using loops or comprehensions"
+    }
+  ]
+}

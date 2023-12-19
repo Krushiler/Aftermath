@@ -31,10 +31,7 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
     }
 
     suspend fun getDictionaries(
-        pagingData: PagingData,
-        searchData: DictionarySearchData,
-        userId: String?,
-        collectionId: String?
+        pagingData: PagingData, searchData: DictionarySearchData, userId: String?, collectionId: String?
     ): PagedResponse<DictionaryInfoDto> {
         val dictionaries = dictionaryDao.getDictionaries(pagingData, searchData, collectionId)
         return PagedResponse(
@@ -46,10 +43,7 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
                     )
                 }
                 DictionaryInfoDto(it.id, it.name, it.description, user, user?.login equalId userId)
-            },
-            total = dictionaries.total,
-            page = pagingData.page,
-            pageSize = pagingData.limit
+            }, total = dictionaries.total, page = pagingData.page, pageSize = pagingData.limit
         )
     }
 
@@ -121,16 +115,29 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
         if (collection != null) return
 
         dictionaryDao.createDictionaryCollection(
-            id = collectionId,
-            name = "Default"
+            id = collectionId, name = "Default"
         )
 
-        try {
-            val id = createDictionaryFromResource("dictionaries/kotlin.json")
-            if (id != null) {
-                dictionaryDao.addDictionaryToCollection(id, collectionId)
+        dictionaryDao.getDictionariesNotPaged(collectionId = collectionId).forEach {
+            dictionaryDao.deleteDictionary(it.id)
+        }
+
+        val files = listOf(
+            "dictionaries/kotlin.json",
+            "dictionaries/iot.json",
+            "dictionaries/data_analysis.json",
+            "dictionaries/math.json",
+            "dictionaries/python.json",
+        )
+
+        for (file in files) {
+            try {
+                val id = createDictionaryFromResource(file)
+                if (id != null) {
+                    dictionaryDao.addDictionaryToCollection(id, collectionId)
+                }
+            } catch (_: Exception) {
             }
-        } catch (_: Exception) {
         }
     }
 
@@ -158,10 +165,7 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
 
             json.terms.forEach {
                 dictionaryDao.createTerm(
-                    id = generateUUID(),
-                    dictionaryId = json.id,
-                    term = it.name,
-                    description = it.description
+                    id = generateUUID(), dictionaryId = json.id, term = it.name, description = it.description
                 )
             }
 

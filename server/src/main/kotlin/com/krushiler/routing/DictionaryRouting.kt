@@ -38,6 +38,14 @@ fun Routing.dictionaryRouting() = route("/dictionary") {
                 call.respondText(e.localizedMessage, status = HttpStatusCode.BadRequest)
             }
         }
+        get("/collection/{id}") {
+            try {
+                val collection = dictionaryInteractor.getCollectionInfo(call.parameters["id"]!!)
+                call.respond(collection ?: throw IllegalArgumentException("Collection not found"))
+            } catch (e: Exception) {
+                call.respondText(e.localizedMessage, status = HttpStatusCode.BadRequest)
+            }
+        }
         get("/my") {
             try {
                 call.respond(dictionaryInteractor.getUserDictionaries(call.userLogin, call.pagingData))

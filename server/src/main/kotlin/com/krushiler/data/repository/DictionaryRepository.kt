@@ -5,6 +5,7 @@ import com.krushiler.data.storage.dao.UserDao
 import com.krushiler.data.storage.dbo.ChangeTermDboAction
 import com.krushiler.domain.model.PagingData
 import data.dto.DefaultDictionaryDto
+import data.dto.DictionaryCollectionDto
 import data.dto.DictionaryDto
 import data.dto.DictionaryInfoDto
 import data.dto.TermDto
@@ -104,8 +105,15 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
         return this == userId
     }
 
-    private val jsonFormat = Json { ignoreUnknownKeys = true }
+    suspend fun getCollectionInfo(collectionId: String): DictionaryCollectionDto? {
+        val collection = dictionaryDao.getDictionaryCollection(collectionId) ?: return null
+        return DictionaryCollectionDto(
+            id = collection.id,
+            name = collection.name,
+        )
+    }
 
+    private val jsonFormat = Json { ignoreUnknownKeys = true }
 
     suspend fun createInitialDictionaries() {
         val collectionId = "default"

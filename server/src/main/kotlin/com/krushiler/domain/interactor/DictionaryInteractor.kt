@@ -4,6 +4,7 @@ import com.krushiler.data.repository.DictionaryRepository
 import com.krushiler.data.repository.UserRepository
 import domain.model.DictionarySearchData
 import com.krushiler.domain.model.PagingData
+import data.dto.DictionaryCollectionDto
 import data.dto.DictionaryDto
 import data.dto.DictionaryInfoDto
 import data.dto.TermDto
@@ -52,6 +53,10 @@ class DictionaryInteractor(
         collectionId: String?
     ): PagedResponse<DictionaryInfoDto> {
         return dictionaryRepository.getDictionaries(pagingData, searchData, userId, collectionId)
+    }
+
+    suspend fun getCollectionInfo(collectionId: String): DictionaryCollectionDto? {
+        return dictionaryRepository.getCollectionInfo(collectionId)
     }
 
     suspend fun createInitialDictionaries() = dictionaryRepository.createInitialDictionaries()

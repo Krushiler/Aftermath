@@ -5,14 +5,14 @@ import org.jetbrains.exposed.sql.Table
 
 data class DictionaryDbo(
     val id: String,
-    val authorId: String,
+    val authorId: String?,
     val name: String,
     val description: String,
 )
 
 object Dictionaries : Table() {
     val id = varchar("id", 128)
-    val authorId = varchar("authorId", 128)
+    val authorId = varchar("authorId", 128).nullable()
     val name = varchar("name", 128)
     val description = varchar("description", 128)
 

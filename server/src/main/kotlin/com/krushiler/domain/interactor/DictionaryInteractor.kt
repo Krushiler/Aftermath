@@ -49,7 +49,10 @@ class DictionaryInteractor(
         pagingData: PagingData,
         searchData: DictionarySearchData,
         userId: String?,
+        collectionId: String?
     ): PagedResponse<DictionaryInfoDto> {
-        return dictionaryRepository.getDictionaries(pagingData, searchData, userId)
+        return dictionaryRepository.getDictionaries(pagingData, searchData, userId, collectionId)
     }
+
+    suspend fun createInitialDictionaries() = dictionaryRepository.createInitialDictionaries()
 }

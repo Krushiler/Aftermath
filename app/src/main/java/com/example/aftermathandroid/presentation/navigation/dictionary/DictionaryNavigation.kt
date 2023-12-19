@@ -36,10 +36,14 @@ fun DictionaryNavigation(
                 rootViewModel.back()
             }
         ) { navController ->
-            NavHost(navController = navController,
+            NavHost(
+                navController = navController,
                 startDestination = DictionaryRoute.Menu.path,
                 enterTransition = { fadeIn() },
-                exitTransition = { fadeOut() }) {
+                exitTransition = { fadeOut() },
+                popEnterTransition = { fadeIn() },
+                popExitTransition = { fadeOut() },
+            ) {
                 composable(DictionaryRoute.Menu.path) {
                     DictionariesMenuScreen(
                         dictionaryScreenSource = dictionaryScreenSource, dictionaryNavigation = viewModel

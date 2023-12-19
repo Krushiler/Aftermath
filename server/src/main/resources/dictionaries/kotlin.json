@@ -1,0 +1,127 @@
+{
+  "id": "kotlin-0",
+  "name": "Kotlin",
+  "description": "A dictionary with Kotlin terms",
+  "terms": [
+    {
+      "name": "Lock",
+      "description": "Ensures exclusive access to a shared resource during multithreading"
+    },
+    {
+      "name": "Mutex",
+      "description": "Fundamental synchronization mechanism for controlling access to shared resources"
+    },
+    {
+      "name": "let",
+      "description": "Facilitates the execution of a code block on a non-null object"
+    },
+    {
+      "name": "Coroutine",
+      "description": "Facilitates asynchronous programming by suspending and resuming computations"
+    },
+    {
+      "name": "Smart Cast",
+      "description": "Implicit casting of types after a check or comparison"
+    },
+    {
+      "name": "Destructuring Declarations",
+      "description": "Facilitates the extraction of components from data structures"
+    },
+    {
+      "name": "Nullable Type",
+      "description": "Denotes a type that can hold a null reference"
+    },
+    {
+      "name": "Companion Object",
+      "description": "Object associated with a class rather than an instance"
+    },
+    {
+      "name": "Extension Function",
+      "description": "Enables adding new functions to existing classes without inheritance"
+    },
+    {
+      "name": "Immutable",
+      "description": "Denotes objects or data structures that cannot be modified after creation"
+    },
+    {
+      "name": "Lambda Expression",
+      "description": "Anonymous function or code block used for concise syntax"
+    },
+    {
+      "name": "High-Order Function",
+      "description": "Function that takes other functions as parameters or returns them"
+    },
+    {
+      "name": "Reified Type",
+      "description": "Type with actual class information available at runtime"
+    },
+    {
+      "name": "Sealed Class",
+      "description": "Restricts the inheritance hierarchy to a defined set of classes"
+    },
+    {
+      "name": "Suspension Function",
+      "description": "Function that can be paused and later resumed"
+    },
+    {
+      "name": "Property Delegation",
+      "description": "Delegating the implementation of a property to another object"
+    },
+    {
+      "name": "Data Class",
+      "description": "Class specifically designed for holding data with auto-generated methods"
+    },
+    {
+      "name": "Lateinit",
+      "description": "Indicates that a variable will be initialized later in the code"
+    },
+    {
+      "name": "Tail Recursion",
+      "description": "Optimization technique for recursive functions to improve performance"
+    },
+    {
+      "name": "Default Argument",
+      "description": "Function parameter with a predefined value if not specified"
+    },
+    {
+      "name": "Range",
+      "description": "Represents a sequence of values between two endpoints"
+    },
+    {
+      "name": "Type Alias",
+      "description": "Alternative name for an existing type for improved readability"
+    },
+    {
+      "name": "Inline Function",
+      "description": "Function whose code is inserted at the call site during compilation"
+    },
+    {
+      "name": "Operator Overloading",
+      "description": "Assigning custom behavior to operators for user-defined types"
+    },
+    {
+      "name": "Enum Class",
+      "description": "Type that represents a fixed set of constants"
+    },
+    {
+      "name": "Platform-Specific Code",
+      "description": "Code tailored for a specific platform, such as JVM or Android"
+    },
+    {
+      "name": "Function Reference",
+      "description": "Referring to functions by name or using a callable reference"
+    },
+    {
+      "name": "Type Inference",
+      "description": "Compiler's ability to deduce variable types without explicit declarations"
+    },
+    {
+      "name": "Where Clause",
+      "description": "Clause used in generics to impose constraints on type parameters"
+    },
+    {
+      "name": "Init Block",
+      "description": "Block of code executed during the initialization of an instance"
+    }
+  ]
+}

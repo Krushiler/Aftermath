@@ -4,13 +4,17 @@ import com.krushiler.data.dao.Dao
 import com.krushiler.data.storage.database.DatabaseList
 import com.krushiler.data.storage.dbo.ChangeTermDboAction
 import com.krushiler.data.storage.dbo.Dictionaries
+import com.krushiler.data.storage.dbo.DictionaryCollectionDbo
+import com.krushiler.data.storage.dbo.DictionaryCollectionDictionaries
+import com.krushiler.data.storage.dbo.DictionaryCollections
 import com.krushiler.data.storage.dbo.DictionaryDbo
 import com.krushiler.data.storage.dbo.TermDbo
 import com.krushiler.data.storage.dbo.Terms
-import domain.model.DictionarySearchData
 import com.krushiler.domain.model.PagingData
+import domain.model.DictionarySearchData
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
@@ -18,6 +22,7 @@ import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
+import util.generateUUID
 
 class DictionaryDao(database: Database) : Dao(database) {
     suspend fun getUserDictionaries(userId: String, pagingData: PagingData): DatabaseList<DictionaryDbo> = dbQuery {
@@ -32,6 +37,7 @@ class DictionaryDao(database: Database) : Dao(database) {
     suspend fun getDictionaries(
         pagingData: PagingData,
         searchData: DictionarySearchData,
+        collectionId: String?
     ): DatabaseList<DictionaryDbo> = dbQuery {
         val request = Dictionaries.selectAll()
         if (searchData.authors.isNotEmpty()) {
@@ -51,6 +57,15 @@ class DictionaryDao(database: Database) : Dao(database) {
                 }
             }
         }
+        if (collectionId != null) {
+            request.andWhere {
+                Dictionaries.id inList
+                        DictionaryCollectionDictionaries.select { DictionaryCollectionDictionaries.collectionId eq collectionId }
+                            .map {
+                                it[DictionaryCollectionDictionaries.dictionaryId]
+                            }
+            }
+        }
         DatabaseList(
             items = request.copy().limit(
                 pagingData.limit, pagingData.offset.toLong()
@@ -67,7 +82,7 @@ class DictionaryDao(database: Database) : Dao(database) {
         Terms.select { Terms.dictionaryId eq dictionaryId }.map { Terms.resultRowToTerm(it) }
     }
 
-    suspend fun createDictionary(id: String, authorId: String, name: String, description: String): Boolean = dbQuery {
+    suspend fun createDictionary(id: String, authorId: String?, name: String, description: String): Boolean = dbQuery {
         Dictionaries.insert {
             it[Dictionaries.name] = name
             it[Dictionaries.description] = description
@@ -118,5 +133,63 @@ class DictionaryDao(database: Database) : Dao(database) {
             it[Terms.name] = term
             it[Terms.description] = description
         } > 0
+    }
+
+    suspend fun createDictionaryCollection(
+        id: String,
+        name: String,
+    ) = dbQuery {
+        DictionaryCollections.insert {
+            it[DictionaryCollections.id] = id
+            it[DictionaryCollections.name] = name
+        }
+    }
+
+    suspend fun addDictionaryToCollection(
+        dictionaryId: String,
+        collectionId: String,
+    ) = dbQuery {
+        DictionaryCollectionDictionaries.insert {
+            it[DictionaryCollectionDictionaries.id] = generateUUID()
+            it[DictionaryCollectionDictionaries.dictionaryId] = dictionaryId
+            it[DictionaryCollectionDictionaries.collectionId] = collectionId
+        }
+    }
+
+    suspend fun removeDictionaryFromCollection(
+        dictionaryId: String,
+        collectionId: String,
+    ) = dbQuery {
+        DictionaryCollections.deleteWhere {
+            (DictionaryCollectionDictionaries.dictionaryId eq dictionaryId).and { DictionaryCollectionDictionaries.collectionId eq collectionId }
+        }
+    }
+
+    suspend fun getDictionaryCollections(
+        pagingData: PagingData
+    ): DatabaseList<DictionaryCollectionDbo> = dbQuery {
+        val request = DictionaryCollections.selectAll()
+        DatabaseList(
+            items = request.copy().limit(pagingData.limit, pagingData.offset.toLong())
+                .map { DictionaryCollections.resultRowToDictionaryCollection(it) },
+            total = request.copy().count().toInt(),
+        )
+    }
+
+    suspend fun getDictionaryCollection(
+        id: String
+    ): DictionaryCollectionDbo? = dbQuery {
+        DictionaryCollections.select { DictionaryCollections.id eq id }
+            .firstOrNull()?.let { DictionaryCollections.resultRowToDictionaryCollection(it) }
+    }
+
+    suspend fun getDictionaryCollectionDictionaries(
+        collectionId: String,
+    ): List<DictionaryDbo> = dbQuery {
+        DictionaryCollectionDictionaries.select { DictionaryCollectionDictionaries.collectionId eq collectionId }.map {
+            Dictionaries.select {
+                Dictionaries.id eq it[DictionaryCollectionDictionaries.dictionaryId]
+            }.map { Dictionaries.resultRowToDictionary(it) }.firstOrNull()
+        }.mapNotNull { it }
     }
 }

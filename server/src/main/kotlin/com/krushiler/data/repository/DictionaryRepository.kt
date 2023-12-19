@@ -3,14 +3,20 @@ package com.krushiler.data.repository
 import com.krushiler.data.storage.dao.DictionaryDao
 import com.krushiler.data.storage.dao.UserDao
 import com.krushiler.data.storage.dbo.ChangeTermDboAction
-import domain.model.DictionarySearchData
 import com.krushiler.domain.model.PagingData
+import data.dto.DefaultDictionaryDto
 import data.dto.DictionaryDto
 import data.dto.DictionaryInfoDto
 import data.dto.TermDto
 import data.dto.UserDto
 import data.response.PagedResponse
+import domain.model.DictionarySearchData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 import util.generateUUID
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
 class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val userDao: UserDao) {
     suspend fun getUserDictionaries(user: UserDto, pagingData: PagingData): PagedResponse<DictionaryInfoDto> {
@@ -27,11 +33,12 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
         pagingData: PagingData,
         searchData: DictionarySearchData,
         userId: String?,
+        collectionId: String?
     ): PagedResponse<DictionaryInfoDto> {
-        val dictionaries = dictionaryDao.getDictionaries(pagingData, searchData)
+        val dictionaries = dictionaryDao.getDictionaries(pagingData, searchData, collectionId)
         return PagedResponse(
             items = dictionaries.items.map {
-                val userDbo = userDao.getUserByLogin(it.authorId)
+                val userDbo = it.authorId?.let { authorId -> userDao.getUserByLogin(authorId) }
                 val user = userDbo?.let { dbo ->
                     UserDto(
                         dbo.login, dbo.name, dbo.avatar
@@ -49,7 +56,7 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
         val dictionary = dictionaryDao.getDictionary(id)
         val terms = dictionaryDao.getTerms(id)
         return dictionary?.let {
-            val userDbo = userDao.getUserByLogin(it.authorId)
+            val userDbo = it.authorId?.let { authorId -> userDao.getUserByLogin(authorId) }
             val user = userDbo?.let { dbo ->
                 UserDto(
                     dbo.login, dbo.name, dbo.avatar
@@ -95,5 +102,63 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
     private infix fun String?.equalId(userId: String?): Boolean {
         if (this == null || userId == null) return false
         return this == userId
+    }
+
+    private val jsonFormat = Json { ignoreUnknownKeys = true }
+
+
+    suspend fun createInitialDictionaries() {
+        val collectionId = "default"
+        val collection = dictionaryDao.getDictionaryCollection(collectionId)
+        if (collection != null) return
+
+        dictionaryDao.createDictionaryCollection(
+            id = collectionId,
+            name = "Default"
+        )
+
+        try {
+            val id = createDictionaryFromResource("dictionaries/kotlin.json")
+            if (id != null) {
+                dictionaryDao.addDictionaryToCollection(id, collectionId)
+            }
+        } catch (_: Exception) {
+        }
+    }
+
+    private suspend fun createDictionaryFromResource(resourceName: String): String? {
+        val inputStream = object {}.javaClass.classLoader.getResourceAsStream(resourceName)
+
+        if (inputStream != null) {
+            val reader = BufferedReader(InputStreamReader(inputStream))
+            val content = reader.readText()
+            withContext(Dispatchers.IO) {
+                reader.close()
+                inputStream.close()
+            }
+
+            val json = jsonFormat.decodeFromString<DefaultDictionaryDto>(content)
+
+            if (dictionaryDao.getDictionary(json.id) != null) return null
+
+            dictionaryDao.createDictionary(
+                id = json.id,
+                authorId = null,
+                name = json.name,
+                description = json.description,
+            )
+
+            json.terms.forEach {
+                dictionaryDao.createTerm(
+                    id = generateUUID(),
+                    dictionaryId = json.id,
+                    term = it.name,
+                    description = it.description
+                )
+            }
+
+            return json.id
+        }
+        return null
     }
 }

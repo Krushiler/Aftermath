@@ -1,11 +1,7 @@
 package com.example.aftermathandroid.presentation.navigation.root
 
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -52,15 +48,11 @@ fun RootNavigation(
                             || navController.currentDestination?.route == RootDestination.Registration.path
                     if (it == null && !isAuthDestination) {
                         navController.navigate(RootDestination.Login.path) {
-                            popUpTo(RootDestination.Home.path) {
-                                inclusive = true
-                            }
+                            popUpTo(0)
                         }
                     } else if (it != null && isAuthDestination) {
                         navController.navigate(RootDestination.Home.path) {
-                            popUpTo(RootDestination.Home.path) {
-                                inclusive = true
-                            }
+                            popUpTo(0)
                         }
                     }
                 }
@@ -69,9 +61,10 @@ fun RootNavigation(
             NavHost(
                 navController = navController,
                 startDestination = RootDestination.Home.path,
-                enterTransition = { fadeIn() },
-                exitTransition = { fadeOut() },
-                popExitTransition = { fadeOut() },
+                enterTransition = { slideInHorizontally { it } },
+                exitTransition = { slideOutHorizontally { -it / 2 } },
+                popEnterTransition = { slideInHorizontally { -it / 2 } },
+                popExitTransition = { slideOutHorizontally { it } },
             ) {
                 composable(RootDestination.Profile.path) {
                     ProfileScreen()
@@ -84,9 +77,6 @@ fun RootNavigation(
                 }
                 composable(
                     RootDestination.Registration.path,
-                    enterTransition = { slideInHorizontally { it } },
-                    popExitTransition = { slideOutHorizontally { it } },
-                    exitTransition = { slideOutHorizontally { it } },
                 ) {
                     RegisterScreen()
                 }
@@ -102,9 +92,6 @@ fun RootNavigation(
                 }
                 composable(
                     RootDestination.SelectDictionary.path,
-                    enterTransition = { slideInVertically(initialOffsetY = { it }) },
-                    exitTransition = { slideOutVertically(targetOffsetY = { it }) },
-                    popExitTransition = { slideOutVertically(targetOffsetY = { it }) },
                 ) {
                     DictionarySelectScreen()
                 }

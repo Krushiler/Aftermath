@@ -1,6 +1,8 @@
 package com.krushiler.data.storage.database
 
 import com.krushiler.data.storage.dbo.Dictionaries
+import com.krushiler.data.storage.dbo.DictionaryCollectionDictionaries
+import com.krushiler.data.storage.dbo.DictionaryCollections
 import com.krushiler.data.storage.dbo.Terms
 import com.krushiler.data.storage.dbo.Users
 import org.jetbrains.exposed.sql.Database
@@ -16,6 +18,8 @@ object DatabaseFactory {
             SchemaUtils.create(Users)
             SchemaUtils.create(Dictionaries)
             SchemaUtils.create(Terms)
+            SchemaUtils.create(DictionaryCollections)
+            SchemaUtils.create(DictionaryCollectionDictionaries)
         }
         return database
     }

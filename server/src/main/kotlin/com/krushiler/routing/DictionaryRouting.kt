@@ -2,6 +2,7 @@ package com.krushiler.routing
 
 import com.krushiler.domain.interactor.DictionaryInteractor
 import com.krushiler.plugins.authenticateBearer
+import com.krushiler.util.collectionId
 import com.krushiler.util.dictionarySearchData
 import com.krushiler.util.pagingData
 import com.krushiler.util.userLogin
@@ -29,7 +30,8 @@ fun Routing.dictionaryRouting() = route("/dictionary") {
                     dictionaryInteractor.getDictionaries(
                         call.pagingData,
                         call.dictionarySearchData,
-                        call.userLogin
+                        call.userLogin,
+                        call.collectionId
                     )
                 )
             } catch (e: Exception) {

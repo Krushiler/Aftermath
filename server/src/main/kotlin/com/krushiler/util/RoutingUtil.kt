@@ -18,3 +18,6 @@ val ApplicationCall.dictionarySearchData
         request.queryParameters["excludeAuthors"]?.split(",") ?: listOf(),
         request.queryParameters["query"] ?: ""
     )
+
+val ApplicationCall.collectionId
+    get() = request.queryParameters["collectionId"]

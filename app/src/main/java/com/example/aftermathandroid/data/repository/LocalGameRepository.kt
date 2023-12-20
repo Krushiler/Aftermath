@@ -112,6 +112,7 @@ class LocalGameRepository @Inject constructor(
     private fun reset() {
         _localGameState.value = LocalGameState.WaitingForStart(3)
         _userScoreState.value = 0
+        _timeSecondsFlow.value = 0
         _termsSource = null
     }
 }

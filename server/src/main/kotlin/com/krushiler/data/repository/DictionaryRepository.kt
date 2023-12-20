@@ -111,8 +111,8 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
 
     suspend fun createInitialDictionaries() {
         val collectionId = "default"
-        val collection = dictionaryDao.getDictionaryCollection(collectionId)
-        if (collection != null) return
+
+        dictionaryDao.deleteDictionaryCollection(collectionId)
 
         dictionaryDao.createDictionaryCollection(
             id = collectionId, name = "Default"
@@ -154,10 +154,10 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
 
             val json = jsonFormat.decodeFromString<DefaultDictionaryDto>(content)
 
-            if (dictionaryDao.getDictionary(json.id) != null) return null
+            val id = generateUUID()
 
             dictionaryDao.createDictionary(
-                id = json.id,
+                id = id,
                 authorId = null,
                 name = json.name,
                 description = json.description,
@@ -165,11 +165,11 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
 
             json.terms.forEach {
                 dictionaryDao.createTerm(
-                    id = generateUUID(), dictionaryId = json.id, term = it.name, description = it.description
+                    id = generateUUID(), dictionaryId = id, term = it.name, description = it.description
                 )
             }
 
-            return json.id
+            return id
         }
         return null
     }

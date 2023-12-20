@@ -112,7 +112,13 @@ class DictionaryDao(database: Database) : Dao(database) {
     }
 
     suspend fun deleteDictionary(id: String): Boolean = dbQuery {
+        DictionaryCollectionDictionaries.deleteWhere { DictionaryCollectionDictionaries.dictionaryId eq id }
         Dictionaries.deleteWhere { Dictionaries.id eq id } > 0 && Terms.deleteWhere { Terms.dictionaryId eq id } > 0
+    }
+
+    suspend fun deleteDictionaryCollection(id: String): Boolean = dbQuery {
+        DictionaryCollectionDictionaries.deleteWhere { DictionaryCollectionDictionaries.collectionId eq id }
+        DictionaryCollections.deleteWhere { DictionaryCollections.id eq id } > 0
     }
 
     suspend fun deleteTerm(id: String): Boolean = dbQuery {

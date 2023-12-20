@@ -14,7 +14,7 @@ object Dictionaries : Table() {
     val id = varchar("id", 128)
     val authorId = varchar("authorId", 128).nullable()
     val name = varchar("name", 128)
-    val description = varchar("description", 128)
+    val description = largeText("description")
 
     override val primaryKey = PrimaryKey(id)
 

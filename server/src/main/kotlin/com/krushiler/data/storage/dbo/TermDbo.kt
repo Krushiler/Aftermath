@@ -13,7 +13,7 @@ data class TermDbo(
 object Terms : Table() {
     val id = varchar("id", 128)
     val name = varchar("term", 128)
-    val description = varchar("description", 128)
+    val description = largeText("description")
     val dictionaryId = varchar("dictionaryId", 128)
 
     override val primaryKey = PrimaryKey(id)

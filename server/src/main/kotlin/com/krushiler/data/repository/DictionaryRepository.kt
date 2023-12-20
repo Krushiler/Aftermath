@@ -131,12 +131,9 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
         )
 
         for (file in files) {
-            try {
-                val id = createDictionaryFromResource(file)
-                if (id != null) {
-                    dictionaryDao.addDictionaryToCollection(id, collectionId)
-                }
-            } catch (_: Exception) {
+            val id = createDictionaryFromResource(file)
+            if (id != null) {
+                dictionaryDao.addDictionaryToCollection(id, collectionId)
             }
         }
     }

@@ -24,12 +24,18 @@ class ResultGameViewModel @Inject constructor(
                 if (gameState is LocalGameState.GameOver) {
                     _stateFlow.update {
                         it.copy(
-                            time = gameState.timeSeconds,
-                            score = gameState.score,
+                            time = gameState.summary.timeSeconds,
+                            score = gameState.summary.score,
+                            questions = gameState.summary.questions,
+                            totalQuestions = gameState.summary.questions.size
                         )
                     }
                 }
             }
         }
+    }
+
+    fun switchSummary() {
+        _stateFlow.update { it.copy(showSummary = !it.showSummary) }
     }
 }

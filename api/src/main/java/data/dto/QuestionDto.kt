@@ -14,3 +14,11 @@ data class QuestionDto(
     val question: QuestionItemDto,
     val answers: List<QuestionItemDto>,
 )
+
+@Serializable
+data class QuestionSummaryDto(
+    val question: QuestionDto,
+    val selectedAnswer: QuestionItemDto?,
+) {
+    val isCorrect = selectedAnswer?.termId == question.term.id
+}

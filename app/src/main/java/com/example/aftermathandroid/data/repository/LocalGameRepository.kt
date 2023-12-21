@@ -2,8 +2,10 @@ package com.example.aftermathandroid.data.repository
 
 import com.example.aftermathandroid.domain.model.GameInitParams
 import com.example.aftermathandroid.domain.model.LocalGameState
+import data.dto.GameSummaryDto
 import data.dto.QuestionDto
 import data.dto.QuestionItemDto
+import data.dto.QuestionSummaryDto
 import domain.game.GameTermsSource
 import domain.game.TakeTermResult
 import kotlinx.coroutines.CoroutineScope
@@ -35,6 +37,8 @@ class LocalGameRepository @Inject constructor(
     private val gameParams: GameInitParams get() = _gameParams!!
 
     private var timerJob: Job? = null
+
+    private val answeredQuestionsSummary = mutableListOf<QuestionSummaryDto>()
 
     fun startGame(gameInitParams: GameInitParams) {
         reset()
@@ -74,6 +78,7 @@ class LocalGameRepository @Inject constructor(
                     answer,
                     correctAnswer
                 )
+                answeredQuestionsSummary.add(QuestionSummaryDto(question, answer))
                 delay(1000)
                 nextTerm()
             }
@@ -104,7 +109,13 @@ class LocalGameRepository @Inject constructor(
     }
 
     private fun finishGame() {
-        _localGameState.value = LocalGameState.GameOver(_timeSecondsFlow.value, _userScoreState.value)
+        _localGameState.value = LocalGameState.GameOver(
+            GameSummaryDto(
+                _userScoreState.value,
+                _timeSecondsFlow.value,
+                answeredQuestionsSummary.toMutableList(),
+            )
+        )
         timerJob?.cancel()
         timerJob = null
     }
@@ -114,5 +125,6 @@ class LocalGameRepository @Inject constructor(
         _userScoreState.value = 0
         _timeSecondsFlow.value = 0
         _termsSource = null
+        answeredQuestionsSummary.clear()
     }
 }

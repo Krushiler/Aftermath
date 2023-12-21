@@ -4,8 +4,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItem
@@ -41,8 +41,8 @@ fun HomeFlowScreen() {
                     NavigationBarItem(
                         selected = navigationState.value?.destination?.route == HomeRoute.Game.path,
                         onClick = { homeViewModel.navigateToFeed() },
-                        icon = { Icon(imageVector = Icons.Outlined.Home, contentDescription = null) },
-                        label = { Text(text = "Feed") },
+                        icon = { Icon(imageVector = Icons.Outlined.PlayArrow, contentDescription = null) },
+                        label = { Text(text = stringResource(id = R.string.game)) },
                     )
                     NavigationBarItem(
                         selected = navigationState.value?.destination?.route == HomeRoute.Dictionaries.path,

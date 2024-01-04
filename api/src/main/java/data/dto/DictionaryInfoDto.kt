@@ -9,4 +9,5 @@ data class DictionaryInfoDto(
     val description: String,
     val author: UserDto?,
     val canEdit: Boolean,
+    val isFavourite: Boolean,
 )

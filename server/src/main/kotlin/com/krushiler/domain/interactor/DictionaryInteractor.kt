@@ -55,6 +55,10 @@ class DictionaryInteractor(
         return dictionaryRepository.getDictionaries(pagingData, searchData, userId, collectionId)
     }
 
+    suspend fun getFavouriteDictionaries(userId: String, pagingData: PagingData): PagedResponse<DictionaryInfoDto> {
+        return dictionaryRepository.getFavouriteDictionaries(pagingData, userId)
+    }
+
     suspend fun getCollectionInfo(collectionId: String): DictionaryCollectionDto? {
         return dictionaryRepository.getCollectionInfo(collectionId)
     }

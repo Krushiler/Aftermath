@@ -23,7 +23,13 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
     suspend fun getUserDictionaries(user: UserDto, pagingData: PagingData): PagedResponse<DictionaryInfoDto> {
         val dictionaries = dictionaryDao.getUserDictionaries(user.name, pagingData)
         return PagedResponse(
-            items = dictionaries.items.map { DictionaryInfoDto(it.id, it.name, it.description, null, true) },
+            items = dictionaries.items.map {
+                DictionaryInfoDto(
+                    it.id, it.name, it.description, null,
+                    canEdit = true,
+                    isFavourite = dictionaryDao.getDictionaryIsFavourite(it.id, user.name)
+                )
+            },
             total = dictionaries.total,
             page = pagingData.page,
             pageSize = pagingData.limit
@@ -42,7 +48,42 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
                         dbo.login, dbo.name, dbo.avatar
                     )
                 }
-                DictionaryInfoDto(it.id, it.name, it.description, user, user?.login equalId userId)
+                DictionaryInfoDto(
+                    it.id,
+                    it.name,
+                    it.description,
+                    user,
+                    user?.login equalId userId,
+                    userId?.let { userId ->
+                        dictionaryDao.getDictionaryIsFavourite(
+                            it.id, userId
+                        )
+                    } ?: false
+                )
+            }, total = dictionaries.total, page = pagingData.page, pageSize = pagingData.limit
+        )
+    }
+
+    suspend fun getFavouriteDictionaries(pagingData: PagingData, userId: String): PagedResponse<DictionaryInfoDto> {
+        val dictionaries = dictionaryDao.getFavouriteDictionaries(pagingData, userId)
+        return PagedResponse(
+            items = dictionaries.items.map {
+                val userDbo = it.authorId?.let { authorId -> userDao.getUserByLogin(authorId) }
+                val user = userDbo?.let { dbo ->
+                    UserDto(
+                        dbo.login, dbo.name, dbo.avatar
+                    )
+                }
+                DictionaryInfoDto(
+                    it.id,
+                    it.name,
+                    it.description,
+                    user,
+                    user?.login equalId userId,
+                    dictionaryDao.getDictionaryIsFavourite(
+                        it.id, userId
+                    )
+                )
             }, total = dictionaries.total, page = pagingData.page, pageSize = pagingData.limit
         )
     }
@@ -64,6 +105,11 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
                 user,
                 user?.login equalId userId,
                 terms.map { term -> TermDto(term.id, term.name, term.description) },
+                userId?.let { userId ->
+                    dictionaryDao.getDictionaryIsFavourite(
+                        id, userId
+                    )
+                } ?: false
             )
         }
     }
@@ -71,7 +117,7 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
     suspend fun createDictionary(user: UserDto, name: String, description: String): DictionaryDto {
         val id = generateUUID()
         if (dictionaryDao.createDictionary(id, user.name, name, description)) {
-            return DictionaryDto(id, name, description, user, true, emptyList())
+            return DictionaryDto(id, name, description, user, true, emptyList(), false)
         }
         throw IllegalStateException("Failed to create dictionary")
     }
@@ -105,6 +151,14 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
             id = collection.id,
             name = collection.name,
         )
+    }
+
+    suspend fun changeFavouriteStatus(dictionaryId: String, userId: String, isFavourite: Boolean) {
+        if (isFavourite) {
+            dictionaryDao.addFavouriteDictionary(dictionaryId, userId)
+        } else {
+            dictionaryDao.removeFavouriteDictionary(dictionaryId, userId)
+        }
     }
 
     private val jsonFormat = Json { ignoreUnknownKeys = true }

@@ -8,6 +8,7 @@ import com.krushiler.data.storage.dbo.DictionaryCollectionDbo
 import com.krushiler.data.storage.dbo.DictionaryCollectionDictionaries
 import com.krushiler.data.storage.dbo.DictionaryCollections
 import com.krushiler.data.storage.dbo.DictionaryDbo
+import com.krushiler.data.storage.dbo.FavouriteDictionaries
 import com.krushiler.data.storage.dbo.TermDbo
 import com.krushiler.data.storage.dbo.Terms
 import com.krushiler.domain.model.PagingData
@@ -155,10 +156,12 @@ class DictionaryDao(database: Database) : Dao(database) {
     suspend fun createDictionaryCollection(
         id: String,
         name: String,
+        authorId: String? = null,
     ) = dbQuery {
         DictionaryCollections.insert {
             it[DictionaryCollections.id] = id
             it[DictionaryCollections.name] = name
+            it[DictionaryCollections.author] = authorId
         }
     }
 
@@ -209,5 +212,48 @@ class DictionaryDao(database: Database) : Dao(database) {
                     Dictionaries.id eq it[DictionaryCollectionDictionaries.dictionaryId]
                 }.map { Dictionaries.resultRowToDictionary(it) }.firstOrNull()
             }.mapNotNull { it }
+    }
+
+    suspend fun addFavouriteDictionary(
+        dictionaryId: String,
+        userId: String
+    ) = dbQuery {
+        FavouriteDictionaries.insert {
+            it[FavouriteDictionaries.id] = generateUUID()
+            it[FavouriteDictionaries.userId] = userId
+            it[FavouriteDictionaries.dictionaryId] = dictionaryId
+        }
+    }
+
+    suspend fun removeFavouriteDictionary(
+        dictionaryId: String,
+        userId: String
+    ) = dbQuery {
+        FavouriteDictionaries.deleteWhere {
+            (FavouriteDictionaries.userId eq userId).and { FavouriteDictionaries.dictionaryId eq dictionaryId }
+        }
+    }
+
+    suspend fun getFavouriteDictionaries(
+        pagingData: PagingData,
+        userId: String
+    ): DatabaseList<DictionaryDbo> = dbQuery {
+        val request = Dictionaries.select {
+            FavouriteDictionaries.userId eq userId and (FavouriteDictionaries.dictionaryId eq Dictionaries.id)
+        }
+        DatabaseList(
+            items = request.copy().limit(pagingData.limit, pagingData.offset.toLong())
+                .map { Dictionaries.resultRowToDictionary(it) },
+            total = request.copy().count().toInt(),
+        )
+    }
+
+    suspend fun getDictionaryIsFavourite(
+        dictionaryId: String,
+        userId: String
+    ): Boolean = dbQuery {
+        FavouriteDictionaries.select {
+            FavouriteDictionaries.userId eq userId and (FavouriteDictionaries.dictionaryId eq dictionaryId)
+        }.count() > 0
     }
 }

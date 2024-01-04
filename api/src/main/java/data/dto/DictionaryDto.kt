@@ -10,4 +10,5 @@ data class DictionaryDto(
     val author: UserDto?,
     val canEdit: Boolean,
     val terms: List<TermDto>,
+    val isFavourite: Boolean,
 )

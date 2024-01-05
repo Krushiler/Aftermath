@@ -34,6 +34,7 @@ import com.example.aftermathandroid.R
 import com.example.aftermathandroid.presentation.common.component.Gap
 import com.example.aftermathandroid.presentation.common.component.animation.animateBoolAsFloatState
 import com.example.aftermathandroid.presentation.common.component.button.BackButton
+import com.example.aftermathandroid.presentation.common.component.button.FavouriteButton
 import com.example.aftermathandroid.presentation.common.component.dictionary.TermEditingItem
 import com.example.aftermathandroid.presentation.common.provider.LocalRootNavigationOwner
 import com.example.aftermathandroid.presentation.common.provider.storeViewModel
@@ -85,6 +86,10 @@ fun EditDictionaryScreen(
                                 )
                             )
                         }
+                    FavouriteButton(
+                        isFavourite = state.value.isFavourite,
+                        onClick = { viewModel.toggleFavourite() }
+                    )
                 },
             )
         },

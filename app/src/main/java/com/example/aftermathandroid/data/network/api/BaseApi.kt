@@ -80,4 +80,8 @@ class BaseApi(private val client: HttpClient) {
         parameter("limit", limit)
         parameter("offset", offset)
     }.body()
+
+    suspend fun addFavouriteDictionary(id: String): Boolean = client.post("/dictionary/favourite/$id").body()
+
+    suspend fun deleteFavouriteDictionary(id: String): Boolean = client.delete("/dictionary/favourite/$id").body()
 }

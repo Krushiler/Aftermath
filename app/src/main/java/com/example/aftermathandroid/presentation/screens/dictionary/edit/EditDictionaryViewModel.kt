@@ -118,4 +118,9 @@ class EditDictionaryViewModel @Inject constructor(
     fun editTermPressed(term: TermDto) {
         _stateFlow.update { it.copy(editTermDialogState = EditTermDialogState(term)) }
     }
+
+    fun toggleFavourite() {
+        _stateFlow.update { it.copy(isFavourite = !it.isFavourite) }
+
+    }
 }

@@ -11,6 +11,7 @@ data class EditDictionaryState(
     val showAddTermDialog: Boolean = false,
     val canEdit: Boolean = false,
     val dictionaryId: String,
+    val isFavourite: Boolean = false,
 )
 
 data class EditTermDialogState(

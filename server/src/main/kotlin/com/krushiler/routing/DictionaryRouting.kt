@@ -6,6 +6,7 @@ import com.krushiler.util.collectionId
 import com.krushiler.util.dictionarySearchData
 import com.krushiler.util.pagingData
 import com.krushiler.util.userLogin
+import data.request.ChangeFavouriteRequest
 import data.request.CreateDictionaryRequest
 import data.request.UpdateDictionaryRequest
 import io.ktor.http.HttpStatusCode
@@ -41,6 +42,20 @@ fun Routing.dictionaryRouting() = route("/dictionary") {
         get("/favourite") {
             try {
                 call.respond(dictionaryInteractor.getFavouriteDictionaries(call.userLogin, call.pagingData))
+            } catch (e: Exception) {
+                call.respondText(e.localizedMessage, status = HttpStatusCode.BadRequest)
+            }
+        }
+        post("/favourite") {
+            try {
+                val request = call.receive<ChangeFavouriteRequest>()
+                call.respond(
+                    dictionaryInteractor.changeFavourite(
+                        call.userLogin,
+                        request.dictionaryId,
+                        request.isFavourite
+                    )
+                )
             } catch (e: Exception) {
                 call.respondText(e.localizedMessage, status = HttpStatusCode.BadRequest)
             }

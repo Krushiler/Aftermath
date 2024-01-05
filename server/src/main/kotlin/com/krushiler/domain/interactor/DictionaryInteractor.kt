@@ -59,6 +59,14 @@ class DictionaryInteractor(
         return dictionaryRepository.getFavouriteDictionaries(pagingData, userId)
     }
 
+    suspend fun changeFavourite(user: String, dictionaryId: String, isFavourite: Boolean) {
+        if (isFavourite) {
+            dictionaryRepository.addFavouriteDictionary(user, dictionaryId)
+        } else {
+            dictionaryRepository.deleteFavouriteDictionary(user, dictionaryId)
+        }
+    }
+
     suspend fun getCollectionInfo(collectionId: String): DictionaryCollectionDto? {
         return dictionaryRepository.getCollectionInfo(collectionId)
     }

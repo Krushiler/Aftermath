@@ -88,6 +88,14 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
         )
     }
 
+    suspend fun addFavouriteDictionary(userId: String, dictionaryId: String) {
+        dictionaryDao.addFavouriteDictionary(userId = userId, dictionaryId = dictionaryId)
+    }
+
+    suspend fun deleteFavouriteDictionary(userId: String, dictionaryId: String) {
+        dictionaryDao.removeFavouriteDictionary(userId = userId, dictionaryId = dictionaryId)
+    }
+
     suspend fun getDictionary(id: String, userId: String?): DictionaryDto? {
         val dictionary = dictionaryDao.getDictionary(id)
         val terms = dictionaryDao.getTerms(id)
@@ -151,14 +159,6 @@ class DictionaryRepository(private val dictionaryDao: DictionaryDao, private val
             id = collection.id,
             name = collection.name,
         )
-    }
-
-    suspend fun changeFavouriteStatus(dictionaryId: String, userId: String, isFavourite: Boolean) {
-        if (isFavourite) {
-            dictionaryDao.addFavouriteDictionary(dictionaryId, userId)
-        } else {
-            dictionaryDao.removeFavouriteDictionary(dictionaryId, userId)
-        }
     }
 
     private val jsonFormat = Json { ignoreUnknownKeys = true }

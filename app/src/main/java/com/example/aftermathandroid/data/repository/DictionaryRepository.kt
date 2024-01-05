@@ -5,6 +5,7 @@ import data.dto.DictionaryCollectionDto
 import data.dto.DictionaryDto
 import data.dto.DictionaryInfoDto
 import data.dto.TermDto
+import data.request.ChangeFavouriteRequest
 import data.request.CreateDictionaryRequest
 import data.request.UpdateDictionaryRequest
 import data.response.PagedResponse
@@ -52,6 +53,8 @@ class DictionaryRepository @Inject constructor(
         limit,
         offset
     )
+
+    suspend fun changeFavourite(dictionaryId: String, isFavourite: Boolean) = api.changeFavourite(ChangeFavouriteRequest(isFavourite, dictionaryId))
 
     suspend fun getCollectionInfo(collectionId: String): DictionaryCollectionDto = api.getCollectionInfo(collectionId)
 }

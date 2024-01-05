@@ -40,4 +40,7 @@ class DictionaryInteractor @Inject constructor(
     suspend fun deleteDictionary(id: String) = dictionaryRepository.deleteDictionary(id)
 
     suspend fun getCollectionInfo(collectionId: String) = dictionaryRepository.getCollectionInfo(collectionId)
+
+    suspend fun changeFavourite(dictionaryId: String, isFavourite: Boolean) =
+        dictionaryRepository.changeFavourite(dictionaryId, isFavourite)
 }

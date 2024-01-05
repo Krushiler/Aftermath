@@ -120,7 +120,18 @@ class EditDictionaryViewModel @Inject constructor(
     }
 
     fun toggleFavourite() {
+        val prevState = _stateFlow.value
         _stateFlow.update { it.copy(isFavourite = !it.isFavourite) }
-
+        viewModelScope.launch {
+            try {
+                dictionaryInteractor.changeFavourite(
+                    _stateFlow.value.dictionaryId,
+                    _stateFlow.value.isFavourite
+                )
+            } catch (e: Exception) {
+                _stateFlow.update { prevState }
+                _errorFlow.emit(ErrorModel.fromException(e))
+            }
+        }
     }
 }

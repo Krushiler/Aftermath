@@ -5,6 +5,7 @@ import data.dto.DictionaryCollectionDto
 import data.dto.DictionaryDto
 import data.dto.DictionaryInfoDto
 import data.dto.UserDto
+import data.request.ChangeFavouriteRequest
 import data.request.ChangeUserRequest
 import data.request.CreateDictionaryRequest
 import data.request.LoginRequest
@@ -81,7 +82,7 @@ class BaseApi(private val client: HttpClient) {
         parameter("offset", offset)
     }.body()
 
-    suspend fun addFavouriteDictionary(id: String): Boolean = client.post("/dictionary/favourite/$id").body()
-
-    suspend fun deleteFavouriteDictionary(id: String): Boolean = client.delete("/dictionary/favourite/$id").body()
+    suspend fun changeFavourite(request: ChangeFavouriteRequest) = client.post("/dictionary/favourite") {
+        setBody(request)
+    }
 }

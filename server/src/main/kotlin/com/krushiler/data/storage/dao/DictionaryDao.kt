@@ -238,8 +238,10 @@ class DictionaryDao(database: Database) : Dao(database) {
         pagingData: PagingData,
         userId: String
     ): DatabaseList<DictionaryDbo> = dbQuery {
-        val request = Dictionaries.select {
-            FavouriteDictionaries.userId eq userId and (FavouriteDictionaries.dictionaryId eq Dictionaries.id)
+        val request = Dictionaries.selectAll().andWhere {
+            Dictionaries.id inList FavouriteDictionaries.select {
+                FavouriteDictionaries.userId eq userId
+            }.map { it[FavouriteDictionaries.dictionaryId] }
         }
         DatabaseList(
             items = request.copy().limit(pagingData.limit, pagingData.offset.toLong())

@@ -38,7 +38,8 @@ class EditDictionaryViewModel @Inject constructor(
                         name = dictionary.name,
                         description = dictionary.description,
                         terms = dictionary.terms,
-                        canEdit = dictionary.canEdit
+                        canEdit = dictionary.canEdit,
+                        isFavourite = dictionary.isFavourite
                     )
                 }
             } catch (e: Exception) {

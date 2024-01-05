@@ -75,6 +75,7 @@ fun PrepareGameScreen(
                         value = state.value.questionCountValue,
                         onValueChange = { viewModel.changeQuestionCount(it) },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        singleLine = true,
                         enabled = !state.value.loading
                     )
                 }

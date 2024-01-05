@@ -2,10 +2,11 @@ package com.example.aftermathandroid.presentation.screens.auth.register
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -27,9 +28,10 @@ import com.example.aftermathandroid.R
 import com.example.aftermathandroid.presentation.common.component.Gap
 import com.example.aftermathandroid.presentation.common.component.animation.animateBoolAsFloatState
 import com.example.aftermathandroid.presentation.common.provider.LocalRootNavigationOwner
-import com.example.aftermathandroid.presentation.common.provider.storeViewModel
 import com.example.aftermathandroid.presentation.common.provider.rootSnackbar
+import com.example.aftermathandroid.presentation.common.provider.storeViewModel
 import com.example.aftermathandroid.presentation.navigation.root.RootNavigationViewModel
+import com.example.aftermathandroid.presentation.theme.Dimens
 
 @Composable
 fun RegisterScreen(
@@ -52,34 +54,40 @@ fun RegisterScreen(
                 .padding(padding)
                 .fillMaxSize()
         ) {
-            Column(
+            LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.SpaceAround,
+                contentPadding = PaddingValues(Dimens.md)
             ) {
-                OutlinedTextField(value = state.value.login,
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                    onValueChange = { viewModel.loginChanged(it) },
-                    label = { Text(text = stringResource(id = R.string.login)) })
-                Gap.Lg()
-                OutlinedTextField(value = state.value.password,
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
-                    keyboardActions = KeyboardActions { viewModel.register() },
-                    onValueChange = { viewModel.passwordChanged(it) },
-                    label = { Text(text = stringResource(id = R.string.password)) })
-                Gap.Lg()
-                Button(
-                    onClick = { viewModel.register() },
-                    enabled = !state.value.isLoading
-                ) {
-                    Text(text = stringResource(id = R.string.register))
-                }
-                Gap.Lg()
-                TextButton(
-                    onClick = { rootNavigation.back() },
-                    enabled = !state.value.isLoading
-                ) {
-                    Text(text = stringResource(id = R.string.loginSuggestion))
+                item {
+                    Gap.Md()
+                    OutlinedTextField(value = state.value.login,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                        onValueChange = { viewModel.loginChanged(it) },
+                        label = { Text(text = stringResource(id = R.string.login)) })
+                    Gap.Lg()
+                    OutlinedTextField(
+                        value = state.value.password,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
+                        keyboardActions = KeyboardActions { viewModel.register() },
+                        onValueChange = { viewModel.passwordChanged(it) },
+                        label = { Text(text = stringResource(id = R.string.password)) },
+                    )
+                    Gap.Lg()
+                    Button(
+                        onClick = { viewModel.register() },
+                        enabled = !state.value.isLoading
+                    ) {
+                        Text(text = stringResource(id = R.string.register))
+                    }
+                    Gap.Lg()
+                    TextButton(
+                        onClick = { rootNavigation.back() },
+                        enabled = !state.value.isLoading
+                    ) {
+                        Text(text = stringResource(id = R.string.loginSuggestion))
+                    }
                 }
             }
             if (state.value.isLoading) LinearProgressIndicator(

@@ -1,12 +1,15 @@
 package com.example.aftermathandroid.presentation.navigation.dictionary
 
+import android.util.Log
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.aftermathandroid.presentation.common.provider.LocalDictionaryNavigationOwner
 import com.example.aftermathandroid.presentation.common.provider.LocalRootNavigationOwner
 import com.example.aftermathandroid.presentation.common.provider.storeViewModel
@@ -59,6 +62,20 @@ fun DictionaryNavigation(
                     )
                 }
                 composable("${DictionaryDestination.Collection.path}/{collectionId}") {
+                    Log.d("pizda", it.arguments?.getString("collectionId").toString())
+                    DictionaryCollectionScreen(
+                        dictionaryScreenSource = dictionaryScreenSource
+                    )
+                }
+                composable(
+                    DictionaryDestination.Favourite.path,
+                    arguments = listOf(
+                        navArgument("isFavourite") {
+                            type = NavType.BoolType
+                            defaultValue = true
+                        }
+                    )
+                ) {
                     DictionaryCollectionScreen(
                         dictionaryScreenSource = dictionaryScreenSource
                     )

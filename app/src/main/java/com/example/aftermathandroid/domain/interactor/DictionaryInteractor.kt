@@ -2,7 +2,9 @@ package com.example.aftermathandroid.domain.interactor
 
 import com.example.aftermathandroid.data.repository.DictionaryRepository
 import data.dto.DictionaryDto
+import data.dto.DictionaryInfoDto
 import data.dto.TermDto
+import data.response.PagedResponse
 import domain.model.DictionarySearchData
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,8 +21,13 @@ class DictionaryInteractor @Inject constructor(
         offset: Int = 0,
         searchData: DictionarySearchData? = null,
         collectionId: String? = null,
-    ) =
-        dictionaryRepository.getDictionaries(limit, offset, searchData, collectionId)
+        isFavourite: Boolean = false,
+    ): PagedResponse<DictionaryInfoDto> {
+        if (isFavourite) {
+            return dictionaryRepository.getFavouriteDictionaries(limit, offset)
+        }
+        return dictionaryRepository.getDictionaries(limit, offset, searchData, collectionId)
+    }
 
     suspend fun createDictionary(name: String, description: String) =
         dictionaryRepository.createDictionary(name, description)

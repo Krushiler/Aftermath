@@ -45,5 +45,13 @@ class DictionaryRepository @Inject constructor(
 
     suspend fun deleteDictionary(id: String) = api.deleteDictionary(id)
 
+    suspend fun getFavouriteDictionaries(
+        limit: Int = 10,
+        offset: Int = 0
+    ): PagedResponse<DictionaryInfoDto> = api.getFavouriteDictionaries(
+        limit,
+        offset
+    )
+
     suspend fun getCollectionInfo(collectionId: String): DictionaryCollectionDto = api.getCollectionInfo(collectionId)
 }

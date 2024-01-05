@@ -18,4 +18,8 @@ class DictionaryNavigationViewModel @Inject constructor() : NavigationViewModel<
     fun navigateToCollection(collectionId: String) {
         emit(NavigationState(DictionaryRoute.Collection(collectionId)))
     }
+
+    fun navigateToFavourite() {
+        emit(NavigationState(DictionaryRoute.Favourite))
+    }
 }

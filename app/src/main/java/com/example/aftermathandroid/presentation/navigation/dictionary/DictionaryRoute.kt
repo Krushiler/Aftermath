@@ -6,7 +6,8 @@ enum class DictionaryDestination(val path: String) {
     Menu("menu"),
     My("my"),
     Search("search"),
-    Collection("collection")
+    Collection("collection"),
+    Favourite("favourite")
 }
 
 sealed class DictionaryRoute(private val destination: DictionaryDestination) : NavigationRoute() {
@@ -18,4 +19,5 @@ sealed class DictionaryRoute(private val destination: DictionaryDestination) : N
     data class Collection(val collectionId: String) : DictionaryRoute(destination = DictionaryDestination.Collection) {
         override fun path() = "${DictionaryDestination.Collection.path}/$collectionId"
     }
+    object Favourite : DictionaryRoute(destination = DictionaryDestination.Favourite)
 }

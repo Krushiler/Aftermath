@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.ThumbUp
@@ -69,6 +70,13 @@ fun DictionariesMenuScreen(
                         name = stringResource(id = R.string.myDictionaries),
                         icon = Icons.Outlined.Home,
                         onPressed = { dictionaryNavigation.navigateToMyDictionaries() }
+                    )
+                }
+                item {
+                    DictionaryMenuItem(
+                        name = stringResource(id = R.string.favorite),
+                        icon = Icons.Outlined.FavoriteBorder,
+                        onPressed = { dictionaryNavigation.navigateToFavourite() }
                     )
                 }
                 item {

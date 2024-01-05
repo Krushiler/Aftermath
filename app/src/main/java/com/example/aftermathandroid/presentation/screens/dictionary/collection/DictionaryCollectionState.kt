@@ -8,5 +8,6 @@ data class DictionaryCollectionState(
     val dictionaries: PagedList<DictionaryInfoDto> = PagedList(),
     val isRefreshing: Boolean = false,
     val collectionName: String = "",
-    val collectionId: String,
+    val collectionId: String?,
+    val isFavourite: Boolean = false,
 )

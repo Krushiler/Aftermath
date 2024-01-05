@@ -72,4 +72,12 @@ class BaseApi(private val client: HttpClient) {
     suspend fun deleteDictionary(id: String): Boolean = client.delete("/dictionary/$id").body()
 
     suspend fun getCollectionInfo(id: String): DictionaryCollectionDto = client.get("/dictionary/collection/$id").body()
+
+    suspend fun getFavouriteDictionaries(
+        limit: Int = 10,
+        offset: Int = 0,
+    ): PagedResponse<DictionaryInfoDto> = client.get("/dictionary/favourite") {
+        parameter("limit", limit)
+        parameter("offset", offset)
+    }.body()
 }

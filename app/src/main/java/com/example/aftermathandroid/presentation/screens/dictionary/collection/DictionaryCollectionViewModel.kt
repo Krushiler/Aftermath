@@ -29,7 +29,8 @@ class DictionaryCollectionViewModel @Inject constructor(
 
     private val _stateFlow = MutableStateFlow(
         DictionaryCollectionState(
-            collectionId = savedStateHandle.get<String>("collectionId") ?: "",
+            collectionId = savedStateHandle.get<String>("collectionId"),
+            isFavourite = savedStateHandle.get<Boolean>("isFavourite") ?: false
         )
     )
     val stateFlow: StateFlow<DictionaryCollectionState> = _stateFlow
@@ -50,20 +51,24 @@ class DictionaryCollectionViewModel @Inject constructor(
             _stateFlow.update { it.copy(isLoading = true) }
 
             if (refresh) {
-                val collectionInfo = dictionaryInteractor.getCollectionInfo(_stateFlow.value.collectionId)
-                _stateFlow.update { it.copy(collectionName = collectionInfo.name) }
+                if (_stateFlow.value.isFavourite) {
+                    _stateFlow.update { it.copy(collectionName = "Favourite") }
+                } else {
+                    val collectionInfo = dictionaryInteractor.getCollectionInfo(_stateFlow.value.collectionId ?: "")
+                    _stateFlow.update { it.copy(collectionName = collectionInfo.name) }
+                }
             }
 
-            val prevState =
-                if (refresh) _stateFlow.value.copy(
-                    dictionaries = PagedList(),
-                    isRefreshing = true,
-                ) else _stateFlow.value
+            val prevState = if (refresh) _stateFlow.value.copy(
+                dictionaries = PagedList(),
+                isRefreshing = true,
+            ) else _stateFlow.value
 
             val pagedDictionaries = dictionaryInteractor.getDictionaries(
                 limit = PAGE_SIZE,
                 offset = prevState.dictionaries.offset,
-                collectionId = _stateFlow.value.collectionId
+                collectionId = _stateFlow.value.collectionId,
+                isFavourite = _stateFlow.value.isFavourite
             )
 
             _stateFlow.update {

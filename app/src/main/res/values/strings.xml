@@ -47,6 +47,8 @@
     <string name="startGame">Start game</string>
     <string name="questionsCount">Questions count</string>
     <string name="game">Game</string>
+    <string name="favourites">Favorites</string>
+    <string name="favorite">Favorite</string>
 
     <plurals name="questionCount">
         <item quantity="one">question</item>

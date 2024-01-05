@@ -22,6 +22,7 @@ object DatabaseFactory {
             SchemaUtils.create(DictionaryCollections)
             SchemaUtils.create(DictionaryCollectionDictionaries)
             SchemaUtils.create(FavouriteDictionaries)
+            SchemaUtils.createMissingTablesAndColumns()
         }
         return database
     }

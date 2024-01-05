@@ -16,13 +16,14 @@ object DatabaseFactory {
         val jdbcURL = "jdbc:h2:file:./build/db"
         val database = Database.connect(jdbcURL, driverClassName)
         transaction(database) {
-            SchemaUtils.create(Users)
-            SchemaUtils.create(Dictionaries)
-            SchemaUtils.create(Terms)
-            SchemaUtils.create(DictionaryCollections)
-            SchemaUtils.create(DictionaryCollectionDictionaries)
-            SchemaUtils.create(FavouriteDictionaries)
-            SchemaUtils.createMissingTablesAndColumns()
+            SchemaUtils.createMissingTablesAndColumns(
+                Users,
+                Dictionaries,
+                Terms,
+                DictionaryCollections,
+                DictionaryCollectionDictionaries,
+                FavouriteDictionaries
+            )
         }
         return database
     }

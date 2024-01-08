@@ -6,11 +6,11 @@ import data.dto.GameClientActionType
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.route
-import io.ktor.server.sessions.sessionId
-import io.ktor.server.sessions.sessions
 import io.ktor.server.websocket.DefaultWebSocketServerSession
 import io.ktor.server.websocket.webSocket
+import io.ktor.websocket.CloseReason
 import io.ktor.websocket.Frame
+import io.ktor.websocket.close
 import io.ktor.websocket.readText
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.serialization.json.Json
@@ -22,16 +22,35 @@ import org.koin.ktor.ext.inject
 fun Routing.gameRouting() = route("/game") {
     val gameInteractor: GameInteractor by inject()
 
-    webSocket {
-        incoming.consumeEach {
-            if (it is Frame.Text) {
-                val text = it.readText()
-                val (command, args) = text.split(" ", limit = 2)
-                when (command) {
-                    "connect" -> {
-                        gameInteractor.registerConnection(args, this)
-                    }
-                }
+    gameWebSocket { socket, userId, _, payload ->
+        when (payload) {
+            is GameClientAction.SelectDictionary -> {
+                if (userId == null) socket.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, "Unauthorized"))
+                else gameInteractor.selectDictionary(userId, payload.dictionaryId, payload.termCount)
+            }
+
+            is GameClientAction.Connect -> {
+                gameInteractor.registerConnection(payload.userId, socket)
+            }
+
+            is GameClientAction.JoinLobby -> {
+                if (userId == null) socket.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, "Unauthorized"))
+                else gameInteractor.connectToLobby(userId, payload.lobbyId)
+            }
+
+            is GameClientAction.LeaveLobby -> {
+                if (userId == null) socket.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, "Unauthorized"))
+                else gameInteractor.leaveLobby(userId)
+            }
+
+            is GameClientAction.PassResult -> {
+                if (userId == null) socket.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, "Unauthorized"))
+                else gameInteractor.passResult(userId, payload.summary)
+            }
+
+            is GameClientAction.StartGame -> {
+                if (userId == null) socket.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, "Unauthorized"))
+                else gameInteractor.startGame(userId)
             }
         }
     }
@@ -39,9 +58,10 @@ fun Routing.gameRouting() = route("/game") {
 
 private fun Route.gameWebSocket(
     handleFrame: suspend (
-        socket: DefaultWebSocketServerSession, clientId: String, frameTextReceived: String, payload: GameClientAction
+        socket: DefaultWebSocketServerSession, userId: String?, frameTextReceived: String, payload: GameClientAction
     ) -> Unit
 ) = webSocket {
+    var userId: String? = null
     incoming.consumeEach {
         if (it is Frame.Text) {
             val frameTextReceived = it.readText()
@@ -60,13 +80,16 @@ private fun Route.gameWebSocket(
                 )
 
                 GameClientActionType.CONNECT -> Json.decodeFromJsonElement<GameClientAction.Connect>(jsonObject)
+
                 else -> null
             }
 
-            call.sessions
+            if (payload is GameClientAction.Connect) {
+                userId = payload.userId
+            }
 
             if (payload != null) {
-//                handleFrame(this, clientId, frameTextReceived, payload)
+                handleFrame(this, userId, frameTextReceived, payload)
             }
         }
     }

@@ -1,35 +1,18 @@
 package com.krushiler.data.websocket
 
-import io.ktor.websocket.DefaultWebSocketSession
-import io.ktor.websocket.Frame
+import data.dto.GameServerAction
+import io.ktor.server.websocket.DefaultWebSocketServerSession
+import io.ktor.server.websocket.sendSerialized
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.coroutines.cancellation.CancellationException
 
-class GameWebsocketConnection(private val session: DefaultWebSocketSession) {
+class GameWebsocketConnection(private val session: DefaultWebSocketServerSession) {
     companion object {
         val lastId = AtomicInteger()
     }
 
     val id = lastId.getAndIncrement()
 
-    suspend fun sendUsersUpdated() {
-        try {
-            session.send(Frame.Text("users-updated"))
-        } catch (_: CancellationException) {
-        }
-    }
-
-    suspend fun gameStarted() {
-        try {
-            session.send(Frame.Text("game-started"))
-        } catch (_: CancellationException) {
-        }
-    }
-
-    suspend fun dictionarySelected() {
-        try {
-            session.send(Frame.Text("dictionary-selected"))
-        } catch (_: CancellationException) {
-        }
+    suspend fun sendAction(action: GameServerAction) {
+        session.sendSerialized(action)
     }
 }

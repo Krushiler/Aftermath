@@ -3,6 +3,8 @@ package com.krushiler.data.repository
 import com.krushiler.data.websocket.GameWebsocketConnection
 import data.dto.DictionaryDto
 import data.dto.DictionaryInfoDto
+import data.dto.GameServerAction
+import data.dto.GameSummaryDto
 import data.dto.LobbyDto
 import data.dto.LobbyStatus
 import data.dto.QuestionDto
@@ -10,7 +12,7 @@ import data.dto.QuestionItemDto
 import data.dto.UserDto
 import domain.game.GameTermsSource
 import domain.game.TakeTermResult
-import io.ktor.websocket.DefaultWebSocketSession
+import io.ktor.server.websocket.DefaultWebSocketServerSession
 
 class GameRepository {
     private val userLobbies = mutableMapOf<String, LobbyDto>()
@@ -23,12 +25,16 @@ class GameRepository {
 
     fun getLobby(id: String): LobbyDto? = lobbies[id]
 
+    fun getUserLobby(userId: String): LobbyDto? = userLobbies[userId]
+
     suspend fun leaveLobby(userId: String) {
         val lobby = userLobbies[userId]
         if (lobby != null) {
             lobby.players = lobby.players.filter { it.login != userId }.toMutableList()
             userLobbies.remove(userId)
-            connections.filter { userLobbies[it.key] == lobby }.forEach { it.value.sendUsersUpdated() }
+            doForLobbyConnections(lobby) {
+                it.sendAction(GameServerAction.UsersUpdated(lobby.players))
+            }
             if (lobby !in userLobbies.values) {
                 lobbies.remove(lobby.id)
             }
@@ -47,7 +53,7 @@ class GameRepository {
 
     fun getUsers(lobbyId: String): List<UserDto> = lobbies[lobbyId]?.players ?: emptyList()
 
-    fun createLobby(userDto: UserDto, webSocketSession: DefaultWebSocketSession): LobbyDto {
+    fun createLobby(userDto: UserDto, webSocketSession: DefaultWebSocketServerSession): LobbyDto {
         val id = "lobby-${System.currentTimeMillis()}"
         val lobby = LobbyDto(
             id = id,
@@ -64,14 +70,16 @@ class GameRepository {
         return lobby
     }
 
-    suspend fun registerConnection(userId: String, webSocketSession: DefaultWebSocketSession) {
+    suspend fun registerConnection(userId: String, webSocketSession: DefaultWebSocketServerSession) {
         connections[userId] = GameWebsocketConnection(webSocketSession)
     }
 
     suspend fun connectToLobby(userId: String, lobbyId: String) {
         val lobby = lobbies[lobbyId] ?: return
         userLobbies[userId] = lobby
-        connections.filter { userLobbies[it.key] == lobby }.forEach { it.value.sendUsersUpdated() }
+        doForLobbyConnections(lobby) {
+            it.sendAction(GameServerAction.UsersUpdated(lobby.players))
+        }
     }
 
     suspend fun selectDictionary(id: String, dictionary: DictionaryDto, termsCount: Int) {
@@ -92,12 +100,36 @@ class GameRepository {
         }
         lobby.dictionary = DictionaryInfoDto.fromDictionary(dictionary)
         lobby.questions = questions
-        connections.filter { userLobbies[it.key] == lobby }.forEach { it.value.dictionarySelected() }
+        doForLobbyConnections(lobby) {
+            it.sendAction(
+                GameServerAction.DictionarySelected(
+                    lobby.dictionary!!,
+                    termsCount,
+                    lobby.questions
+                )
+            )
+        }
+    }
+
+    suspend fun passResult(userId: String, summary: GameSummaryDto) {
+        val lobby = userLobbies[userId] ?: return
+        lobby.results[userId] = summary
+        doForLobbyConnections(lobby) {
+            it.sendAction(GameServerAction.ResultsChanged(lobby.results))
+        }
     }
 
     suspend fun startGame(id: String) {
         val lobby = lobbies[id] ?: return
         lobby.status = LobbyStatus.STARTED
-        connections.filter { userLobbies[it.key] == lobby }.forEach { it.value.gameStarted() }
+        doForLobbyConnections(lobby) {
+            it.sendAction(GameServerAction.GameStarted)
+        }
+    }
+
+    private fun lobbyConnections(lobby: LobbyDto) = connections.filter { userLobbies[it.key] == lobby }
+
+    private inline fun doForLobbyConnections(lobby: LobbyDto, action: (GameWebsocketConnection) -> Unit) {
+        lobbyConnections(lobby).forEach { action(it.value) }
     }
 }

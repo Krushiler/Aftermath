@@ -14,10 +14,4 @@ fun Application.configureSession() {
     install(Sessions) {
         cookie<GameSession>("GAME_SESSION")
     }
-
-    intercept(ApplicationCallPipeline.Plugins) {
-        if (call.sessions.get<GameSession>() == null) {
-            val clientId = call.parameters["clientId"] ?: ""
-        }
-    }
 }

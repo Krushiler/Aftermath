@@ -29,7 +29,7 @@ sealed class GameClientAction(
 
     @Serializable
     data class PassResult(
-        val summary: List<QuestionSummaryDto>
+        val summary: GameSummaryDto
     ) : GameClientAction(GameClientActionType.PASS_RESULT)
 
     @Serializable
@@ -43,7 +43,5 @@ sealed class GameClientAction(
     ) : GameClientAction(GameClientActionType.LEAVE_LOBBY)
 
     @Serializable
-    data class StartGame(
-        val lobbyId: String
-    ) : GameClientAction(GameClientActionType.START_GAME)
+    object StartGame : GameClientAction(GameClientActionType.START_GAME)
 }

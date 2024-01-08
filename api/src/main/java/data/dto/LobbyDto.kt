@@ -11,6 +11,7 @@ data class LobbyDto(
     var dictionary: DictionaryInfoDto?,
     var questions: List<QuestionDto>,
     var players: List<UserDto> = emptyList(),
+    val results: MutableMap<String, GameSummaryDto> = mutableMapOf()
 )
 
 @Serializable

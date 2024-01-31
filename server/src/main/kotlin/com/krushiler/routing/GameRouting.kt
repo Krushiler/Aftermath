@@ -75,6 +75,10 @@ private fun Route.gameWebSocket(
                     jsonObject
                 )
 
+                GameClientActionType.LEAVE_LOBBY -> Json.decodeFromJsonElement<GameClientAction.LeaveLobby>(
+                    jsonObject
+                )
+
                 GameClientActionType.PASS_RESULT -> Json.decodeFromJsonElement<GameClientAction.PassResult>(
                     jsonObject
                 )

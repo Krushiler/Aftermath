@@ -11,7 +11,6 @@ object GameServerActionType {
 
 @Serializable
 sealed class GameServerAction(val type: String) {
-
     @Serializable
     data class UsersUpdated(
         val users: List<UserDto>

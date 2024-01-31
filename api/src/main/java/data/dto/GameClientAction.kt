@@ -38,9 +38,7 @@ sealed class GameClientAction(
     ) : GameClientAction(GameClientActionType.JOIN_LOBBY)
 
     @Serializable
-    data class LeaveLobby(
-        val lobbyId: String
-    ) : GameClientAction(GameClientActionType.LEAVE_LOBBY)
+    object LeaveLobby : GameClientAction(GameClientActionType.LEAVE_LOBBY)
 
     @Serializable
     object StartGame : GameClientAction(GameClientActionType.START_GAME)

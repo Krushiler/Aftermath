@@ -8,7 +8,6 @@ import data.dto.GameSummaryDto
 import data.dto.LobbyDto
 import data.dto.LobbyStatus
 import data.dto.QuestionDto
-import data.dto.QuestionItemDto
 import data.dto.UserDto
 import domain.game.GameTermsSource
 import domain.game.TakeTermResult
@@ -53,7 +52,7 @@ class GameRepository {
 
     fun getUsers(lobbyId: String): List<UserDto> = lobbies[lobbyId]?.players ?: emptyList()
 
-    fun createLobby(userDto: UserDto, webSocketSession: DefaultWebSocketServerSession): LobbyDto {
+    fun createLobby(userDto: UserDto): LobbyDto {
         val id = "lobby-${System.currentTimeMillis()}"
         val lobby = LobbyDto(
             id = id,
@@ -66,7 +65,6 @@ class GameRepository {
         )
         lobbies[id] = lobby
         userLobbies[userDto.login] = lobby
-        connections[userDto.login] = GameWebsocketConnection(webSocketSession)
         return lobby
     }
 
@@ -89,13 +87,7 @@ class GameRepository {
         for (i in 0 until termsCount) {
             val result = source[id]!!.takeTerm(3)
             if (result is TakeTermResult.Success) {
-                questions.add(
-                    QuestionDto(
-                        result.term,
-                        QuestionItemDto(result.term.id, result.term.description),
-                        result.answers.map { QuestionItemDto(it.id, it.description) }
-                    )
-                )
+                questions.add(result.question)
             }
         }
         lobby.dictionary = DictionaryInfoDto.fromDictionary(dictionary)

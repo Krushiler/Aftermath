@@ -1,10 +1,16 @@
 package com.krushiler.routing
 
+import com.krushiler.data.repository.UserRepository
 import com.krushiler.domain.interactor.GameInteractor
+import com.krushiler.util.userLogin
 import data.dto.GameClientAction
 import data.dto.GameClientActionType
+import io.ktor.server.application.call
+import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.Routing
+import io.ktor.server.routing.get
+import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 import io.ktor.server.websocket.DefaultWebSocketServerSession
 import io.ktor.server.websocket.webSocket
@@ -22,7 +28,15 @@ import org.koin.ktor.ext.inject
 fun Routing.gameRouting() = route("/game") {
     val gameInteractor: GameInteractor by inject()
 
-    gameWebSocket { socket, userId, _, payload ->
+    get("/lobbies") {
+        call.respond(gameInteractor.getLobbies())
+    }
+
+    post("/lobbies/create") {
+        call.respond(gameInteractor.createLobby(call.userLogin))
+    }
+
+    gameWebSocket { socket, userId, _, payload, lobbyId ->
         when (payload) {
             is GameClientAction.SelectDictionary -> {
                 if (userId == null) socket.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, "Unauthorized"))
@@ -30,17 +44,8 @@ fun Routing.gameRouting() = route("/game") {
             }
 
             is GameClientAction.Connect -> {
-                gameInteractor.registerConnection(payload.userId, socket)
-            }
-
-            is GameClientAction.JoinLobby -> {
                 if (userId == null) socket.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, "Unauthorized"))
-                else gameInteractor.connectToLobby(userId, payload.lobbyId)
-            }
-
-            is GameClientAction.LeaveLobby -> {
-                if (userId == null) socket.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, "Unauthorized"))
-                else gameInteractor.leaveLobby(userId)
+                else gameInteractor.registerConnection(userId, socket, lobbyId)
             }
 
             is GameClientAction.PassResult -> {
@@ -58,10 +63,13 @@ fun Routing.gameRouting() = route("/game") {
 
 private fun Route.gameWebSocket(
     handleFrame: suspend (
-        socket: DefaultWebSocketServerSession, userId: String?, frameTextReceived: String, payload: GameClientAction
+        socket: DefaultWebSocketServerSession, userId: String?, frameTextReceived: String, payload: GameClientAction, lobbyId: String
     ) -> Unit
-) = webSocket {
+) = webSocket("/{lobbyId}") {
+    val lobbyId = call.parameters["lobbyId"]!!
     var userId: String? = null
+    val userRepository: UserRepository by inject()
+
     incoming.consumeEach {
         if (it is Frame.Text) {
             val frameTextReceived = it.readText()
@@ -75,10 +83,6 @@ private fun Route.gameWebSocket(
                     jsonObject
                 )
 
-                GameClientActionType.LEAVE_LOBBY -> Json.decodeFromJsonElement<GameClientAction.LeaveLobby>(
-                    jsonObject
-                )
-
                 GameClientActionType.PASS_RESULT -> Json.decodeFromJsonElement<GameClientAction.PassResult>(
                     jsonObject
                 )
@@ -89,11 +93,12 @@ private fun Route.gameWebSocket(
             }
 
             if (payload is GameClientAction.Connect) {
-                userId = payload.userId
+                val user = userRepository.getUserByTokenOrNull(payload.token)
+                userId = user?.login
             }
 
             if (payload != null) {
-                handleFrame(this, userId, frameTextReceived, payload)
+                handleFrame(this, userId, frameTextReceived, payload, lobbyId)
             }
         }
     }

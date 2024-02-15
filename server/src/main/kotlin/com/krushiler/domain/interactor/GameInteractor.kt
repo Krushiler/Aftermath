@@ -24,16 +24,15 @@ class GameInteractor(
 
     fun getUsers(lobbyId: String) = gameRepository.getUsers(lobbyId)
 
-    suspend fun createLobby(userId: String, webSocketSession: DefaultWebSocketServerSession): LobbyDto {
+    suspend fun createLobby(userId: String): LobbyDto {
         val user = userRepository.getUserByLogin(userId)
-        return gameRepository.createLobby(user, webSocketSession)
+        return gameRepository.createLobby(user)
     }
 
-    suspend fun registerConnection(userId: String, webSocketSession: DefaultWebSocketServerSession) =
+    suspend fun registerConnection(userId: String, webSocketSession: DefaultWebSocketServerSession, lobbyId: String) {
         gameRepository.registerConnection(userId, webSocketSession)
-
-    suspend fun connectToLobby(userId: String, lobbyId: String) =
         gameRepository.connectToLobby(userId, lobbyId)
+    }
 
     suspend fun startGame(userId: String) {
         val lobbyId = gameRepository.getUserLobby(userId)?.id ?: return

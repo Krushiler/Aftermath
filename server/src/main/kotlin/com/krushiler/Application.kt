@@ -4,6 +4,7 @@ import com.krushiler.plugins.configureDi
 import com.krushiler.plugins.configureRouting
 import com.krushiler.plugins.configureSecurity
 import com.krushiler.plugins.configureSerialization
+import com.krushiler.plugins.configureSession
 import com.krushiler.plugins.configureSockets
 import com.krushiler.plugins.configureStatusPages
 import io.ktor.server.application.Application
@@ -22,4 +23,5 @@ fun Application.module() {
     configureStatusPages()
     configureSockets()
     configureRouting()
+    configureSession()
 }

@@ -10,4 +10,17 @@ data class DictionaryInfoDto(
     val author: UserDto?,
     val canEdit: Boolean,
     val isFavourite: Boolean,
-)
+) {
+    companion object {
+        fun fromDictionary(dictionary: DictionaryDto): DictionaryInfoDto {
+            return DictionaryInfoDto(
+                id = dictionary.id,
+                name = dictionary.name,
+                description = dictionary.description,
+                author = dictionary.author,
+                canEdit = dictionary.canEdit,
+                isFavourite = dictionary.isFavourite
+            )
+        }
+    }
+}

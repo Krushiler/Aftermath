@@ -2,6 +2,7 @@ package com.krushiler.plugins
 
 import com.krushiler.routing.authRouting
 import com.krushiler.routing.dictionaryRouting
+import com.krushiler.routing.gameRouting
 import com.krushiler.routing.staticRouting
 import com.krushiler.routing.userRouting
 import io.ktor.server.application.*
@@ -17,5 +18,6 @@ fun Application.configureRouting() {
         authRouting()
         userRouting()
         dictionaryRouting()
+        gameRouting()
     }
 }

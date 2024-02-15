@@ -1,6 +1,6 @@
 package com.example.aftermathandroid.data.repository
 
-import com.example.aftermathandroid.domain.model.GameInitParams
+import domain.model.GameInitParams
 import com.example.aftermathandroid.domain.model.LocalGameState
 import data.dto.GameSummaryDto
 import data.dto.QuestionDto

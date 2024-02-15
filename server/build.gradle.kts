@@ -36,6 +36,7 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json")
     implementation("io.ktor:ktor-network-tls-certificates")
     implementation("io.ktor:ktor-server-status-pages")
+    implementation("io.ktor:ktor-server-sessions")
 
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")

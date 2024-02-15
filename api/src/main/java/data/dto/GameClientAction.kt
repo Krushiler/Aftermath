@@ -3,8 +3,6 @@ package data.dto
 import kotlinx.serialization.Serializable
 
 object GameClientActionType {
-    const val JOIN_LOBBY = "join-lobby"
-    const val LEAVE_LOBBY = "leave-lobby"
     const val START_GAME = "start-game"
     const val SELECT_DICTIONARY = "select-dictionary"
     const val PASS_RESULT = "pass-result"
@@ -18,7 +16,7 @@ sealed class GameClientAction(
 
     @Serializable
     data class Connect(
-        val userId: String
+        val token: String
     ) : GameClientAction(GameClientActionType.CONNECT)
 
     @Serializable
@@ -31,14 +29,6 @@ sealed class GameClientAction(
     data class PassResult(
         val summary: GameSummaryDto
     ) : GameClientAction(GameClientActionType.PASS_RESULT)
-
-    @Serializable
-    data class JoinLobby(
-        val lobbyId: String
-    ) : GameClientAction(GameClientActionType.JOIN_LOBBY)
-
-    @Serializable
-    object LeaveLobby : GameClientAction(GameClientActionType.LEAVE_LOBBY)
 
     @Serializable
     object StartGame : GameClientAction(GameClientActionType.START_GAME)

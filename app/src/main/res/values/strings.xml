@@ -38,6 +38,7 @@
     <string name="myDictionaries">My dictionaries</string>
     <string name="selectDictionary">Select dictionary</string>
     <string name="defaultDictionaries">Default dictionaries</string>
+    <string name="lobbies">Lobbies</string>
 
     <string name="question">Question</string>
     <string name="answer">Answer</string>
@@ -57,5 +58,14 @@
         <item quantity="many">questions</item>
         <item quantity="zero">questions</item>
         <item quantity="other">questions</item>
+    </plurals>
+
+    <plurals name="playersCount">
+        <item quantity="one">player</item>
+        <item quantity="two">players</item>
+        <item quantity="few">players</item>
+        <item quantity="many">players</item>
+        <item quantity="zero">players</item>
+        <item quantity="other">players</item>
     </plurals>
 </resources>

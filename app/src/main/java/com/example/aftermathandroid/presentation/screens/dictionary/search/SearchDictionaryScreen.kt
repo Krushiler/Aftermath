@@ -28,7 +28,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.aftermathandroid.R
 import com.example.aftermathandroid.presentation.common.component.button.BackButton
-import com.example.aftermathandroid.presentation.common.component.dictionary.DictionaryItem
+import com.example.aftermathandroid.presentation.common.component.list_item.DictionaryItem
 import com.example.aftermathandroid.presentation.common.component.field.AppBarTextField
 import com.example.aftermathandroid.presentation.common.provider.LocalDictionaryNavigationOwner
 import com.example.aftermathandroid.presentation.common.provider.LocalRootNavigationOwner

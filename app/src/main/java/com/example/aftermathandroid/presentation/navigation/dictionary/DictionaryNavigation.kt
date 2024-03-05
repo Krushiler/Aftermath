@@ -1,6 +1,5 @@
 package com.example.aftermathandroid.presentation.navigation.dictionary
 
-import android.util.Log
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
@@ -62,7 +61,6 @@ fun DictionaryNavigation(
                     )
                 }
                 composable("${DictionaryDestination.Collection.path}/{collectionId}") {
-                    Log.d("pizda", it.arguments?.getString("collectionId").toString())
                     DictionaryCollectionScreen(
                         dictionaryScreenSource = dictionaryScreenSource
                     )

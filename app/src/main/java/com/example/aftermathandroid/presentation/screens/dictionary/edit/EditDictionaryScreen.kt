@@ -35,7 +35,7 @@ import com.example.aftermathandroid.presentation.common.component.Gap
 import com.example.aftermathandroid.presentation.common.component.animation.animateBoolAsFloatState
 import com.example.aftermathandroid.presentation.common.component.button.BackButton
 import com.example.aftermathandroid.presentation.common.component.button.FavouriteButton
-import com.example.aftermathandroid.presentation.common.component.dictionary.TermEditingItem
+import com.example.aftermathandroid.presentation.common.component.list_item.TermEditingItem
 import com.example.aftermathandroid.presentation.common.provider.LocalRootNavigationOwner
 import com.example.aftermathandroid.presentation.common.provider.storeViewModel
 import com.example.aftermathandroid.presentation.common.provider.rootSnackbar

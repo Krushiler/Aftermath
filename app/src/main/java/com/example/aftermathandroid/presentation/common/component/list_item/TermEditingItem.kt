@@ -1,4 +1,4 @@
-package com.example.aftermathandroid.presentation.common.component.dictionary
+package com.example.aftermathandroid.presentation.common.component.list_item
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,19 +11,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.aftermathandroid.presentation.common.component.Gap
 import com.example.aftermathandroid.presentation.theme.Dimens
-import data.dto.DictionaryInfoDto
+import data.dto.TermDto
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DictionaryItem(dictionary: DictionaryInfoDto, onPressed: () -> Unit) {
+fun TermEditingItem(
+    term: TermDto,
+    onPressed: () -> Unit,
+) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         onClick = { onPressed() },
     ) {
         Column(modifier = Modifier.padding(Dimens.md)) {
-            Text(text = dictionary.name, style = MaterialTheme.typography.titleMedium)
+            Text(text = term.name, style = MaterialTheme.typography.titleMedium)
             Gap.Md()
-            Text(text = dictionary.description, style = MaterialTheme.typography.bodyMedium)
+            Text(text = term.description, style = MaterialTheme.typography.bodyMedium)
         }
     }
 }

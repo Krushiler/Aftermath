@@ -13,6 +13,7 @@ import com.example.aftermathandroid.presentation.common.provider.storeViewModel
 import com.example.aftermathandroid.presentation.navigation.common.NavigationComponent
 import com.example.aftermathandroid.presentation.navigation.root.RootNavigationViewModel
 import com.example.aftermathandroid.presentation.screens.dictionary.flow.DictionariesFlowScreen
+import com.example.aftermathandroid.presentation.screens.game.lobby_list.LobbyListScreen
 import com.example.aftermathandroid.presentation.screens.game.prepare.PrepareGameScreen
 
 @Composable
@@ -42,6 +43,9 @@ fun HomeNavigation(
             }
             composable(HomeRoute.Dictionaries.path) {
                 DictionariesFlowScreen()
+            }
+            composable(HomeRoute.Lobbies.path) {
+                LobbyListScreen()
             }
         }
     }

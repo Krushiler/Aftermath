@@ -4,6 +4,7 @@ import data.dto.AuthDto
 import data.dto.DictionaryCollectionDto
 import data.dto.DictionaryDto
 import data.dto.DictionaryInfoDto
+import data.dto.LobbyDto
 import data.dto.UserDto
 import data.request.ChangeFavouriteRequest
 import data.request.ChangeUserRequest
@@ -15,7 +16,6 @@ import data.response.PagedResponse
 import domain.model.DictionarySearchData
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.plugins.websocket.webSocket
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
@@ -86,4 +86,8 @@ class BaseApi(private val client: HttpClient) {
     suspend fun changeFavourite(request: ChangeFavouriteRequest) = client.post("/dictionary/favourite") {
         setBody(request)
     }
+
+    suspend fun getLobbies(): List<LobbyDto> = client.get("/lobbies").body()
+
+    suspend fun createLobby(): LobbyDto = client.post("/lobbies/create").body()
 }

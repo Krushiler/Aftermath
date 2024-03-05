@@ -23,7 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.aftermathandroid.presentation.common.component.button.BackButton
-import com.example.aftermathandroid.presentation.common.component.dictionary.DictionaryItem
+import com.example.aftermathandroid.presentation.common.component.list_item.DictionaryItem
 import com.example.aftermathandroid.presentation.common.provider.LocalDictionaryNavigationOwner
 import com.example.aftermathandroid.presentation.common.provider.LocalRootNavigationOwner
 import com.example.aftermathandroid.presentation.common.provider.rootSnackbar

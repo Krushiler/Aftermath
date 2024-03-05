@@ -15,4 +15,8 @@ class HomeNavigationViewModel @Inject constructor() : NavigationViewModel<HomeRo
     fun navigateToDictionaries() {
         emit(NavigationState(HomeRoute.Dictionaries, routeType = RouteType.Switch))
     }
+
+    fun navigateToLobbies() {
+        emit(NavigationState(HomeRoute.Lobbies, routeType = RouteType.Switch))
+    }
 }

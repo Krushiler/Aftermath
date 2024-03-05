@@ -7,4 +7,5 @@ sealed class HomeRoute(val path: String) : NavigationRoute() {
 
     object Game : HomeRoute(path = "game")
     object Dictionaries : HomeRoute(path = "dictionaries")
+    object Lobbies : HomeRoute(path = "lobbies")
 }

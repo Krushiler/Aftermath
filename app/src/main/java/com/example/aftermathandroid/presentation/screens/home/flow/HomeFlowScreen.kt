@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material3.BottomAppBar
@@ -45,11 +46,15 @@ fun HomeFlowScreen() {
                         label = { Text(text = stringResource(id = R.string.game)) },
                     )
                     NavigationBarItem(
+                        selected = navigationState.value?.destination?.route == HomeRoute.Lobbies.path,
+                        onClick = { homeViewModel.navigateToLobbies() },
+                        icon = { Icon(imageVector = Icons.Outlined.List, contentDescription = null) },
+                        label = { Text(text = stringResource(id = R.string.lobbies)) },
+                    )
+                    NavigationBarItem(
                         selected = navigationState.value?.destination?.route == HomeRoute.Dictionaries.path,
                         onClick = { homeViewModel.navigateToDictionaries() },
-                        icon = {
-                            Icon(imageVector = Icons.Outlined.Menu, contentDescription = null)
-                        },
+                        icon = { Icon(imageVector = Icons.Outlined.Menu, contentDescription = null) },
                         label = { Text(text = stringResource(id = R.string.dictionaries)) },
                     )
                 }

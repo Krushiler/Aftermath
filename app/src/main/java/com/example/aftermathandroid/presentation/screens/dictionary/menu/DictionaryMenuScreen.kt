@@ -17,22 +17,23 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.aftermathandroid.R
 import com.example.aftermathandroid.presentation.common.component.button.ProfileButton
-import com.example.aftermathandroid.presentation.common.provider.LocalDictionaryNavigationOwner
-import com.example.aftermathandroid.presentation.common.provider.LocalRootNavigationOwner
-import com.example.aftermathandroid.presentation.common.provider.storeViewModel
-import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryNavigationViewModel
+import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryNavigation
 import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryScreenSource
-import com.example.aftermathandroid.presentation.navigation.root.RootNavigationViewModel
+import com.example.aftermathandroid.presentation.navigation.dictionary.createDictionaryNavigation
+import com.example.aftermathandroid.presentation.navigation.root.RootNavigation
+import com.example.aftermathandroid.presentation.navigation.root.createRootNavigation
 import com.example.aftermathandroid.presentation.theme.Dimens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DictionariesMenuScreen(
     dictionaryScreenSource: DictionaryScreenSource,
-    dictionaryNavigation: DictionaryNavigationViewModel = storeViewModel(LocalDictionaryNavigationOwner),
-    rootNavigation: RootNavigationViewModel = storeViewModel(LocalRootNavigationOwner)
+    dictionaryNavigation: DictionaryNavigation = createDictionaryNavigation(),
+    rootNavigation: RootNavigation = createRootNavigation(),
+    viewModel: DictionaryMenuViewModel = hiltViewModel()
 ) {
     Scaffold(
         topBar = {
@@ -42,7 +43,7 @@ fun DictionariesMenuScreen(
                     actions = {
                         ProfileButton(
                             profilePressed = { rootNavigation.navigateToProfile() },
-                            logoutPressed = { rootNavigation.logout() }
+                            logoutPressed = { viewModel.logout() }
                         )
                     }
                 )

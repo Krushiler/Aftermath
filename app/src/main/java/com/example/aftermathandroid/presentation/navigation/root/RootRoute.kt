@@ -12,7 +12,7 @@ enum class RootDestination(val path: String) {
     Game("game"),
 }
 
-sealed class RootRoute(private val destination: RootDestination) : NavigationRoute() {
+sealed class RootRoute(private val destination: RootDestination) : NavigationRoute {
     override fun path() = destination.path
 
     object Login : RootRoute(RootDestination.Login)

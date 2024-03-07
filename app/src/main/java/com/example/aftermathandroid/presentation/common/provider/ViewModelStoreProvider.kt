@@ -12,10 +12,3 @@ val LocalRootStoreOwner = compositionLocalOf<ViewModelStoreOwner?> { null }
 @Composable
 inline fun <reified VM : ViewModel> storeViewModel(entry: ProvidableCompositionLocal<ViewModelStoreOwner?>) =
     hiltViewModel<VM>(checkNotNull(entry.current))
-
-
-val LocalRootNavigationOwner = compositionLocalOf<ViewModelStoreOwner?> { null }
-
-val LocalHomeNavigationOwner = compositionLocalOf<ViewModelStoreOwner?> { null }
-
-val LocalDictionaryNavigationOwner = compositionLocalOf<ViewModelStoreOwner?> { null }

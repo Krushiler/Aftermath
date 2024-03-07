@@ -27,15 +27,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.aftermathandroid.R
 import com.example.aftermathandroid.presentation.common.component.Gap
 import com.example.aftermathandroid.presentation.common.component.animation.animateBoolAsFloatState
-import com.example.aftermathandroid.presentation.common.provider.LocalRootNavigationOwner
 import com.example.aftermathandroid.presentation.common.provider.rootSnackbar
-import com.example.aftermathandroid.presentation.common.provider.storeViewModel
-import com.example.aftermathandroid.presentation.navigation.root.RootNavigationViewModel
+import com.example.aftermathandroid.presentation.navigation.root.RootNavigation
+import com.example.aftermathandroid.presentation.navigation.root.createRootNavigation
 import com.example.aftermathandroid.presentation.theme.Dimens
 
 @Composable
 fun RegisterScreen(
-    rootNavigation: RootNavigationViewModel = storeViewModel(LocalRootNavigationOwner),
+    rootNavigation: RootNavigation = createRootNavigation(),
     viewModel: RegisterViewModel = hiltViewModel()
 ) {
     val snackbarHost = rootSnackbar()

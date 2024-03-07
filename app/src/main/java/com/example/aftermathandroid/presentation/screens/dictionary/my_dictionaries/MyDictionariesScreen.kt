@@ -32,13 +32,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.aftermathandroid.R
 import com.example.aftermathandroid.presentation.common.component.button.BackButton
 import com.example.aftermathandroid.presentation.common.component.list_item.DictionaryItem
-import com.example.aftermathandroid.presentation.common.provider.LocalDictionaryNavigationOwner
-import com.example.aftermathandroid.presentation.common.provider.LocalRootNavigationOwner
 import com.example.aftermathandroid.presentation.common.provider.rootSnackbar
-import com.example.aftermathandroid.presentation.common.provider.storeViewModel
-import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryNavigationViewModel
+import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryNavigation
 import com.example.aftermathandroid.presentation.navigation.dictionary.DictionaryScreenSource
-import com.example.aftermathandroid.presentation.navigation.root.RootNavigationViewModel
+import com.example.aftermathandroid.presentation.navigation.dictionary.createDictionaryNavigation
+import com.example.aftermathandroid.presentation.navigation.root.RootNavigation
+import com.example.aftermathandroid.presentation.navigation.root.createRootNavigation
 import com.example.aftermathandroid.presentation.screens.dictionary.create.CreateDictionaryDialog
 import com.example.aftermathandroid.presentation.screens.dictionary.delete.DeleteDictionaryDialog
 import com.example.aftermathandroid.presentation.theme.Dimens
@@ -49,8 +48,8 @@ import kotlinx.coroutines.flow.collectLatest
 fun MyDictionariesScreen(
     dictionaryScreenSource: DictionaryScreenSource,
     viewModel: MyDictionariesViewModel = hiltViewModel(),
-    dictionaryNavigation: DictionaryNavigationViewModel = storeViewModel(LocalDictionaryNavigationOwner),
-    rootNavigation: RootNavigationViewModel = storeViewModel(LocalRootNavigationOwner)
+    dictionaryNavigation: DictionaryNavigation = createDictionaryNavigation(),
+    rootNavigation: RootNavigation = createRootNavigation()
 ) {
     val snackbarHost = rootSnackbar()
     val state = viewModel.stateFlow.collectAsState()

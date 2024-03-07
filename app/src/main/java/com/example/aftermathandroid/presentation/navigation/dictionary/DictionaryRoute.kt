@@ -10,7 +10,7 @@ enum class DictionaryDestination(val path: String) {
     Favourite("favourite")
 }
 
-sealed class DictionaryRoute(private val destination: DictionaryDestination) : NavigationRoute() {
+sealed class DictionaryRoute(private val destination: DictionaryDestination) : NavigationRoute {
     override fun path() = destination.path
 
     object Menu : DictionaryRoute(destination = DictionaryDestination.Menu)

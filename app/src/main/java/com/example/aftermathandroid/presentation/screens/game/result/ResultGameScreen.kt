@@ -23,16 +23,15 @@ import com.example.aftermathandroid.presentation.common.component.Gap
 import com.example.aftermathandroid.presentation.common.component.animation.animateBoolAsFloatState
 import com.example.aftermathandroid.presentation.common.component.button.ListSectionButton
 import com.example.aftermathandroid.presentation.common.component.container.ExpandableColumnSection
-import com.example.aftermathandroid.presentation.common.provider.LocalRootNavigationOwner
-import com.example.aftermathandroid.presentation.common.provider.storeViewModel
-import com.example.aftermathandroid.presentation.navigation.root.RootNavigationViewModel
+import com.example.aftermathandroid.presentation.navigation.root.RootNavigation
+import com.example.aftermathandroid.presentation.navigation.root.createRootNavigation
 import com.example.aftermathandroid.presentation.screens.game.result.component.QuestionSummaryItem
 import com.example.aftermathandroid.presentation.screens.game.result.component.ResultGameInfoView
 import com.example.aftermathandroid.presentation.theme.Dimens
 
 @Composable
 fun ResultGameScreen(
-    rootNavigationViewModel: RootNavigationViewModel = storeViewModel(LocalRootNavigationOwner),
+    rootNavigation: RootNavigation = createRootNavigation(),
     viewModel: ResultGameViewModel = hiltViewModel()
 ) {
     val state = viewModel.stateFlow.collectAsState()
@@ -40,7 +39,7 @@ fun ResultGameScreen(
     val showSummaryAnimation = animateBoolAsFloatState(targetValue = state.value.showSummary)
 
     BackHandler {
-        rootNavigationViewModel.back()
+        rootNavigation.back()
     }
 
     Scaffold { padding ->
@@ -84,7 +83,7 @@ fun ResultGameScreen(
                     Gap.Md()
                     OutlinedButton(
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = { rootNavigationViewModel.back() },
+                        onClick = { rootNavigation.back() },
                     ) {
                         Text(text = stringResource(id = R.string.back))
                     }

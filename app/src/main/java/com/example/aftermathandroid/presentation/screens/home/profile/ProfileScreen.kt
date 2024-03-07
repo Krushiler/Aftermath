@@ -32,17 +32,16 @@ import com.example.aftermathandroid.R
 import com.example.aftermathandroid.presentation.common.component.Gap
 import com.example.aftermathandroid.presentation.common.component.animation.animateBoolAsFloatState
 import com.example.aftermathandroid.presentation.common.component.button.BackButton
-import com.example.aftermathandroid.presentation.common.provider.LocalRootNavigationOwner
-import com.example.aftermathandroid.presentation.common.provider.storeViewModel
 import com.example.aftermathandroid.presentation.common.provider.rootSnackbar
-import com.example.aftermathandroid.presentation.navigation.root.RootNavigationViewModel
+import com.example.aftermathandroid.presentation.navigation.root.RootNavigation
+import com.example.aftermathandroid.presentation.navigation.root.createRootNavigation
 import com.example.aftermathandroid.presentation.theme.Dimens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
-    rootNavigationViewModel: RootNavigationViewModel = storeViewModel(LocalRootNavigationOwner)
+    rootNavigation: RootNavigation = createRootNavigation()
 ) {
     val state = viewModel.stateFlow.collectAsState()
     val columnScrollState = rememberScrollState()
@@ -58,7 +57,7 @@ fun ProfileScreen(
 
     Scaffold(topBar = {
         TopAppBar(title = { Text(text = stringResource(id = R.string.profile)) },
-            navigationIcon = { BackButton(onClick = { rootNavigationViewModel.back() }) },
+            navigationIcon = { BackButton(onClick = { rootNavigation.back() }) },
             actions = {
                 IconButton(
                     onClick = { viewModel.saveChanges() },

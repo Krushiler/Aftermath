@@ -1,13 +1,12 @@
 package com.example.aftermathandroid.data.repository
 
-import domain.model.GameInitParams
 import com.example.aftermathandroid.domain.model.LocalGameState
 import data.dto.GameSummaryDto
-import data.dto.QuestionDto
 import data.dto.QuestionItemDto
 import data.dto.QuestionSummaryDto
 import domain.game.GameTermsSource
 import domain.game.TakeTermResult
+import domain.model.GameInitParams
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -44,7 +43,11 @@ class LocalGameRepository @Inject constructor(
         reset()
         coroutineScope.launch {
             var timeToStart = 3
-            _termsSource = GameTermsSource(gameInitParams.dictionaryDto.terms, gameInitParams.questionsCount)
+            _termsSource = GameTermsSource(
+                gameInitParams.dictionaryDto?.terms.orEmpty(),
+                gameInitParams.questionsCount,
+                gameInitParams.questions
+            )
             _gameParams = gameInitParams
 
             while (timeToStart > 0) {
@@ -88,20 +91,7 @@ class LocalGameRepository @Inject constructor(
     private fun nextTerm() {
         val termResult = termsSource.takeTerm(gameParams.answersCount)
         if (termResult is TakeTermResult.Success) {
-            val term = termResult.term
-            val question = QuestionDto(
-                term = term,
-                question = QuestionItemDto(
-                    termId = term.id,
-                    text = term.description,
-                ),
-                answers = termResult.answers.map {
-                    QuestionItemDto(
-                        termId = it.id,
-                        text = it.name
-                    )
-                }
-            )
+            val question = termResult.question
             _localGameState.value = LocalGameState.Question(question, null, null)
         } else {
             finishGame()

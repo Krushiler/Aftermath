@@ -17,7 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.example.aftermathandroid.presentation.common.provider.LocalRootSnackbarState
 import com.example.aftermathandroid.presentation.common.provider.LocalRootStoreOwner
-import com.example.aftermathandroid.presentation.navigation.root.RootNavigation
+import com.example.aftermathandroid.presentation.navigation.root.RootNavigator
 import com.example.aftermathandroid.presentation.theme.AftermathAndroidTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         Scaffold(snackbarHost = { SnackbarHost(snackbarHostState) }) {
                             Box(modifier = Modifier.padding(it)) {
-                                RootNavigation()
+                                RootNavigator()
                             }
                         }
                     }

@@ -1,49 +1,29 @@
 package com.example.aftermathandroid.presentation.navigation.home
 
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.example.aftermathandroid.presentation.common.provider.LocalHomeNavigationOwner
-import com.example.aftermathandroid.presentation.common.provider.LocalRootNavigationOwner
-import com.example.aftermathandroid.presentation.common.provider.storeViewModel
-import com.example.aftermathandroid.presentation.navigation.common.NavigationComponent
-import com.example.aftermathandroid.presentation.navigation.root.RootNavigationViewModel
-import com.example.aftermathandroid.presentation.screens.dictionary.flow.DictionariesFlowScreen
-import com.example.aftermathandroid.presentation.screens.game.prepare.PrepareGameScreen
+import com.example.aftermathandroid.presentation.navigation.common.Navigation
+import com.example.aftermathandroid.presentation.navigation.util.switch
 
 @Composable
-fun HomeNavigation(
-    navController: NavHostController = rememberNavController(),
-) {
-    val viewModel: HomeNavigationViewModel = storeViewModel(LocalHomeNavigationOwner)
-    val rootViewModel: RootNavigationViewModel = storeViewModel(LocalRootNavigationOwner)
+fun createHomeNavigation() = HomeNavigation(checkNotNull(LocalHomeNavController.current))
 
-    NavigationComponent(
-        navController = navController,
-        viewModel = viewModel,
-        onBackOver = {
-            rootViewModel.back()
+class HomeNavigation(navController: NavHostController) : Navigation(navController) {
+    fun navigateToFeed() {
+        navController.navigate(HomeRoute.Game.path) {
+            switch(navController)
         }
-    ) { controller ->
-        NavHost(
-            navController = controller,
-            startDestination = HomeRoute.Game.path,
-            enterTransition = { fadeIn() },
-            exitTransition = { fadeOut() },
-            popEnterTransition = { fadeIn() },
-            popExitTransition = { fadeOut() },
-        ) {
-            composable(HomeRoute.Game.path) {
-                PrepareGameScreen()
-            }
-            composable(HomeRoute.Dictionaries.path) {
-                DictionariesFlowScreen()
-            }
+    }
+
+    fun navigateToDictionaries() {
+        navController.navigate(HomeRoute.Dictionaries.path) {
+            switch(navController)
+        }
+    }
+
+    fun navigateToLobbies() {
+        navController.navigate(HomeRoute.Lobbies.path) {
+            switch(navController)
         }
     }
 }
-

@@ -1,6 +1,5 @@
 package com.example.aftermathandroid.presentation.screens.auth.login
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +20,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.aftermathandroid.presentation.common.component.Gap
@@ -39,10 +39,17 @@ fun LoginScreen(
     val state = viewModel.stateFlow.collectAsState()
     val loadingAnimation = animateBoolAsFloatState(state.value.isLoading)
 
+    val focusManager = LocalFocusManager.current
+
     LaunchedEffect(Unit) {
         viewModel.errorFlow.collect {
             snackbarHost.showSnackbar(it.message)
         }
+    }
+
+    fun onLoginPressed() {
+        focusManager.clearFocus()
+        viewModel.login()
     }
 
     Scaffold { padding ->
@@ -55,10 +62,10 @@ fun LoginScreen(
                 modifier = Modifier
                     .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceAround,
                 contentPadding = PaddingValues(Dimens.md)
             ) {
                 item {
+                    Gap.Xxl()
                     OutlinedTextField(
                         value = state.value.login,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
@@ -69,13 +76,13 @@ fun LoginScreen(
                     OutlinedTextField(
                         value = state.value.password,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
-                        keyboardActions = KeyboardActions { viewModel.login() },
+                        keyboardActions = KeyboardActions { onLoginPressed() },
                         onValueChange = { viewModel.passwordChanged(it) },
                         label = { Text(text = "Password") }
                     )
                     Gap.Lg()
                     Button(
-                        onClick = { viewModel.login() },
+                        onClick = { onLoginPressed() },
                         enabled = !state.value.isLoading
                     ) {
                         Text(text = "Login")

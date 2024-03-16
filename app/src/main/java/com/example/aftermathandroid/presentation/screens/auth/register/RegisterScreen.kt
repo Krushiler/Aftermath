@@ -1,6 +1,5 @@
 package com.example.aftermathandroid.presentation.screens.auth.register
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +20,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -41,10 +41,17 @@ fun RegisterScreen(
     val state = viewModel.stateFlow.collectAsState()
     val loadingAnimation = animateBoolAsFloatState(state.value.isLoading)
 
+    val focusManager = LocalFocusManager.current
+
     LaunchedEffect(Unit) {
         viewModel.errorFlow.collect {
             snackbarHost.showSnackbar(it.message)
         }
+    }
+
+    fun onRegisterPressed() {
+        focusManager.clearFocus()
+        viewModel.register()
     }
 
     Scaffold { padding ->
@@ -56,11 +63,10 @@ fun RegisterScreen(
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceAround,
                 contentPadding = PaddingValues(Dimens.md)
             ) {
                 item {
-                    Gap.Md()
+                    Gap.Xxl()
                     OutlinedTextField(value = state.value.login,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                         onValueChange = { viewModel.loginChanged(it) },
@@ -69,13 +75,13 @@ fun RegisterScreen(
                     OutlinedTextField(
                         value = state.value.password,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
-                        keyboardActions = KeyboardActions { viewModel.register() },
+                        keyboardActions = KeyboardActions { onRegisterPressed() },
                         onValueChange = { viewModel.passwordChanged(it) },
                         label = { Text(text = stringResource(id = R.string.password)) },
                     )
                     Gap.Lg()
                     Button(
-                        onClick = { viewModel.register() },
+                        onClick = { onRegisterPressed() },
                         enabled = !state.value.isLoading
                     ) {
                         Text(text = stringResource(id = R.string.register))

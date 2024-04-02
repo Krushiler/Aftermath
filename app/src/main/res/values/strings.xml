@@ -39,6 +39,7 @@
     <string name="selectDictionary">Select dictionary</string>
     <string name="defaultDictionaries">Default dictionaries</string>
     <string name="lobbies">Lobbies</string>
+    <string name="lobby">Lobby</string>
 
     <string name="question">Question</string>
     <string name="answer">Answer</string>

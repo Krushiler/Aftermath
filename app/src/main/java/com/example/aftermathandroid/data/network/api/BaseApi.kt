@@ -87,7 +87,7 @@ class BaseApi(private val client: HttpClient) {
         setBody(request)
     }
 
-    suspend fun getLobbies(): List<LobbyDto> = client.get("/lobbies").body()
+    suspend fun getLobbies(): List<LobbyDto> = client.get("/game/lobbies").body()
 
-    suspend fun createLobby(): LobbyDto = client.post("/lobbies/create").body()
+    suspend fun createLobby(): LobbyDto = client.post("/game/lobbies/create").body()
 }

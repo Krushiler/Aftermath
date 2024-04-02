@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,10 +19,13 @@ import javax.inject.Inject
 class LobbyListViewModel @Inject constructor(private val gameInteractor: GameInteractor) : ViewModel() {
 
     private val _state = MutableStateFlow(LobbyListScreenState())
-    val state: StateFlow<LobbyListScreenState> get() = _state
+    val state: StateFlow<LobbyListScreenState> get() = _state.asStateFlow()
 
     private val _errorFlow = MutableSharedFlow<ErrorModel>()
-    val errorFlow: SharedFlow<ErrorModel> get() = _errorFlow
+    val errorFlow: SharedFlow<ErrorModel> get() = _errorFlow.asSharedFlow()
+
+    private val _lobbyCreatedFlow = MutableSharedFlow<Unit>()
+    val lobbyCreatedFlow: SharedFlow<Unit> get() = _lobbyCreatedFlow.asSharedFlow()
 
     init {
         loadLobbies()
@@ -32,6 +37,19 @@ class LobbyListViewModel @Inject constructor(private val gameInteractor: GameInt
             try {
                 val lobbies = gameInteractor.getLobbies()
                 _state.update { it.copy(lobbies = lobbies) }
+            } catch (e: Exception) {
+                _errorFlow.emit(ErrorModel.fromException(e))
+            }
+            _state.update { it.copy(isLoading = false) }
+        }
+    }
+
+    fun createLobby() {
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
+            try {
+                gameInteractor.createLobby()
+                _lobbyCreatedFlow.emit(Unit)
             } catch (e: Exception) {
                 _errorFlow.emit(ErrorModel.fromException(e))
             }

@@ -2,6 +2,7 @@ package com.krushiler.routing
 
 import com.krushiler.data.repository.UserRepository
 import com.krushiler.domain.interactor.GameInteractor
+import com.krushiler.plugins.authenticateBearer
 import com.krushiler.util.userLogin
 import data.dto.GameClientAction
 import data.dto.GameClientActionType
@@ -28,34 +29,37 @@ import org.koin.ktor.ext.inject
 fun Routing.gameRouting() = route("/game") {
     val gameInteractor: GameInteractor by inject()
 
-    get("/lobbies") {
-        call.respond(gameInteractor.getLobbies())
-    }
+    authenticateBearer {
 
-    post("/lobbies/create") {
-        call.respond(gameInteractor.createLobby(call.userLogin))
-    }
+        get("/lobbies") {
+            call.respond(gameInteractor.getLobbies())
+        }
 
-    gameWebSocket { socket, userId, _, payload, lobbyId ->
-        when (payload) {
-            is GameClientAction.SelectDictionary -> {
-                if (userId == null) socket.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, "Unauthorized"))
-                else gameInteractor.selectDictionary(userId, payload.dictionaryId, payload.termCount)
-            }
+        post("/lobbies/create") {
+            call.respond(gameInteractor.createLobby(call.userLogin))
+        }
 
-            is GameClientAction.Connect -> {
-                if (userId == null) socket.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, "Unauthorized"))
-                else gameInteractor.registerConnection(userId, socket, lobbyId)
-            }
+        gameWebSocket { socket, userId, _, payload, lobbyId ->
+            when (payload) {
+                is GameClientAction.SelectDictionary -> {
+                    if (userId == null) socket.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, "Unauthorized"))
+                    else gameInteractor.selectDictionary(userId, payload.dictionaryId, payload.termCount)
+                }
 
-            is GameClientAction.PassResult -> {
-                if (userId == null) socket.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, "Unauthorized"))
-                else gameInteractor.passResult(userId, payload.summary)
-            }
+                is GameClientAction.Connect -> {
+                    if (userId == null) socket.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, "Unauthorized"))
+                    else gameInteractor.registerConnection(userId, socket, lobbyId)
+                }
 
-            is GameClientAction.StartGame -> {
-                if (userId == null) socket.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, "Unauthorized"))
-                else gameInteractor.startGame(userId)
+                is GameClientAction.PassResult -> {
+                    if (userId == null) socket.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, "Unauthorized"))
+                    else gameInteractor.passResult(userId, payload.summary)
+                }
+
+                is GameClientAction.StartGame -> {
+                    if (userId == null) socket.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, "Unauthorized"))
+                    else gameInteractor.startGame(userId)
+                }
             }
         }
     }

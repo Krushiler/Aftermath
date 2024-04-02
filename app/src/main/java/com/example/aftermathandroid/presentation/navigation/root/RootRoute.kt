@@ -10,6 +10,7 @@ enum class RootDestination(val path: String) {
     EditDictionary("edit-dictionary"),
     SelectDictionary("select-dictionary"),
     Game("game"),
+    Lobby("lobby")
 }
 
 sealed class RootRoute(private val destination: RootDestination) : NavigationRoute {
@@ -25,4 +26,5 @@ sealed class RootRoute(private val destination: RootDestination) : NavigationRou
 
     object SelectDictionary : RootRoute(RootDestination.SelectDictionary)
     object Game : RootRoute(RootDestination.Game)
+    object Lobby : RootRoute(RootDestination.Lobby)
 }

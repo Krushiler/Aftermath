@@ -21,6 +21,7 @@ import com.example.aftermathandroid.presentation.screens.auth.register.RegisterS
 import com.example.aftermathandroid.presentation.screens.dictionary.edit.EditDictionaryScreen
 import com.example.aftermathandroid.presentation.screens.dictionary.select.DictionarySelectScreen
 import com.example.aftermathandroid.presentation.screens.game.flow.GameFlowScreen
+import com.example.aftermathandroid.presentation.screens.game.lobby.LobbyScreen
 import com.example.aftermathandroid.presentation.screens.home.flow.HomeFlowScreen
 import com.example.aftermathandroid.presentation.screens.home.profile.ProfileScreen
 
@@ -90,6 +91,9 @@ fun RootNavigator(
                 RootDestination.Game.path,
             ) {
                 GameFlowScreen()
+            }
+            composable(RootDestination.Lobby.path) {
+                LobbyScreen()
             }
         }
     }

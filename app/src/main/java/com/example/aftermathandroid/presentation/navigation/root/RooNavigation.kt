@@ -34,4 +34,8 @@ class RootNavigation(navController: NavHostController) : Navigation(navControlle
     fun navigateToGame() {
         navController.navigate(RootRoute.Game.path())
     }
+
+    fun navigateToLobby() {
+        navController.navigate(RootRoute.Lobby.path())
+    }
 }

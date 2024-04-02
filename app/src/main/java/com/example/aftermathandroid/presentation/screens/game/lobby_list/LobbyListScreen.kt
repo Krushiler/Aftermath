@@ -48,7 +48,7 @@ fun LobbyListScreen(
 
     LaunchedEffect(Unit) {
         viewModel.lobbyCreatedFlow.collect {
-            rootNavigation
+            rootNavigation.navigateToLobby()
         }
     }
 

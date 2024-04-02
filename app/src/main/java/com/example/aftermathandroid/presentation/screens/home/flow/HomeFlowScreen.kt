@@ -43,12 +43,12 @@ fun HomeFlowScreen(
                         icon = { Icon(imageVector = Icons.Outlined.PlayArrow, contentDescription = null) },
                         label = { Text(text = stringResource(id = R.string.game)) },
                     )
-                    NavigationBarItem(
+/*                    NavigationBarItem(
                         selected = navigationState.value?.destination?.route == HomeRoute.Lobbies.path,
                         onClick = { homeNavigation.navigateToLobbies() },
                         icon = { Icon(imageVector = Icons.Outlined.Menu, contentDescription = null) },
                         label = { Text(text = stringResource(id = R.string.lobbies)) },
-                    )
+                    )*/
                     NavigationBarItem(
                         selected = navigationState.value?.destination?.route == HomeRoute.Dictionaries.path,
                         onClick = { homeNavigation.navigateToDictionaries() },

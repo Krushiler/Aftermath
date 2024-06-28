@@ -45,10 +45,8 @@ android {
             isDebuggable = true
         }
         release {
-            isMinifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
-            )
+            isMinifyEnabled = false
+            isDebuggable = true
         }
     }
     compileOptions {
